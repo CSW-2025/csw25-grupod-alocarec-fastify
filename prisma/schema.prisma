@@ -9,7 +9,12 @@ datasource db {
 }
 
 model Usuario {
-  id    Int     @id @default(autoincrement())
-  nome  String
-  email String  @unique
+  id        Int      @id @default(autoincrement())
+  nome      String
+  email     String   @unique
+  senha     String
+  ativo     Boolean  @default(true)
+  tipo      String   @default("usuario") // admin, professor, aluno
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
