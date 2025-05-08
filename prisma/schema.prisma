@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "./generated/client"
 }
 
 datasource db {
@@ -13,4 +12,14 @@ model dummy {
   column1 String? @db.VarChar
 
   @@ignore
+}
+
+model usuario {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  email     String   @unique
+  tipo      String
+  ativo     Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
