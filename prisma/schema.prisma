@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "./generated/client"  // Adicionando o caminho de saída
+  output   = "./generated/client"
 }
 
 datasource db {
@@ -8,13 +8,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Usuario {
-  id        Int      @id @default(autoincrement())
-  nome      String
-  email     String   @unique
-  senha     String
-  ativo     Boolean  @default(true)
-  tipo      String   @default("usuario") // admin, professor, aluno
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model dummy {
+  column1 String? @db.VarChar
+
+  @@ignore
 }

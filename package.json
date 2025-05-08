@@ -7,7 +7,7 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "prisma": "prisma",
-    "migrate": "docker compose exec app npx prisma migrate dev --name", 
+    "migrate": "docker compose exec app npx prisma migrate dev --name",
     "studio": "prisma studio"
   },
   "dependencies": {
