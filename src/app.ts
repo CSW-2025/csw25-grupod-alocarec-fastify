@@ -2,11 +2,10 @@ import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
-import usuarioRotas from '@usuarios/usuario-routes';
-import aulaRoutes from '@usuarios/aula/aula-routs';
-import pedidoRoutes from '@usuarios/pedido/pedido-routs';
-import disciplinaRoutes from '@usuarios/disciplina/disciplina-routes';
-// ajuste o alias se necessário
+import usuarioRotas from '../src/domains/usuario/usuario-routes';
+import aulaRoutes from '../src/domains/aula/aula-routs';
+import pedidoRoutes from '../src/domains/pedido/pedido-routs';
+import disciplinaRoutes from '../src/domains/disciplina/disciplina-routes';
 
 const app = Fastify();
 
