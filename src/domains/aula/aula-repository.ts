@@ -1,4 +1,4 @@
-import prisma from '../../config/database';
+import { prisma } from '../../config/database';
 import { CreateAulaInput, UpdateAulaInput } from './aula-entity';
 
 export function create(data: CreateAulaInput) {

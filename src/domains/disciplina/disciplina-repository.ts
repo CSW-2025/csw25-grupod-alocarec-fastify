@@ -1,4 +1,4 @@
-import prisma from '../../config/database';
+import { prisma } from '../../config/database';
 import { CreateDisciplinaInput, UpdateDisciplinaInput } from './disciplina-entity';
 
 export function create(data: CreateDisciplinaInput) {
@@ -10,7 +10,16 @@ export function findAll() {
 }
 
 export function findById(id: number) {
-  return prisma.disciplina.findUnique({ where: { id } });
+  return prisma.disciplina.findUnique({
+    where: { id },
+    include: {
+      curriculos: {
+        include: {
+          curriculo: true
+        }
+      }
+    }
+  });
 }
 
 export function update(id: number, data: UpdateDisciplinaInput) {

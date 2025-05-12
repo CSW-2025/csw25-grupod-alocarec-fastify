@@ -2,10 +2,11 @@ import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
-import usuarioRotas from '@usuarios/usuario-routes';
-import aulaRoutes from '@usuarios/aula/aula-routs';
-import pedidoRoutes from '@usuarios/pedido/pedido-routs';
-import disciplinaRoutes from '@usuarios/disciplina/disciplina-routes';
+import usuarioRotas from './domains/usuario/usuario-routes';
+import aulaRoutes from './domains/aula/aula-routs';
+import pedidoRoutes from './domains/pedido/pedido-routs';
+import disciplinaRoutes from './domains/disciplina/disciplina-routes';
+import perfilRoutes from './domains/perfil/perfil-routes';
 // ajuste o alias se necessário
 
 const app = Fastify();
@@ -47,6 +48,7 @@ app.register(usuarioRotas, { prefix: '/usuarios' });
 app.register(aulaRoutes, { prefix: '/aulas' });
 app.register(pedidoRoutes, { prefix: '/pedidos' });
 app.register(disciplinaRoutes, { prefix: '/disciplinas' });
+app.register(perfilRoutes, { prefix: '/perfis' });
 
 
 export default app;

@@ -27,7 +27,7 @@ export function getAllUsers(): Promise<Usuario[]> {
       telefones: true,
       perfil: true
     }
-  }).then(users => users.map(user => ({ ...user, sexo: user.sexo as Sexo })));
+  }).then((users: any[]) => users.map((user: any) => ({ ...user, sexo: user.sexo as Sexo })));
 }
 
 export function getUserById(id: number): Promise<Usuario | null> {
@@ -37,7 +37,7 @@ export function getUserById(id: number): Promise<Usuario | null> {
       telefones: true,
       perfil: true
     }
-  }).then(user => user ? { ...user, sexo: user.sexo as Sexo } : null);
+  }).then((user: any) => user ? { ...user, sexo: user.sexo as Sexo } : null);
 }
 
 export function updateUser(id: number, data: UpdateUsuarioInput): Promise<Usuario | null> {
@@ -51,7 +51,7 @@ export function updateUser(id: number, data: UpdateUsuarioInput): Promise<Usuari
       telefones: true,
       perfil: true
     }
-  }).then(user => user ? { ...user, sexo: user.sexo as Sexo } : null);
+  }).then((user: any) => user ? { ...user, sexo: user.sexo as Sexo } : null);
 }
 
 export function deleteUser(id: number): Promise<boolean> {

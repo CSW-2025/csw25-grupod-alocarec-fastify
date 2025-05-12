@@ -1,13 +1,41 @@
 import { FastifyInstance } from 'fastify';
 import { createCurriculoController, getAllCurriculosController, getCurriculoByIdController, updateCurriculoController, deleteCurriculoController } from './curriculo-controller';
 
+const disciplinaSchema = {
+  type: 'object',
+  properties: {
+    id: { type: 'number' },
+    disciplina_id: { type: 'number' },
+    curriculo_id: { type: 'number' },
+    semestre: { type: 'string' },
+    disciplina: {
+      type: 'object',
+      properties: {
+        id: { type: 'number' },
+        nome: { type: 'string' },
+        codigo: { type: 'string' },
+        creditos: { type: 'number' },
+        carga_horaria: { type: 'number' },
+        createdAt: { type: 'string', format: 'date-time' },
+        updatedAt: { type: 'string', format: 'date-time' }
+      }
+    }
+  }
+};
+
 const curriculoSchema = {
   type: 'object',
   properties: {
     id: { type: 'number' },
     nome_curso: { type: 'string' },
     semestre_inicio_vigencia: { type: 'string' },
-    semestre_fim_vigencia: { type: 'string' }
+    semestre_fim_vigencia: { type: 'string' },
+    createdAt: { type: 'string', format: 'date-time' },
+    updatedAt: { type: 'string', format: 'date-time' },
+    disciplinas: {
+      type: 'array',
+      items: disciplinaSchema
+    }
   }
 };
 
