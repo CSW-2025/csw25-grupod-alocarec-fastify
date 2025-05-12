@@ -38,6 +38,9 @@ app.register(swaggerUi, {
 });
 
 // Rotas
+app.get('/', (req, reply) => {
+  reply.redirect('/documentation');
+});
 app.register(usuarioRotas, { prefix: '/usuarios' });
 app.register(perfilRoutes, { prefix: '/perfis' });
 // app.register(grupoRoutes, { prefix: '/grupos' });

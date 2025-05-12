@@ -1,6 +1,6 @@
 // user.repository.ts
 import { prisma } from '../../config/database';
-import { Usuario, CreateUsuarioInput, UpdateUsuarioInput } from './usuario-entity';
+import { Usuario, CreateUsuarioInput, UpdateUsuarioInput, Sexo } from './usuario-entity';
 
 export function createUser(data: CreateUsuarioInput): Promise<Usuario> {
   return prisma.usuario.create({
@@ -8,19 +8,17 @@ export function createUser(data: CreateUsuarioInput): Promise<Usuario> {
       nome: data.nome,
       email: data.email,
       dataNascimento: data.dataNascimento,
-      sexo: data.sexo,
+      sexo: data.sexo as Sexo,
       perfilId: data.perfilId,
       telefones: {
         create: data.telefones // array de { numero, descricao }
-      },
-      createdAt: new Date(),
-      updatedAt: new Date()
+      }
     },
     include: {
       telefones: true,
       perfil: true
     }
-  });
+  }).then((user: any) => ({ ...user, sexo: user.sexo as Sexo }));
 }
 
 export function getAllUsers(): Promise<Usuario[]> {
@@ -29,7 +27,7 @@ export function getAllUsers(): Promise<Usuario[]> {
       telefones: true,
       perfil: true
     }
-  });
+  }).then(users => users.map(user => ({ ...user, sexo: user.sexo as Sexo })));
 }
 
 export function getUserById(id: number): Promise<Usuario | null> {
@@ -39,12 +37,13 @@ export function getUserById(id: number): Promise<Usuario | null> {
       telefones: true,
       perfil: true
     }
-  });
+  }).then(user => user ? { ...user, sexo: user.sexo as Sexo } : null);
 }
 
 export function updateUser(id: number, data: UpdateUsuarioInput): Promise<Usuario | null> {
-  const updateData: any = { ...data, updatedAt: new Date() };
+  const updateData: any = { ...data };
   if (updateData.perfilId === undefined) delete updateData.perfilId;
+  if (updateData.sexo) updateData.sexo = updateData.sexo as Sexo;
   return prisma.usuario.update({
     where: { id },
     data: updateData,
@@ -52,7 +51,7 @@ export function updateUser(id: number, data: UpdateUsuarioInput): Promise<Usuari
       telefones: true,
       perfil: true
     }
-  });
+  }).then(user => user ? { ...user, sexo: user.sexo as Sexo } : null);
 }
 
 export function deleteUser(id: number): Promise<boolean> {

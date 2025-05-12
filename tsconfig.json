@@ -10,9 +10,10 @@
     "baseUrl": ".", 
     "paths": {
       "@usuarios/*": ["src/domains/usuario/*"],
-      "@grupo/*": ["src/domains/grupo/*"],
-    }
+
+    },
+    "rootDir": "./src"
   },
-  "include": ["src", "prisma"],
+  "include": ["src"],
   "exclude": ["node_modules", "dist"]
 }

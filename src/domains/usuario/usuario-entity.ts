@@ -9,12 +9,17 @@ export interface Perfil {
     nome: string; // Admin, Professor, Aluno, Coordenador
 }
 
+export enum Sexo {
+    M = 'M',
+    F = 'F'
+}
+
 export interface Usuario {
     id: number;
     email: string;
     nome: string;
     dataNascimento: Date;
-    sexo: string;
+    sexo: Sexo;
     telefones: Telefone[];
     perfilId: number;
     perfil: Perfil;
@@ -24,7 +29,7 @@ export type CreateUsuarioInput = {
     email: string;
     nome: string;
     dataNascimento: Date;
-    sexo: string;
+    sexo: Sexo;
     telefones: Omit<Telefone, 'id'>[];
     perfilId: number;
 };
