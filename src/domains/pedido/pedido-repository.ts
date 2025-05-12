@@ -1,4 +1,4 @@
-import prisma from '../../config/database';
+import { prisma } from 'src/config/database';
 import { CreatePedidoInput, UpdatePedidoInput } from './pedido-entity';
 
 export function create(data: CreatePedidoInput) {

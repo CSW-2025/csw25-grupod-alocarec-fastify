@@ -1,4 +1,4 @@
-import prisma from '../../config/database';
+import { prisma } from 'src/config/database';
 import { CreateDisciplinaInput, UpdateDisciplinaInput } from './disciplina-entity';
 
 export function create(data: CreateDisciplinaInput) {
