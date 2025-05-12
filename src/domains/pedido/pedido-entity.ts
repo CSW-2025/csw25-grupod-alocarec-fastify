@@ -1,11 +1,17 @@
-export interface Pedido {
-    id: number;
-    nome: string;
-    moderador_id?: number;
-    sala_id?: number;
-    recurso_id?: number;
-    status: string;
+export enum Status {
+  PENDENTE = 'pendente',
+  APROVADA = 'aprovada',
+  REJEITADA = 'rejeitada',
 }
 
-export type CreatePedidoInput = Omit<Pedido, 'id'>;
-export type UpdatePedidoInput = Partial<CreatePedidoInput>; 
+export interface Pedido {
+  id: number;
+  aula_id: number;
+  disciplina_id: number;
+  status: Status;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export type CreatePedidoInput = Omit<Pedido, 'id' | 'createdAt' | 'updatedAt'>;
+export type UpdatePedidoInput = Partial<CreatePedidoInput>;
