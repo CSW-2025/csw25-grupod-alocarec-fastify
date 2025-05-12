@@ -7,19 +7,117 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model dummy {
-  column1 String? @db.VarChar
-
-  @@ignore
+model Usuario {
+  id             Int       @id @default(autoincrement())
+  email          String    @unique
+  nome           String
+  dataNascimento DateTime
+  sexo           String
+  telefones      Telefone[]
+  perfilId       Int
+  perfil         Perfil    @relation(fields: [perfilId], references: [id])
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 }
 
-model usuario {
-  id        Int      @id @default(autoincrement())
+model Telefone {
+  id         Int      @id @default(autoincrement())
+  numero     String
+  descricao  String
+  usuarioId  Int
+  usuario    Usuario  @relation(fields: [usuarioId], references: [id])
+}
+
+model Perfil {
+  id      Int      @id @default(autoincrement())
+  nome    String   @unique
+  usuarios Usuario[]
+}
+
+model Grupo {
+  id        Int        @id @default(autoincrement())
   nome      String
-  email     String   @unique
-  tipo      String
-  ativo     Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+}
+
+model Turma {
+  id            Int        @id @default(autoincrement())
+  numero        String
+  semestre      String
+  professor_id  Int
+  vagas         Int
+  disciplina_id Int?
+  horarios      Horario[]
+}
+
+model Horario {
+  id          Int     @id @default(autoincrement())
+  dia_semana  String
+  horario     String
+  turma_id    Int
+  turma       Turma   @relation(fields: [turma_id], references: [id])
+}
+
+model Curriculo {
+  id                      Int      @id @default(autoincrement())
+  nome_curso              String
+  semestre_inicio_vigencia String
+  semestre_fim_vigencia    String
+  disciplinas            DisciplinaCurriculo[]
+}
+
+model Disciplina {
+  id            Int       @id @default(autoincrement())
+  nome          String
+  codigo        String    @unique
+  creditos      Int
+  carga_horaria Int
+  curriculos    DisciplinaCurriculo[]
+  requisitos    Requisito[]
+}
+
+model DisciplinaCurriculo {
+  id            Int       @id @default(autoincrement())
+  disciplina_id Int
+  curriculo_id  Int
+  semestre      String
+  disciplina    Disciplina @relation(fields: [disciplina_id], references: [id])
+  curriculo     Curriculo  @relation(fields: [curriculo_id], references: [id])
+}
+
+model Pedido {
+  id           Int      @id @default(autoincrement())
+  nome         String
+  moderador_id Int?
+  sala_id      Int?
+  recurso_id   Int?
+  status       String
+  sala         Sala?    @relation(fields: [sala_id], references: [id])
+  recurso      Recurso? @relation(fields: [recurso_id], references: [id])
+}
+
+model Requisito {
+  id            Int        @id @default(autoincrement())
+  tipo          String
+  disciplina_id Int
+  disciplina    Disciplina @relation(fields: [disciplina_id], references: [id])
+}
+
+model TipoRecurso {
+  id   Int    @id @default(autoincrement())
+  nome String
+  recursos Recurso[]
+}
+
+model Sala {
+  id      Int      @id @default(autoincrement())
+  nome    String
+  pedidos Pedido[]
+}
+
+model Recurso {
+  id            Int      @id @default(autoincrement())
+  nome          String
+  tipo_recurso_id Int
+  tipo_recurso  TipoRecurso @relation(fields: [tipo_recurso_id], references: [id])
+  pedidos       Pedido[]
 }

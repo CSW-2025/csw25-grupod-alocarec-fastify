@@ -9,12 +9,24 @@ export default async function usuarioRotas(fastify: FastifyInstance) {
       summary: 'Criar um novo usuário',
       body: {
         type: 'object',
-        required: ['nome', 'email', 'senha'],
+        required: ['nome', 'email', 'dataNascimento', 'sexo', 'perfilId', 'telefones'],
         properties: {
           nome: { type: 'string' },
           email: { type: 'string', format: 'email' },
-          senha: { type: 'string' },
-          tipo: { type: 'string', enum: ['usuario', 'admin', 'professor', 'aluno'] }
+          dataNascimento: { type: 'string', format: 'date-time' },
+          sexo: { type: 'string' },
+          perfilId: { type: 'number' },
+          telefones: {
+            type: 'array',
+            items: {
+              type: 'object',
+              required: ['numero', 'descricao'],
+              properties: {
+                numero: { type: 'string' },
+                descricao: { type: 'string' }
+              }
+            }
+          }
         }
       },
       response: {
@@ -24,8 +36,27 @@ export default async function usuarioRotas(fastify: FastifyInstance) {
             id: { type: 'number' },
             nome: { type: 'string' },
             email: { type: 'string' },
-            tipo: { type: 'string' },
-            ativo: { type: 'boolean' },
+            dataNascimento: { type: 'string', format: 'date-time' },
+            sexo: { type: 'string' },
+            perfilId: { type: 'number' },
+            perfil: {
+              type: 'object',
+              properties: {
+                id: { type: 'number' },
+                nome: { type: 'string' }
+              }
+            },
+            telefones: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  id: { type: 'number' },
+                  numero: { type: 'string' },
+                  descricao: { type: 'string' }
+                }
+              }
+            },
             createdAt: { type: 'string', format: 'date-time' },
             updatedAt: { type: 'string', format: 'date-time' }
           }

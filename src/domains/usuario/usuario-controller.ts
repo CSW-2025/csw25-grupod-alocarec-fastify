@@ -2,10 +2,12 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import * as userService from './usuario-service';
 import { CreateUsuarioInput, UpdateUsuarioInput } from './usuario-entity';
+import bcrypt from 'bcryptjs';
 
 export async function createUser(req: FastifyRequest, res: FastifyReply) {
-  const { nome, email, senha, tipo = 'usuario' } = req.body as CreateUsuarioInput;
-  const user = await userService.createUser({ nome, email, senha, tipo, ativo: true });
+  const { nome, email, dataNascimento, sexo, telefones, perfilId } = req.body as any;
+  // telefones deve ser um array de objetos { numero, descricao }
+  const user = await userService.createUser({ nome, email, dataNascimento, sexo, telefones, perfilId });
   res.status(201).send(user);
 }
 

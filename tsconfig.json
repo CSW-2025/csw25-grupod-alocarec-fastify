@@ -7,12 +7,12 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
-    "rootDir": "./src",
     "baseUrl": ".", 
     "paths": {
-      "@usuarios/*": ["src/domains/usuario/*"]
+      "@usuarios/*": ["src/domains/usuario/*"],
+      "@grupo/*": ["src/domains/grupo/*"],
     }
   },
-  "include": ["src"],
+  "include": ["src", "prisma"],
   "exclude": ["node_modules", "dist"]
 }

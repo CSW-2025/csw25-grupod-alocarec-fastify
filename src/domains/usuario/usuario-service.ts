@@ -1,10 +1,8 @@
 // user.service.ts
 import * as userRepository from './usuario-repository';
-import { Usuario } from './usuario-entity';
+import { Usuario, CreateUsuarioInput } from './usuario-entity';
 
-type CreateUserData = Omit<Usuario, 'id' | 'createdAt' | 'updatedAt'>;
-
-export function createUser(data: CreateUserData) {
+export function createUser(data: CreateUsuarioInput) {
   return userRepository.createUser(data);
 }
 
@@ -16,7 +14,7 @@ export function getUserById(id: number): Promise<Usuario | null> {
   return userRepository.getUserById(id);
 }
 
-export function updateUser(id: number, data: Partial<CreateUserData>): Promise<Usuario | null> {
+export function updateUser(id: number, data: Partial<CreateUsuarioInput>): Promise<Usuario | null> {
   return userRepository.updateUser(id, data);
 }
 

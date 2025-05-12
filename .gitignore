@@ -42,3 +42,5 @@ jest-coverage/
 # Others
 *.sqlite
 *.sqlite-journal
+
+*.code-workspace

@@ -1,9 +1,17 @@
 import Fastify from 'fastify';
+import cors from '@fastify/cors';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
-import usuarioRotas from '@usuarios/usuario-routes';
+import usuarioRotas from './domains/usuario/usuario-routes';
+import perfilRoutes from './domains/perfil/perfil-routes';
+// import grupoRoutes from './domains/grupo/grupo-routes';
 
 const app = Fastify();
+
+// Habilitar CORS para todas as origens
+app.register(cors, {
+  origin: true,
+});
 
 // Configuração do Swagger
 app.register(swagger, {
@@ -18,7 +26,9 @@ app.register(swagger, {
     consumes: ['application/json'],
     produces: ['application/json'],
     tags: [
-      { name: 'usuarios', description: 'Endpoints relacionados a usuários' }
+      { name: 'usuarios', description: 'Endpoints relacionados a usuários' },
+      { name: 'perfis', description: 'Endpoints relacionados a perfis' },
+      // { name: 'grupos', description: 'Endpoints relacionados a grupos' },     
     ]
   }
 });
@@ -29,5 +39,7 @@ app.register(swaggerUi, {
 
 // Rotas
 app.register(usuarioRotas, { prefix: '/usuarios' });
+app.register(perfilRoutes, { prefix: '/perfis' });
+// app.register(grupoRoutes, { prefix: '/grupos' });
 
 export default app;

@@ -1,5 +1,6 @@
 services:
   db:
+    container_name: alocarec-db
     image: postgres:15
     restart: always
     environment:
@@ -10,17 +11,22 @@ services:
       - pgdata:/var/lib/postgresql/data
     ports:
       - '5432:5432'
+    #expose:Comentado, para testar se o banco de dados está funcionando externamente
+    #  - '5432'
+    networks:
+      - alocarec-network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
+      interval: 10s
       timeout: 5s
       retries: 5
 
   app:
-    build: .
-    volumes:
-      - .:/app
-
+    container_name: alocarec-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
     ports:
       - '3000:3000'
       - '5555:5555'
@@ -28,9 +34,16 @@ services:
       db:
         condition: service_healthy
     environment:
-      DATABASE_URL: ${DATABASE_URL}
-    command: sh -c "npx prisma generate && npm run dev"  
+      DATABASE_URL: ${DATABASE_URL}      
+      #DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@alocarec-db:5432/${POSTGRES_DB}
+    networks:
+      - alocarec-network
 
+networks:
+  alocarec-network:
+    name: alocarec-network
 
 volumes:
   pgdata:
+    name: alocarec-pgdata
+ 

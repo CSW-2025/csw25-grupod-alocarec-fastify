@@ -1,14 +1,33 @@
-export interface Usuario {
+export interface Telefone {
     id: number;
-    nome: string;
-    email: string;
-    senha: string;
-    ativo: boolean;
-    tipo: string;
-    createdAt: Date;
-    updatedAt: Date;
+    numero: string;
+    descricao: string;
 }
 
-export type CreateUsuarioInput = Omit<Usuario, 'id' | 'createdAt' | 'updatedAt'>;
+export interface Perfil {
+    id: number;
+    nome: string; // Admin, Professor, Aluno, Coordenador
+}
+
+export interface Usuario {
+    id: number;
+    email: string;
+    nome: string;
+    dataNascimento: Date;
+    sexo: string;
+    telefones: Telefone[];
+    perfilId: number;
+    perfil: Perfil;
+}
+
+export type CreateUsuarioInput = {
+    email: string;
+    nome: string;
+    dataNascimento: Date;
+    sexo: string;
+    telefones: Omit<Telefone, 'id'>[];
+    perfilId: number;
+};
+
 export type UpdateUsuarioInput = Partial<CreateUsuarioInput>;
   
