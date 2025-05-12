@@ -116,6 +116,15 @@ model Requisito {
   disciplina_id Int
   disciplina    Disciplina @relation(fields: [disciplina_id], references: [id])
 }
+model Recurso {
+  id              Int     @id @default(autoincrement())
+  descricao       String
+  status          String
+  disponivel      Boolean @default(true)
+  tipo_recurso_id Int
+  tipoRecurso     TipoRecurso @relation(fields: [tipo_recurso_id], references: [id])
+  pedidos         Pedido[]
+}
 
 model TipoRecurso {
   id   Int    @id @default(autoincrement())
@@ -129,13 +138,6 @@ model Sala {
   pedidos Pedido[]
 }
 
-model Recurso {
-  id            Int      @id @default(autoincrement())
-  nome          String
-  tipo_recurso_id Int
-  tipo_recurso  TipoRecurso @relation(fields: [tipo_recurso_id], references: [id])
-  pedidos       Pedido[]
-}
 
 model Aula {
   id          Int      @id @default(autoincrement())
@@ -146,4 +148,17 @@ model Aula {
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+model Predio {
+  id              Int     @id @default(autoincrement())
+  numero          String
+  nome            String  @unique
+  descricao       String?
+  rua             String
+  numero_endereco String
+  complemento     String?
+  bairro          String
+  cidade          String
+  uf              String
+  cep             String
 }

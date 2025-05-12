@@ -7,6 +7,8 @@ import aulaRoutes from './domains/aula/aula-routs';
 import pedidoRoutes from './domains/pedido/pedido-routs';
 import disciplinaRoutes from './domains/disciplina/disciplina-routes';
 import perfilRoutes from './domains/perfil/perfil-routes';
+import predioRoutes  from './domains/predio/predio-routs';
+import recursoRoutes  from './domains/recurso/recurso-routs';
 // ajuste o alias se necessário
 
 const app = Fastify();
@@ -49,6 +51,8 @@ app.register(aulaRoutes, { prefix: '/aulas' });
 app.register(pedidoRoutes, { prefix: '/pedidos' });
 app.register(disciplinaRoutes, { prefix: '/disciplinas' });
 app.register(perfilRoutes, { prefix: '/perfis' });
+app.register(predioRoutes, { prefix: '/predios' });
+app.register(recursoRoutes, { prefix: '/recursos' });
 
 
 export default app;
