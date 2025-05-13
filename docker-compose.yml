@@ -38,7 +38,7 @@ services:
       #DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@alocarec-db:5432/${POSTGRES_DB}
     networks:
       - alocarec-network
-    entrypoint: ["sh", "entrypoint.sh"]
+    command: sh -c "npx prisma migrate dev --name init"
 
 networks:
   alocarec-network:
