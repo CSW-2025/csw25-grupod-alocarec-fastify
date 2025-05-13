@@ -9,6 +9,8 @@ import disciplinaRoutes from './domains/disciplina/disciplina-routes';
 import perfilRoutes from './domains/perfil/perfil-routes';
 import predioRoutes  from './domains/predio/predio-routs';
 import recursoRoutes  from './domains/recurso/recurso-routs';
+import salaRoutes from './domains/sala/sala-routs';
+import reservaRoutes from './domains/reserva/reserva-routs';
 // ajuste o alias se necessário
 
 const app = Fastify();
@@ -35,6 +37,8 @@ app.register(swagger, {
       { name: 'perfis', description: 'Endpoints relacionados a perfis' },
       { name: 'prédios', description: 'Endpoints relacionados a prédios' },
       { name: 'recursos', description: 'Endpoints relacionados a recursos' },
+      { name: 'salas', description: 'Endpoints relacionados a salas' },
+      { name: 'reservas', description: 'Endpoints relacionados a reservas' },
       // { name: 'grupos', description: 'Endpoints relacionados a grupos' },     
     ]
   }
@@ -55,6 +59,8 @@ app.register(disciplinaRoutes, { prefix: '/disciplinas' });
 app.register(perfilRoutes, { prefix: '/perfis' });
 app.register(predioRoutes, { prefix: '/predios' });
 app.register(recursoRoutes, { prefix: '/recursos' });
+app.register(salaRoutes, { prefix: '/salas' });
+app.register(reservaRoutes, { prefix: '/reservas' });
 
 
 export default app;
