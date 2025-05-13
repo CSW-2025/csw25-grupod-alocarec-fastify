@@ -28,6 +28,9 @@ yarn-error.log*
 docker-compose.override.yml
 docker.env
 
+# Aws
+.env.aws
+
 # TypeScript
 *.tsbuildinfo
 tsconfig.tsbuildinfo
