@@ -3,7 +3,13 @@ node_modules/
 dist/
 build/
 .env
-       
+
+# Terraform
+infra/.terraform/
+infra/terraform.tfstate
+infra/terraform.tfstate.*
+infra/*.tfstate
+infra/*.tfstate.*       
        
 # Prisma
 prisma/dev.db
