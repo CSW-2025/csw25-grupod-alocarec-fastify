@@ -124,9 +124,12 @@ model TipoRecurso {
 }
 
 model Sala {
-  id      Int      @id @default(autoincrement())
-  nome    String
-  pedidos Pedido[]
+  id          Int       @id @default(autoincrement()) 
+  nome        String    
+  capacidade  Int      
+  andar       String    
+  recurso     String?   
+  pedidos     Pedido[]  
 }
 
 model Recurso {
@@ -146,4 +149,12 @@ model Aula {
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Reserva {
+  id         Int    @id @default(autoincrement()) 
+  salaId     Int    
+  recurso    String 
+  observacao String 
+  sala       Sala   @relation(fields: [salaId], references: [id]) 
 }
