@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # filepath: ./entrypoint.sh
 
 # Aguarda o banco de dados estar pronto
