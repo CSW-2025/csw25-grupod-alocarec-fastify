@@ -14,7 +14,6 @@ infra/*.tfstate.*
 # Prisma
 prisma/dev.db
 prisma/dev.db-journal
-prisma/migrations/
 prisma/generated/
 
 # Logs
@@ -28,6 +27,9 @@ yarn-error.log*
 *.pid
 docker-compose.override.yml
 docker.env
+
+# Aws
+.env.aws
 
 # TypeScript
 *.tsbuildinfo
