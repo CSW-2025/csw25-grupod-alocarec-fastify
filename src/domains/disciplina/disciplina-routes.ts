@@ -28,6 +28,14 @@ const curriculoSchema = {
   }
 };
 
+const requisitoSchema = {
+  type: 'object',
+  properties: {
+    id: { type: 'number' },
+    tipo: { type: 'string' }
+  }
+};
+
 const disciplinaSchema = {
   type: 'object',
   properties: {
@@ -36,11 +44,16 @@ const disciplinaSchema = {
     codigo: { type: 'string' },
     creditos: { type: 'number' },
     carga_horaria: { type: 'number' },
+    ementa: { type: 'string' },
     createdAt: { type: 'string', format: 'date-time' },
     updatedAt: { type: 'string', format: 'date-time' },
     curriculos: {
       type: 'array',
       items: curriculoSchema
+    },
+    requisitos: {
+      type: 'array',
+      items: requisitoSchema
     }
   }
 };
@@ -57,7 +70,8 @@ export default async function disciplinaRoutes(fastify: FastifyInstance) {
           nome: { type: 'string' },
           codigo: { type: 'string' },
           creditos: { type: 'number' },
-          carga_horaria: { type: 'number' }
+          carga_horaria: { type: 'number' },
+          ementa: { type: 'string' }
         }
       },
       response: { 201: disciplinaSchema }
@@ -108,7 +122,8 @@ export default async function disciplinaRoutes(fastify: FastifyInstance) {
           nome: { type: 'string' },
           codigo: { type: 'string' },
           creditos: { type: 'number' },
-          carga_horaria: { type: 'number' }
+          carga_horaria: { type: 'number' },
+          ementa: { type: 'string' }
         }
       },
       response: {

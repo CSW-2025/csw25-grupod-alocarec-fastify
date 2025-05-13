@@ -30,6 +30,7 @@ model Usuario {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
   reservas       Reserva[]
+  aulas          AulaUsuario[]
 }
 
 model Telefone {
@@ -59,6 +60,7 @@ model Turma {
   vagas         Int
   disciplina_id Int?
   horarios      Horario[]
+  aulas         Aula[]
 }
 
 model Horario {
@@ -83,6 +85,7 @@ model Disciplina {
   codigo        String    @unique
   creditos      Int
   carga_horaria Int
+  ementa        String?
   curriculos    DisciplinaCurriculo[]
   requisitos    Requisito[]
 }
@@ -150,6 +153,7 @@ model Sala {
   predio     Predio   @relation(fields: [predioId], references: [id])
   pedidos    Pedido[]
   reservas   Reserva[]
+  aulas      Aula[]
 }
 
 model Aula {
@@ -158,10 +162,15 @@ model Aula {
   data_inicio DateTime
   data_fim    DateTime
   descricao   String?
-
+  turmaId     Int
+  salaId      Int
+  turma       Turma    @relation(fields: [turmaId], references: [id])
+  sala        Sala     @relation(fields: [salaId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  usuarios    AulaUsuario[]
 }
+
 model Predio {
   id              Int     @id @default(autoincrement())
   numero          String
@@ -176,4 +185,12 @@ model Predio {
   cep             String
 
   salas           Sala[]
+}
+
+model AulaUsuario {
+  usuarioId Int
+  aulaId    Int
+  usuario   Usuario @relation(fields: [usuarioId], references: [id])
+  aula      Aula    @relation(fields: [aulaId], references: [id])
+  @@id([usuarioId, aulaId])
 }

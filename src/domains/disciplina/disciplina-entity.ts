@@ -6,6 +6,7 @@ export interface Disciplina {
   codigo: string;
   creditos: number;
   carga_horaria: number;
+  ementa?: string;
   createdAt: Date;
   updatedAt: Date;
   curriculos?: readonly DisciplinaCurriculo[];
