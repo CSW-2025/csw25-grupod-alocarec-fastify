@@ -1,5 +1,3 @@
-import { Prisma } from '@prisma/client';
-
 export interface Pedido {
   id: number;
   aula_id: number;
