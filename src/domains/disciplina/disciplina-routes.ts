@@ -7,35 +7,6 @@ import {
   deleteDisciplina,
 } from './disciplina-controller';
 
-const curriculoSchema = {
-  type: 'object',
-  properties: {
-    id: { type: 'number' },
-    curriculo_id: { type: 'number' },
-    disciplina_id: { type: 'number' },
-    semestre: { type: 'string' },
-    curriculo: {
-      type: 'object',
-      properties: {
-        id: { type: 'number' },
-        nome_curso: { type: 'string' },
-        semestre_inicio_vigencia: { type: 'string' },
-        semestre_fim_vigencia: { type: 'string' },
-        createdAt: { type: 'string', format: 'date-time' },
-        updatedAt: { type: 'string', format: 'date-time' }
-      }
-    }
-  }
-};
-
-const requisitoSchema = {
-  type: 'object',
-  properties: {
-    id: { type: 'number' },
-    tipo: { type: 'string' }
-  }
-};
-
 const disciplinaSchema = {
   type: 'object',
   properties: {
@@ -46,20 +17,22 @@ const disciplinaSchema = {
     carga_horaria: { type: 'number' },
     ementa: { type: 'string' },
     createdAt: { type: 'string', format: 'date-time' },
-    updatedAt: { type: 'string', format: 'date-time' },
-    curriculos: {
-      type: 'array',
-      items: curriculoSchema
-    },
-    requisitos: {
-      type: 'array',
-      items: requisitoSchema
-    }
+    updatedAt: { type: 'string', format: 'date-time' }
   }
 };
 
+function verificarAdminOuCoordenador(request: any, reply: any, done: any) {
+  const user = request.user;
+  if (!user || !user.perfil || (user.perfil.nome !== 'Admin' && user.perfil.nome !== 'Coordenador')) {
+    reply.code(403).send({ message: 'Acesso restrito a administradores ou coordenadores.' });
+    return;
+  }
+  done();
+}
+
 export default async function disciplinaRoutes(fastify: FastifyInstance) {
   fastify.post('/', {
+    preHandler: verificarAdminOuCoordenador,
     schema: {
       tags: ['disciplinas'],
       summary: 'Criar uma nova disciplina',
@@ -108,6 +81,7 @@ export default async function disciplinaRoutes(fastify: FastifyInstance) {
   }, getDisciplinaById);
 
   fastify.put('/:id', {
+    preHandler: verificarAdminOuCoordenador,
     schema: {
       tags: ['disciplinas'],
       summary: 'Atualizar disciplina',
@@ -134,6 +108,7 @@ export default async function disciplinaRoutes(fastify: FastifyInstance) {
   }, updateDisciplina);
 
   fastify.delete('/:id', {
+    preHandler: verificarAdminOuCoordenador,
     schema: {
       tags: ['disciplinas'],
       summary: 'Deletar disciplina',

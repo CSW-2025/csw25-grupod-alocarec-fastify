@@ -14,7 +14,6 @@ import reservaRoutes from './domains/reserva/reserva-routs';
 import turmaRoutes from './domains/turma/turma-routes';
 import tipoRecursoRoutes from './domains/tipo-recurso/tipo-recurso-routes';
 import curriculoRoutes from './domains/curriculo/curriculo-routes';
-import horarioRoutes from './domains/horario/horario-routes';
 // ajuste o alias se necessário
 
 const app = Fastify();
@@ -38,19 +37,28 @@ app.register(swagger, {
     produces: ['application/json'],
     tags: [
       { name: 'aulas', description: 'Endpoints relacionados a aulas' },
-      { name: 'currículos', description: 'Endpoints relacionados a currículos' },
+      { name: 'curriculos', description: 'Endpoints relacionados a curriculos' },
       { name: 'disciplinas', description: 'Endpoints relacionados a disciplinas' },
-      { name: 'horarios', description: 'Endpoints relacionados a horários de turmas' },
       { name: 'pedidos', description: 'Endpoints relacionados a pedidos' },
       { name: 'perfis', description: 'Endpoints relacionados a perfis' },
-      { name: 'prédios', description: 'Endpoints relacionados a prédios' },
+      { name: 'predios', description: 'Endpoints relacionados a predios' },
       { name: 'recursos', description: 'Endpoints relacionados a recursos' },
       { name: 'reservas', description: 'Endpoints relacionados a reservas' },
       { name: 'salas', description: 'Endpoints relacionados a salas' },
       { name: 'tipos de recurso', description: 'Endpoints relacionados a tipos de recurso' },
       { name: 'turmas', description: 'Endpoints relacionados a turmas' },
-      { name: 'usuarios', description: 'Endpoints relacionados a usuarios' },
-      { name: 'curriculos', description: 'Endpoints relacionados a curriculos' },
+      { name: 'usuarios', description: 'Endpoints relacionados a usuarios' }
+    ],
+    securityDefinitions: {
+      BearerAuth: {
+        type: 'apiKey',
+        name: 'Authorization',
+        in: 'header',
+        description: 'JWT token no formato: Bearer <token>'
+      }
+    },
+    security: [
+      { BearerAuth: [] }
     ]
   }
 });
@@ -75,6 +83,5 @@ app.register(reservaRoutes, { prefix: '/reservas' });
 app.register(turmaRoutes, { prefix: '/turmas' });
 app.register(tipoRecursoRoutes, { prefix: '/tipos-recurso' });
 app.register(curriculoRoutes, { prefix: '/curriculos' });
-app.register(horarioRoutes, { prefix: '/horarios' });
 
 export default app;

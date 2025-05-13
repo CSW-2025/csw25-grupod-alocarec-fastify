@@ -7,40 +7,35 @@ import {
   deleteSala,
 } from './sala-controller';
 
+declare module 'fastify' {
+  interface FastifyRequest {
+    user?: any;
+  }
+}
+
+function verificarAdmin(request: any, reply: any, done: any) {
+  const user = request.user;
+  if (!user || !user.perfil || user.perfil.nome !== 'Admin') {
+    reply.code(403).send({ message: 'Acesso restrito a administradores.' });
+    return;
+  }
+  done();
+}
+
 export default async function salaRoutes(app: FastifyInstance) {
-  app.post('/', {
-    schema: {
-      tags: ['salas'],
-      summary: 'Criar uma nova sala',
-      body: {
-        type: 'object',
-        required: ['nome', 'capacidade', 'predioId'],
-        properties: {
-          nome: { type: 'string' },
-          capacidade: { type: 'number' },
-          predioId: { type: 'number' }
-        }
-      },
-      response: {
-        201: {
-          type: 'object',
-          properties: {
-            id: { type: 'number' },
-            nome: { type: 'string' },
-            capacidade: { type: 'number' },
-            predioId: { type: 'number' },
-            predio: {
-              type: 'object',
-              properties: {
-                id: { type: 'number' },
-                nome: { type: 'string' }
-              }
-            }
-          }
-        }
+  app.addHook('preHandler', async (request, reply) => {
+    if (request.headers.authorization) {
+      try {
+        const token = request.headers.authorization.replace('Bearer ', '');
+        const decoded = require('jsonwebtoken').verify(token, require('../../config/jwt').JWT_SECRET);
+        request.user = decoded;
+      } catch (err) {
+        reply.code(401).send({ message: 'Token inválido.' });
       }
     }
-  }, createSala);
+  });
+
+  app.post('/', { preHandler: verificarAdmin, schema: { tags: ['salas'] } }, createSala);
 
   app.get('/', {
     schema: {
@@ -108,72 +103,7 @@ export default async function salaRoutes(app: FastifyInstance) {
     }
   }, getSalaById);
 
-  app.put('/:id', {
-    schema: {
-      tags: ['salas'],
-      summary: 'Atualizar sala',
-      params: {
-        type: 'object',
-        required: ['id'],
-        properties: {
-          id: { type: 'string' }
-        }
-      },
-      body: {
-        type: 'object',
-        properties: {
-          nome: { type: 'string' },
-          capacidade: { type: 'number' },
-          predioId: { type: 'number' }
-        }
-      },
-      response: {
-        200: {
-          type: 'object',
-          properties: {
-            id: { type: 'number' },
-            nome: { type: 'string' },
-            capacidade: { type: 'number' },
-            predioId: { type: 'number' },
-            predio: {
-              type: 'object',
-              properties: {
-                id: { type: 'number' },
-                nome: { type: 'string' }
-              }
-            }
-          }
-        },
-        404: {
-          type: 'object',
-          properties: {
-            message: { type: 'string' }
-          }
-        }
-      }
-    }
-  }, updateSala);
+  app.put('/:id', { preHandler: verificarAdmin, schema: { tags: ['salas'] } }, updateSala);
 
-  app.delete('/:id', {
-    schema: {
-      tags: ['salas'],
-      summary: 'Deletar sala',
-      params: {
-        type: 'object',
-        required: ['id'],
-        properties: {
-          id: { type: 'string' }
-        }
-      },
-      response: {
-        204: { type: 'null' },
-        404: {
-          type: 'object',
-          properties: {
-            message: { type: 'string' }
-          }
-        }
-      }
-    }
-  }, deleteSala);
+  app.delete('/:id', { preHandler: verificarAdmin, schema: { tags: ['salas'] } }, deleteSala);
 } 

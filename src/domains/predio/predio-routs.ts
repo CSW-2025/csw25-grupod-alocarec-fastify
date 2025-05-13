@@ -7,39 +7,37 @@ import {
   deletePredioController,
 } from './predio-controller';
 
+declare module 'fastify' {
+  interface FastifyRequest {
+    user?: any;
+  }
+}
+
+function verificarAdmin(request: any, reply: any, done: any) {
+  const user = request.user;
+  if (!user || !user.perfil || user.perfil.nome !== 'Admin') {
+    reply.code(403).send({ message: 'Acesso restrito a administradores.' });
+    return;
+  }
+  done();
+}
+
 export default async function predioRoutes(app: FastifyInstance) {
-  app.post('/', {
-    schema: {
-      tags: ['prédios'],
-      summary: 'Criar um novo prédio'
+  app.addHook('preHandler', async (request, reply) => {
+    if (request.headers.authorization) {
+      try {
+        const token = request.headers.authorization.replace('Bearer ', '');
+        const decoded = require('jsonwebtoken').verify(token, require('../../config/jwt').JWT_SECRET);
+        request.user = decoded;
+      } catch (err) {
+        reply.code(401).send({ message: 'Token inválido.' });
+      }
     }
-  }, createPredioController);
+  });
 
-  app.get('/', {
-    schema: {
-      tags: ['prédios'],
-      summary: 'Listar todos os prédios'
-    }
-  }, getAllPrediosController);
-
-  app.get('/:id', {
-    schema: {
-      tags: ['prédios'],
-      summary: 'Buscar prédio por ID'
-    }
-  }, getPredioByIdController);
-
-  app.put('/:id', {
-    schema: {
-      tags: ['prédios'],
-      summary: 'Atualizar prédio'
-    }
-  }, updatePredioController);
-
-  app.delete('/:id', {
-    schema: {
-      tags: ['prédios'],
-      summary: 'Deletar prédio'
-    }
-  }, deletePredioController);
+  app.post('/', { preHandler: verificarAdmin, schema: { tags: ['predios'] } }, createPredioController);
+  app.put('/:id', { preHandler: verificarAdmin, schema: { tags: ['predios'] } }, updatePredioController);
+  app.delete('/:id', { preHandler: verificarAdmin, schema: { tags: ['predios'] } }, deletePredioController);
+  app.get('/', { schema: { tags: ['predios'] } }, getAllPrediosController);
+  app.get('/:id', { schema: { tags: ['predios'] } }, getPredioByIdController);
 }

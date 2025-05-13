@@ -3,11 +3,13 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import * as userService from './usuario-service';
 import { CreateUsuarioInput, UpdateUsuarioInput } from './usuario-entity';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { JWT_SECRET } from '../../config/jwt';
 
 export async function createUser(req: FastifyRequest, res: FastifyReply) {
-  const { nome, email, dataNascimento, sexo, telefones, perfilId } = req.body as any;
+  const { nome, email, dataNascimento, sexo, telefones, perfilId, senha } = req.body as any;
   // telefones deve ser um array de objetos { numero, descricao }
-  const user = await userService.createUser({ nome, email, dataNascimento, sexo, telefones, perfilId });
+  const user = await userService.createUser({ nome, email, dataNascimento, sexo, telefones, perfilId, senha });
   res.status(201).send(user);
 }
 
@@ -61,4 +63,23 @@ export async function deleteUser(req: FastifyRequest, res: FastifyReply) {
     return;
   }
   res.status(204).send();
+}
+
+export async function login(req: FastifyRequest, res: FastifyReply) {
+  const { email, senha } = req.body as { email: string; senha: string };
+  if (!email || !senha) {
+    return res.status(400).send({ message: 'Email e senha são obrigatórios.' });
+  }
+  const user = await userService.getUserByEmail(email);
+  if (!user) {
+    return res.status(401).send({ message: 'Usuário ou senha inválidos.' });
+  }
+  const senhaValida = await bcrypt.compare(senha, user.senha);
+  if (!senhaValida) {
+    return res.status(401).send({ message: 'Usuário ou senha inválidos.' });
+  }
+  // Não incluir a senha no payload do token
+  const { senha: _, ...userPayload } = user;
+  const token = jwt.sign(userPayload, JWT_SECRET, { expiresIn: '1h' });
+  return res.send({ token });
 }

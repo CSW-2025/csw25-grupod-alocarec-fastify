@@ -1,7 +1,29 @@
 import { FastifyInstance } from 'fastify';
 import { createUser, getAllUsers, getUserById, updateUser, deleteUser } from './usuario-controller';
 
+function verificarAdmin(request: any, reply: any, done: any) {
+  const user = request.user;
+  if (!user || !user.perfil || user.perfil.nome !== 'Admin') {
+    reply.code(403).send({ message: 'Acesso restrito a administradores.' });
+    return;
+  }
+  done();
+}
+
 export default async function usuarioRotas(fastify: FastifyInstance) {
+  // Middleware para autenticação JWT
+  fastify.addHook('preHandler', async (request, reply) => {
+    if (request.headers.authorization) {
+      try {
+        const token = request.headers.authorization.replace('Bearer ', '');
+        const decoded = require('jsonwebtoken').verify(token, require('../../config/jwt').JWT_SECRET);
+        request.user = decoded;
+      } catch (err) {
+        reply.code(401).send({ message: 'Token inválido.' });
+      }
+    }
+  });
+
   // Criar usuário
   fastify.post('/', {
     schema: {
@@ -62,7 +84,8 @@ export default async function usuarioRotas(fastify: FastifyInstance) {
           }
         }
       }
-    }
+    },
+    preHandler: verificarAdmin
   }, createUser);
 
   // Listar todos os usuários
@@ -205,7 +228,8 @@ export default async function usuarioRotas(fastify: FastifyInstance) {
           }
         }
       }
-    }
+    },
+    preHandler: verificarAdmin
   }, updateUser);
 
   // Deletar usuário
@@ -231,6 +255,7 @@ export default async function usuarioRotas(fastify: FastifyInstance) {
           }
         }
       }
-    }
+    },
+    preHandler: verificarAdmin
   }, deleteUser);
 }

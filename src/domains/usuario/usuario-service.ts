@@ -1,6 +1,7 @@
 // user.service.ts
 import * as userRepository from './usuario-repository';
 import { Usuario, CreateUsuarioInput } from './usuario-entity';
+import { prisma } from '../../config/database';
 
 export function createUser(data: CreateUsuarioInput) {
   return userRepository.createUser(data);
@@ -20,4 +21,8 @@ export function updateUser(id: number, data: Partial<CreateUsuarioInput>): Promi
 
 export function deleteUser(id: number): Promise<boolean> {
   return userRepository.deleteUser(id);
+}
+
+export async function getUserByEmail(email: string) {
+  return prisma.usuario.findUnique({ where: { email } });
 }

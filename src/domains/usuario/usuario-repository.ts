@@ -2,14 +2,15 @@
 import { prisma } from '../../config/database';
 import { Usuario, CreateUsuarioInput, UpdateUsuarioInput, Sexo } from './usuario-entity';
 
-export function createUser(data: CreateUsuarioInput): Promise<Usuario> {
+export async function createUser(data: CreateUsuarioInput): Promise<Usuario> {
   return prisma.usuario.create({
     data: {
       nome: data.nome,
       email: data.email,
-      dataNascimento: data.dataNascimento,
+      dataNascimento: new Date(data.dataNascimento),
       sexo: data.sexo as Sexo,
       perfilId: data.perfilId,
+      senha: data.senha,
       telefones: {
         create: data.telefones // array de { numero, descricao }
       }

@@ -12,13 +12,6 @@ export function findAll() {
 export function findById(id: number) {
   return prisma.disciplina.findUnique({
     where: { id },
-    include: {
-      curriculos: {
-        include: {
-          curriculo: true
-        }
-      }
-    }
   });
 }
 

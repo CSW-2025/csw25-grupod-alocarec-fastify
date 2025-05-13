@@ -32,6 +32,7 @@ export type CreateUsuarioInput = {
     sexo: Sexo;
     telefones: Omit<Telefone, 'id'>[];
     perfilId: number;
+    senha: string;
 };
 
 export type UpdateUsuarioInput = Partial<CreateUsuarioInput>;

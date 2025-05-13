@@ -18,6 +18,24 @@ enum Status {
   REJEITADA
 }
 
+enum HorarioEnum {
+  A // 08:00
+  B // 08:45
+  C // 09:45
+  D // 10:30
+  E // 11:30
+  F // 14:00
+  G // 14:45
+  H // 15:45
+  I // 16:30
+  J // 17:30
+  K // 18:15
+  L // 19:15
+  M // 20:00
+  N // 21:00
+  P // 21:45
+}
+
 model Usuario {
   id             Int       @id @default(autoincrement())
   email          String    @unique
@@ -31,6 +49,7 @@ model Usuario {
   updatedAt      DateTime  @updatedAt
   reservas       Reserva[]
   aulas          AulaUsuario[]
+  senha          String    // hash da senha
 }
 
 model Telefone {
@@ -66,17 +85,17 @@ model Turma {
 model Horario {
   id          Int     @id @default(autoincrement())
   dia_semana  String
-  horario     String
+  horario     HorarioEnum
   turma_id    Int
   turma       Turma   @relation(fields: [turma_id], references: [id])
 }
 
 model Curriculo {
-  id                      Int      @id @default(autoincrement())
+  id        Int         @id @default(autoincrement())
   nome_curso              String
   semestre_inicio_vigencia String
   semestre_fim_vigencia    String
-  disciplinas            DisciplinaCurriculo[]
+  disciplinas              Disciplina[] @relation("CurriculoDisciplinas")
 }
 
 model Disciplina {
@@ -86,17 +105,7 @@ model Disciplina {
   creditos      Int
   carga_horaria Int
   ementa        String?
-  curriculos    DisciplinaCurriculo[]
-  requisitos    Requisito[]
-}
-
-model DisciplinaCurriculo {
-  id            Int       @id @default(autoincrement())
-  disciplina_id Int
-  curriculo_id  Int
-  semestre      String
-  disciplina    Disciplina @relation(fields: [disciplina_id], references: [id])
-  curriculo     Curriculo  @relation(fields: [curriculo_id], references: [id])
+  curriculos    Curriculo[] @relation("CurriculoDisciplinas")
 }
 
 model Pedido {
@@ -114,12 +123,6 @@ model Pedido {
   updatedAt      DateTime @updatedAt
 }
 
-model Requisito {
-  id            Int        @id @default(autoincrement())
-  tipo          String
-  disciplina_id Int
-  disciplina    Disciplina @relation(fields: [disciplina_id], references: [id])
-}
 model Recurso {
   id              Int     @id @default(autoincrement())
   descricao       String
@@ -164,6 +167,7 @@ model Aula {
   descricao   String?
   turmaId     Int
   salaId      Int
+  horario     HorarioEnum?
   turma       Turma    @relation(fields: [turmaId], references: [id])
   sala        Sala     @relation(fields: [salaId], references: [id])
   createdAt   DateTime @default(now())
