@@ -33,6 +33,8 @@ app.register(swagger, {
     tags: [
       { name: 'usuarios', description: 'Endpoints relacionados a usuários' },
       { name: 'perfis', description: 'Endpoints relacionados a perfis' },
+      { name: 'prédios', description: 'Endpoints relacionados a prédios' },
+      { name: 'recursos', description: 'Endpoints relacionados a recursos' },
       // { name: 'grupos', description: 'Endpoints relacionados a grupos' },     
     ]
   }
