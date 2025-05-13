@@ -1,13 +1,10 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { prisma } from "src/config/database";
 
 function getErrorMessage(error: unknown): string {
   if (error instanceof Error) return error.message;
   return String(error);
 }
 
-// Criar uma nova sala
 export async function createSala(data: { nome: string, capacidade: number, andar: string, recurso?: string }) {
   try {
     const sala = await prisma.sala.create({
@@ -24,7 +21,7 @@ export async function createSala(data: { nome: string, capacidade: number, andar
   }
 }
 
-// Obter todas as salas
+
 export async function getAllSalas() {
   try {
     return await prisma.sala.findMany();
@@ -33,7 +30,7 @@ export async function getAllSalas() {
   }
 }
 
-// Obter uma sala pelo ID
+
 export async function getSalaById(id: number) {
   try {
     return await prisma.sala.findUnique({
