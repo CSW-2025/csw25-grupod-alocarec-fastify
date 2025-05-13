@@ -51,6 +51,7 @@ services:
       DATABASE_URL: ${DATABASE_URL}
     networks:
       - alocarec-network
+    restart: "no"
 
 networks:
   alocarec-network:
