@@ -29,6 +29,7 @@ model Usuario {
   perfil         Perfil    @relation(fields: [perfilId], references: [id])
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
+  reservas       Reserva[]
 }
 
 model Telefone {
@@ -126,6 +127,15 @@ model Recurso {
   pedidos         Pedido[]
 }
 
+model Reserva {
+  id        Int      @id @default(autoincrement())
+  salaId    Int
+  usuarioId Int
+  dataHora  DateTime
+  sala      Sala     @relation(fields: [salaId], references: [id])
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id])
+}
+
 model TipoRecurso {
   id   Int    @id @default(autoincrement())
   nome String
@@ -133,11 +143,14 @@ model TipoRecurso {
 }
 
 model Sala {
-  id      Int      @id @default(autoincrement())
-  nome    String
-  pedidos Pedido[]
+  id         Int      @id @default(autoincrement())
+  nome       String
+  capacidade Int
+  predioId   Int
+  predio     Predio   @relation(fields: [predioId], references: [id])
+  pedidos    Pedido[]
+  reservas   Reserva[]
 }
-
 
 model Aula {
   id          Int      @id @default(autoincrement())
@@ -161,4 +174,6 @@ model Predio {
   cidade          String
   uf              String
   cep             String
+
+  salas           Sala[]
 }
