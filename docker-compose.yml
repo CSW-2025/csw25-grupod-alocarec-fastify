@@ -39,6 +39,8 @@ services:
     networks:
       - alocarec-network
     entrypoint: sh -c "npx prisma migrate dev --name init && npm start"
+    volumes:
+      - .:/app
 
 networks:
   alocarec-network:
