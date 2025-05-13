@@ -57,13 +57,7 @@ app.register(aulaRoutes, { prefix: '/aulas' });
 app.register(pedidoRoutes, { prefix: '/pedidos' });
 app.register(disciplinaRoutes, { prefix: '/disciplinas' });
 app.register(perfilRoutes, { prefix: '/perfis' });
-<<<<<<< HEAD
 app.register(reservaRoutes, { prefix: '/reserva' });
 app.register(salaRoutes, { prefix: '/salas' });
-=======
-app.register(predioRoutes, { prefix: '/predios' });
-app.register(recursoRoutes, { prefix: '/recursos' });
-
->>>>>>> origin/main
 
 export default app;

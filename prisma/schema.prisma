@@ -152,7 +152,6 @@ model Aula {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
-<<<<<<< HEAD
 
 model Reserva {
   id         Int    @id @default(autoincrement()) 
@@ -160,18 +159,4 @@ model Reserva {
   recurso    String 
   observacao String 
   sala       Sala   @relation(fields: [salaId], references: [id]) 
-=======
-model Predio {
-  id              Int     @id @default(autoincrement())
-  numero          String
-  nome            String  @unique
-  descricao       String?
-  rua             String
-  numero_endereco String
-  complemento     String?
-  bairro          String
-  cidade          String
-  uf              String
-  cep             String
->>>>>>> origin/main
 }
