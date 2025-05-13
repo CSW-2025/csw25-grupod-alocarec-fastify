@@ -1,22 +1,25 @@
-import { prisma } from '../../config/database';
-import { CreateAulaInput, UpdateAulaInput } from './aula-entity';
+import { PrismaClient, Aula as PrismaAula } from '@prisma/client';
 
-export function create(data: CreateAulaInput) {
-  return prisma.aula.create({ data });
-}
+const prisma = new PrismaClient();
 
-export function findAll() {
-  return prisma.aula.findMany();
-}
+export class AulaRepository {
+  async create(data: Omit<PrismaAula, 'id'>): Promise<PrismaAula> {
+    return prisma.aula.create({ data });
+  }
 
-export function findById(id: number) {
-  return prisma.aula.findUnique({ where: { id } });
-}
+  async findAll(): Promise<PrismaAula[]> {
+    return prisma.aula.findMany();
+  }
 
-export function update(id: number, data: UpdateAulaInput) {
-  return prisma.aula.update({ where: { id }, data });
-}
+  async findById(id: number): Promise<PrismaAula | null> {
+    return prisma.aula.findUnique({ where: { id } });
+  }
 
-export function remove(id: number) {
-  return prisma.aula.delete({ where: { id } });
+  async update(id: number, data: Partial<Omit<PrismaAula, 'id'>>): Promise<PrismaAula> {
+    return prisma.aula.update({ where: { id }, data });
+  }
+
+  async delete(id: number): Promise<void> {
+    await prisma.aula.delete({ where: { id } });
+  }
 }
