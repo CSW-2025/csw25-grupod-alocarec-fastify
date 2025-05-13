@@ -1,9 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 
+import { prisma } from 'src/config/database';
 
-const prisma = new PrismaClient();
-
-// Criar Sala
 export async function createSala(
   request: FastifyRequest<{ Body: { numSala: string, capacidade: number, andar: string, recurso?: string } }>,
   reply: FastifyReply
@@ -28,7 +26,6 @@ export async function createSala(
   }
 }
 
-// Listar Salas
 export async function getAllSalas(
   request: FastifyRequest,
   reply: FastifyReply
