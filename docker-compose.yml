@@ -46,7 +46,7 @@ services:
     depends_on:
       app:
         condition: service_started
-    command: npx prisma migrate dev --name init
+    command: /bin/sh -c "npx prisma migrate dev --name init && npm run prisma:seed"
     environment:
       DATABASE_URL: ${DATABASE_URL}
     networks:

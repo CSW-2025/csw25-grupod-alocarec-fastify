@@ -6,23 +6,68 @@ import {
   deletePredio,
 } from './predio-repository';
 import { CreatePredioInput, UpdatePredioInput } from './predio-entity';
+import { toPredioResponseDTO } from './dto/PredioMapper';
+import { PredioResponseDTO } from './dto/PredioResponseDTO';
 
-export async function createPredioService(data: CreatePredioInput) {
-  return await createPredio(data);
+class ServiceError extends Error {
+  statusCode: number;
+  constructor(message: string, statusCode = 500) {
+    super(message);
+    this.name = 'ServiceError';
+    this.statusCode = statusCode;
+  }
 }
 
-export async function getAllPrediosService() {
-  return await getAllPredios();
+export async function createPredioService(data: CreatePredioInput): Promise<PredioResponseDTO> {
+  try {
+    const predio = await createPredio(data);
+    return toPredioResponseDTO(predio);
+  } catch (error) {
+    throw new ServiceError('Erro ao criar prédio', 500);
+  }
 }
 
-export async function getPredioByIdService(id: number) {
-  return await getPredioById(id);
+export async function getAllPrediosService(): Promise<PredioResponseDTO[]> {
+  try {
+    const predios = await getAllPredios();
+    return predios.map(toPredioResponseDTO);
+  } catch (error) {
+    throw new ServiceError('Erro ao listar prédios', 500);
+  }
 }
 
-export async function updatePredioService(id: number, data: UpdatePredioInput) {
-  return await updatePredio(id, data);
+export async function getPredioByIdService(id: number): Promise<PredioResponseDTO> {
+  try {
+    const predio = await getPredioById(id);
+    if (!predio) throw new ServiceError('Prédio não encontrado', 404);
+    return toPredioResponseDTO(predio);
+  } catch (error) {
+    if (error instanceof ServiceError) throw error;
+    throw new ServiceError('Erro ao buscar prédio', 500);
+  }
 }
 
-export async function deletePredioService(id: number) {
-  return await deletePredio(id);
+export async function updatePredioService(id: number, data: UpdatePredioInput): Promise<PredioResponseDTO> {
+  try {
+    const predio = await updatePredio(id, data);
+    if (!predio) throw new ServiceError('Prédio não encontrado', 404);
+    return toPredioResponseDTO(predio);
+  } catch (error) {
+    if ((error as any).code === 'P2025') {
+      throw new ServiceError('Prédio não encontrado', 404);
+    }
+    throw new ServiceError('Erro ao atualizar prédio', 500);
+  }
+}
+
+export async function deletePredioService(id: number): Promise<void> {
+  try {
+    const deleted = await deletePredio(id);
+    if (!deleted) throw new ServiceError('Prédio não encontrado', 404);
+  } catch (error) {
+    if ((error as any).code === 'P2025') {
+      throw new ServiceError('Prédio não encontrado', 404);
+    }
+    throw new ServiceError('Erro ao deletar prédio', 500);
+  }
 }

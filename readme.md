@@ -17,16 +17,12 @@ Este é um projeto usando o framework Fastify com TypeScrip e PostgreSQL com Pri
 ```bash
 docker-compose up --build
 ```
-
-2. **Execute a migração inicial:**
-
-- Se tiver o Node e o NPM instalados:
-```bash
-npm run migrate init
-```
--  Caso contrário: 
-```bash
-docker compose exec app npx prisma migrate dev --name init
-```
-
 ## Certifique-se de ter um arquivo `.env` baseado no `.env.example`.
+
+
+Obter token usuario admin pre criado
+http://localhost:3000/documentation/static/index.html#/usuarios/post_usuarios_login
+{
+  "email": "admin@admin.com",
+  "senha": "admin123"
+}

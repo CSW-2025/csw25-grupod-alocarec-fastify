@@ -1,38 +1,68 @@
 import { Pedido, CreatePedidoInput, UpdatePedidoInput } from './pedido-entity';
 import * as repository from './pedido-repository';
+import { toPedidoResponseDTO } from './dto/PedidoMapper';
+import { PedidoResponseDTO } from './dto/PedidoResponseDTO';
 
-function toPedido(pedido: any): Pedido {
-  return {
-    ...pedido,
-    createdAt: pedido.createdAt ? pedido.createdAt.toISOString() : '',
-    updatedAt: pedido.updatedAt ? pedido.updatedAt.toISOString() : '',
-    aula_id: pedido.aula_id ?? null,
-    disciplina_id: pedido.disciplina_id ?? null,
-  };
+class ServiceError extends Error {
+  statusCode: number;
+  constructor(message: string, statusCode = 500) {
+    super(message);
+    this.name = 'ServiceError';
+    this.statusCode = statusCode;
+  }
 }
 
-export async function createPedido(data: CreatePedidoInput): Promise<Pedido> {
-  const pedido = await repository.create(data);
-  return toPedido(pedido);
+export async function createPedidoService(data: CreatePedidoInput): Promise<PedidoResponseDTO> {
+  try {
+    const pedido = await repository.create(data);
+    return toPedidoResponseDTO(pedido);
+  } catch (error) {
+    throw new ServiceError('Erro ao criar pedido', 500);
+  }
 }
 
-export async function getAllPedidos(): Promise<Pedido[]> {
-  const pedidos = await repository.findAll();
-  return pedidos.map(toPedido);
+export async function getAllPedidosService(): Promise<PedidoResponseDTO[]> {
+  try {
+    const pedidos = await repository.findAll();
+    return pedidos.map(toPedidoResponseDTO);
+  } catch (error) {
+    throw new ServiceError('Erro ao listar pedidos', 500);
+  }
 }
 
-export async function getPedidoById(id: number): Promise<Pedido | null> {
-  const pedido = await repository.findById(id);
-  return pedido ? toPedido(pedido) : null;
+export async function getPedidoByIdService(id: number): Promise<PedidoResponseDTO> {
+  try {
+    const pedido = await repository.findById(id);
+    if (!pedido) throw new ServiceError('Pedido não encontrado', 404);
+    return toPedidoResponseDTO(pedido);
+  } catch (error) {
+    if (error instanceof ServiceError) throw error;
+    throw new ServiceError('Erro ao buscar pedido', 500);
+  }
 }
 
-export async function updatePedido(id: number, data: UpdatePedidoInput): Promise<Pedido | null> {
-  const existing = await repository.findById(id);
-  if (!existing) return null;
-  const pedido = await repository.update(id, data);
-  return pedido ? toPedido(pedido) : null;
+export async function updatePedidoService(id: number, data: UpdatePedidoInput): Promise<PedidoResponseDTO> {
+  try {
+    const existing = await repository.findById(id);
+    if (!existing) throw new ServiceError('Pedido não encontrado', 404);
+    const pedido = await repository.update(id, data);
+    return toPedidoResponseDTO(pedido);
+  } catch (error) {
+    if ((error as any).code === 'P2025') {
+      throw new ServiceError('Pedido não encontrado', 404);
+    }
+    throw new ServiceError('Erro ao atualizar pedido', 500);
+  }
 }
 
-export async function deletePedido(id: number): Promise<void> {
-  await repository.remove(id);
+export async function deletePedidoService(id: number): Promise<void> {
+  try {
+    const deleted = await repository.remove(id);
+    if (!deleted) throw new ServiceError('Pedido não encontrado', 404);
+  } catch (error) {
+    if ((error as any).code === 'P2025') {
+      throw new ServiceError('Pedido não encontrado', 404);
+    }
+    throw new ServiceError('Erro ao deletar pedido', 500);
+  }
 }

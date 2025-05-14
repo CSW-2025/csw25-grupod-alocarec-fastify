@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { createUser, getAllUsers, getUserById, updateUser, deleteUser } from './usuario-controller';
+import { createUser, getAllUsers, getUserById, updateUser, deleteUser, login } from './usuario-controller';
 
 function verificarAdmin(request: any, reply: any, done: any) {
   const user = request.user;
@@ -258,4 +258,40 @@ export default async function usuarioRotas(fastify: FastifyInstance) {
     },
     preHandler: verificarAdmin
   }, deleteUser);
+
+  // Endpoint de login
+  fastify.post('/login', {
+    schema: {
+      tags: ['usuarios'],
+      summary: 'Autentica usuário e retorna um token JWT',
+      body: {
+        type: 'object',
+        required: ['email', 'senha'],
+        properties: {
+          email: { type: 'string', format: 'email' },
+          senha: { type: 'string' }
+        }
+      },
+      response: {
+        200: {
+          type: 'object',
+          properties: {
+            token: { type: 'string' }
+          }
+        },
+        400: {
+          type: 'object',
+          properties: {
+            message: { type: 'string' }
+          }
+        },
+        401: {
+          type: 'object',
+          properties: {
+            message: { type: 'string' }
+          }
+        }
+      }
+    }
+  }, login);
 }

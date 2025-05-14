@@ -14,16 +14,19 @@ import reservaRoutes from './domains/reserva/reserva-routes';
 import turmaRoutes from './domains/turma/turma-routes';
 import tipoRecursoRoutes from './domains/tipo-recurso/tipo-recurso-routes';
 import curriculoRoutes from './domains/curriculo/curriculo-routes';
+import { errorHandler } from './middleware-error-handler';
 // ajuste o alias se necessário
 
 const app = Fastify();
+
+app.setErrorHandler(errorHandler);
 
 // Habilitar CORS para todas as origens
 app.register(cors, {
   origin: true,
 });
 
-// Configuração do Swagger
+// Configuração do Swagger (deve ser registrada antes das rotas)
 app.register(swagger, {
   swagger: {
     info: {

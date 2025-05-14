@@ -29,9 +29,6 @@ export async function getRecursoByIdController(
   reply: FastifyReply
 ) {
   const recurso = await getRecursoByIdService(request.params.id);
-  if (!recurso) {
-    return reply.code(404).send({ message: 'Recurso não encontrado' });
-  }
   return reply.send(recurso);
 }
 
@@ -40,9 +37,6 @@ export async function updateRecursoController(
   reply: FastifyReply
 ) {
   const recurso = await updateRecursoService(request.params.id, request.body);
-  if (!recurso) {
-    return reply.code(404).send({ message: 'Recurso não encontrado' });
-  }
   return reply.send(recurso);
 }
 
@@ -50,9 +44,6 @@ export async function deleteRecursoController(
   request: FastifyRequest<{ Params: { id: number } }>,
   reply: FastifyReply
 ) {
-  const success = await deleteRecursoService(request.params.id);
-  if (!success) {
-    return reply.code(404).send({ message: 'Recurso não encontrado' });
-  }
+  await deleteRecursoService(request.params.id);
   return reply.code(204).send();
 }

@@ -1,67 +1,33 @@
 // user.controller.ts
 import { FastifyRequest, FastifyReply } from 'fastify';
-import * as userService from './usuario-service';
+import { createUserService, getAllUsersService, getUserByIdService, updateUserService, deleteUserService, getUserByEmail } from './usuario-service';
 import { CreateUsuarioInput, UpdateUsuarioInput } from './usuario-entity';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../../config/jwt';
 
-export async function createUser(req: FastifyRequest, res: FastifyReply) {
-  const { nome, email, dataNascimento, sexo, telefones, perfilId, senha } = req.body as any;
-  // telefones deve ser um array de objetos { numero, descricao }
-  const user = await userService.createUser({ nome, email, dataNascimento, sexo, telefones, perfilId, senha });
+export async function createUserController(req: FastifyRequest<{ Body: CreateUsuarioInput }>, res: FastifyReply) {
+  const user = await createUserService(req.body);
   res.status(201).send(user);
 }
 
-export async function getAllUsers(req: FastifyRequest, res: FastifyReply) {
-  const users = await userService.getAllUsers();
+export async function getAllUsersController(req: FastifyRequest, res: FastifyReply) {
+  const users = await getAllUsersService();
   res.send(users);
 }
 
-export async function getUserById(req: FastifyRequest, res: FastifyReply) {
-  try {
-    const { id } = req.params as { id: string };
-    const user = await userService.getUserById(parseInt(id));
-    if (!user) {
-      res.status(404).send({ message: 'Usuário não encontrado' });
-      return;
-    }
-    res.send(user);
-  } catch (error) {
-    res.status(500).send({
-      statusCode: 500,
-      error: 'Internal Server Error',
-      message: 'Ocorreu um erro inesperado ao buscar o usuário.'
-    });
-  }
+export async function getUserByIdController(req: FastifyRequest<{ Params: { id: number } }>, res: FastifyReply) {
+  const user = await getUserByIdService(req.params.id);
+  res.send(user);
 }
 
-export async function updateUser(req: FastifyRequest, res: FastifyReply) {
-  try {
-    const { id } = req.params as { id: string };
-    const updateData = req.body as UpdateUsuarioInput;
-    const user = await userService.updateUser(parseInt(id), updateData);
-    if (!user) {
-      res.status(404).send({ message: 'Usuário não encontrado' });
-      return;
-    }
-    res.send(user);
-  } catch (error) {
-    res.status(500).send({
-      statusCode: 500,
-      error: 'Internal Server Error',
-      message: 'Ocorreu um erro inesperado ao atualizar o usuário.'
-    });
-  }
+export async function updateUserController(req: FastifyRequest<{ Params: { id: number }, Body: UpdateUsuarioInput }>, res: FastifyReply) {
+  const user = await updateUserService(req.params.id, req.body);
+  res.send(user);
 }
 
-export async function deleteUser(req: FastifyRequest, res: FastifyReply) {
-  const { id } = req.params as { id: string };
-  const success = await userService.deleteUser(parseInt(id));
-  if (!success) {
-    res.status(404).send({ message: 'Usuário não encontrado' });
-    return;
-  }
+export async function deleteUserController(req: FastifyRequest<{ Params: { id: number } }>, res: FastifyReply) {
+  await deleteUserService(req.params.id);
   res.status(204).send();
 }
 
@@ -70,7 +36,7 @@ export async function login(req: FastifyRequest, res: FastifyReply) {
   if (!email || !senha) {
     return res.status(400).send({ message: 'Email e senha são obrigatórios.' });
   }
-  const user = await userService.getUserByEmail(email);
+  const user = await getUserByEmail(email);
   if (!user) {
     return res.status(401).send({ message: 'Usuário ou senha inválidos.' });
   }
@@ -83,3 +49,11 @@ export async function login(req: FastifyRequest, res: FastifyReply) {
   const token = jwt.sign(userPayload, JWT_SECRET, { expiresIn: '1h' });
   return res.send({ token });
 }
+
+export { 
+  createUserController as createUser,
+  getAllUsersController as getAllUsers,
+  getUserByIdController as getUserById,
+  updateUserController as updateUser,
+  deleteUserController as deleteUser
+};
