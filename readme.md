@@ -2,6 +2,13 @@
 
 Este é um projeto usando o framework Fastify com TypeScrip e PostgreSQL com Prisma. 
 
+# Participantes do grupo
+Nathan Dame Abreu
+Thales Xavier Caceres
+Giuliano Roy Pontello
+Leonardo Bertoletti
+João Pedro Salles
+
 ## ✅ Pré-requisitos
 
 - [Docker](https://www.docker.com/)
