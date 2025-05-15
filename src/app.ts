@@ -3,24 +3,30 @@ import cors from '@fastify/cors';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 import usuarioRotas from './domains/usuario/usuario-routes';
-import aulaRoutes from './domains/aula/aula-routs';
-import pedidoRoutes from './domains/pedido/pedido-routs';
+import aulaRoutes from './domains/aula/aula-routes';
+import pedidoRoutes from './domains/pedido/pedido-routes';
 import disciplinaRoutes from './domains/disciplina/disciplina-routes';
 import perfilRoutes from './domains/perfil/perfil-routes';
-import predioRoutes  from './domains/predio/predio-routs';
-import recursoRoutes  from './domains/recurso/recurso-routs';
-import salaRoutes from './domains/sala/sala-routs';
-import reservaRoutes from './domains/reserva/reserva-routs';
+import predioRoutes from './domains/predio/predio-routes';
+import recursoRoutes from './domains/recurso/recurso-routes';
+import salaRoutes from './domains/sala/sala-routes';
+import reservaRoutes from './domains/reserva/reserva-routes';
+import turmaRoutes from './domains/turma/turma-routes';
+import tipoRecursoRoutes from './domains/tipo-recurso/tipo-recurso-routes';
+import curriculoRoutes from './domains/curriculo/curriculo-routes';
+import { errorHandler } from './middleware-error-handler';
 // ajuste o alias se necessário
 
 const app = Fastify();
+
+app.setErrorHandler(errorHandler);
 
 // Habilitar CORS para todas as origens
 app.register(cors, {
   origin: true,
 });
 
-// Configuração do Swagger
+// Configuração do Swagger (deve ser registrada antes das rotas)
 app.register(swagger, {
   swagger: {
     info: {
@@ -33,13 +39,29 @@ app.register(swagger, {
     consumes: ['application/json'],
     produces: ['application/json'],
     tags: [
-      { name: 'usuarios', description: 'Endpoints relacionados a usuários' },
+      { name: 'aulas', description: 'Endpoints relacionados a aulas' },
+      { name: 'curriculos', description: 'Endpoints relacionados a curriculos' },
+      { name: 'disciplinas', description: 'Endpoints relacionados a disciplinas' },
+      { name: 'pedidos', description: 'Endpoints relacionados a pedidos' },
       { name: 'perfis', description: 'Endpoints relacionados a perfis' },
-      { name: 'prédios', description: 'Endpoints relacionados a prédios' },
+      { name: 'predios', description: 'Endpoints relacionados a predios' },
       { name: 'recursos', description: 'Endpoints relacionados a recursos' },
-      { name: 'salas', description: 'Endpoints relacionados a salas' },
       { name: 'reservas', description: 'Endpoints relacionados a reservas' },
-      // { name: 'grupos', description: 'Endpoints relacionados a grupos' },     
+      { name: 'salas', description: 'Endpoints relacionados a salas' },
+      { name: 'tipos de recurso', description: 'Endpoints relacionados a tipos de recurso' },
+      { name: 'turmas', description: 'Endpoints relacionados a turmas' },
+      { name: 'usuarios', description: 'Endpoints relacionados a usuarios' }
+    ],
+    securityDefinitions: {
+      BearerAuth: {
+        type: 'apiKey',
+        name: 'Authorization',
+        in: 'header',
+        description: 'JWT token no formato: Bearer <token>'
+      }
+    },
+    security: [
+      { BearerAuth: [] }
     ]
   }
 });
@@ -61,6 +83,8 @@ app.register(predioRoutes, { prefix: '/predios' });
 app.register(recursoRoutes, { prefix: '/recursos' });
 app.register(salaRoutes, { prefix: '/salas' });
 app.register(reservaRoutes, { prefix: '/reservas' });
-
+app.register(turmaRoutes, { prefix: '/turmas' });
+app.register(tipoRecursoRoutes, { prefix: '/tipos-recurso' });
+app.register(curriculoRoutes, { prefix: '/curriculos' });
 
 export default app;

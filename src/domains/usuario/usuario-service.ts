@@ -1,23 +1,73 @@
 // user.service.ts
 import * as userRepository from './usuario-repository';
 import { Usuario, CreateUsuarioInput } from './usuario-entity';
+import { toUsuarioResponseDTO } from './dto/UsuarioMapper';
+import { UsuarioResponseDTO } from './dto/UsuarioResponseDTO';
+import { prisma } from '../../config/database';
 
-export function createUser(data: CreateUsuarioInput) {
-  return userRepository.createUser(data);
+class ServiceError extends Error {
+  statusCode: number;
+  constructor(message: string, statusCode = 500) {
+    super(message);
+    this.name = 'ServiceError';
+    this.statusCode = statusCode;
+  }
 }
 
-export function getAllUsers(): Promise<Usuario[]> {
-  return userRepository.getAllUsers();
+export async function createUserService(data: CreateUsuarioInput): Promise<UsuarioResponseDTO> {
+  try {
+    const usuario = await userRepository.createUser(data);
+    return toUsuarioResponseDTO(usuario);
+  } catch (error) {
+    throw new ServiceError('Erro ao criar usuário', 500);
+  }
 }
 
-export function getUserById(id: number): Promise<Usuario | null> {
-  return userRepository.getUserById(id);
+export async function getAllUsersService(): Promise<UsuarioResponseDTO[]> {
+  try {
+    const usuarios = await userRepository.getAllUsers();
+    return usuarios.map(toUsuarioResponseDTO);
+  } catch (error) {
+    throw new ServiceError('Erro ao listar usuários', 500);
+  }
 }
 
-export function updateUser(id: number, data: Partial<CreateUsuarioInput>): Promise<Usuario | null> {
-  return userRepository.updateUser(id, data);
+export async function getUserByIdService(id: number): Promise<UsuarioResponseDTO> {
+  try {
+    const usuario = await userRepository.getUserById(id);
+    if (!usuario) throw new ServiceError('Usuário não encontrado', 404);
+    return toUsuarioResponseDTO(usuario);
+  } catch (error) {
+    if (error instanceof ServiceError) throw error;
+    throw new ServiceError('Erro ao buscar usuário', 500);
+  }
 }
 
-export function deleteUser(id: number): Promise<boolean> {
-  return userRepository.deleteUser(id);
+export async function updateUserService(id: number, data: Partial<CreateUsuarioInput>): Promise<UsuarioResponseDTO> {
+  try {
+    const usuario = await userRepository.updateUser(id, data);
+    if (!usuario) throw new ServiceError('Usuário não encontrado', 404);
+    return toUsuarioResponseDTO(usuario);
+  } catch (error) {
+    if ((error as any).code === 'P2025') {
+      throw new ServiceError('Usuário não encontrado', 404);
+    }
+    throw new ServiceError('Erro ao atualizar usuário', 500);
+  }
+}
+
+export async function deleteUserService(id: number): Promise<void> {
+  try {
+    const deleted = await userRepository.deleteUser(id);
+    if (!deleted) throw new ServiceError('Usuário não encontrado', 404);
+  } catch (error) {
+    if ((error as any).code === 'P2025') {
+      throw new ServiceError('Usuário não encontrado', 404);
+    }
+    throw new ServiceError('Erro ao deletar usuário', 500);
+  }
+}
+
+export async function getUserByEmail(email: string) {
+  return prisma.usuario.findUnique({ where: { email } });
 }

@@ -12,13 +12,6 @@ export async function getAllCurriculos() {
 export function getCurriculoById(id: number) {
     return prisma.curriculo.findUnique({
         where: { id },
-        include: {
-            disciplinas: {
-                include: {
-                    disciplina: true
-                }
-            }
-        }
     });
 }
 

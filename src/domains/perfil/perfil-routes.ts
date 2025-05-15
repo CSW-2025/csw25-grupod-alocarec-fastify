@@ -9,23 +9,30 @@ const perfilSchema = {
   }
 };
 
+function verificarAdmin(request: any, reply: any, done: any) {
+  const user = request.user;
+  if (!user || !user.perfil || user.perfil.nome !== 'Admin') {
+    reply.code(403).send({ message: 'Acesso restrito a administradores.' });
+    return;
+  }
+  done();
+}
+
 export default async function perfilRoutes(fastify: FastifyInstance) {
-  fastify.post('/', {
-    schema: {
-      tags: ['perfis'],
-      summary: 'Criar um novo perfil',
-      body: {
-        type: 'object',
-        required: ['nome'],
-        properties: {
-          nome: { type: 'string' }
-        }
-      },
-      response: {
-        201: perfilSchema
+  fastify.post('/', { preHandler: verificarAdmin, schema: {
+    tags: ['perfis'],
+    summary: 'Criar um novo perfil',
+    body: {
+      type: 'object',
+      required: ['nome'],
+      properties: {
+        nome: { type: 'string' }
       }
+    },
+    response: {
+      201: perfilSchema
     }
-  }, createPerfilController);
+  } }, createPerfilController);
 
   fastify.get('/', {
     schema: {
@@ -63,55 +70,51 @@ export default async function perfilRoutes(fastify: FastifyInstance) {
     }
   }, getPerfilByIdController);
 
-  fastify.put('/:id', {
-    schema: {
-      tags: ['perfis'],
-      summary: 'Atualizar perfil',
-      params: {
+  fastify.put('/:id', { preHandler: verificarAdmin, schema: {
+    tags: ['perfis'],
+    summary: 'Atualizar perfil',
+    params: {
+      type: 'object',
+      required: ['id'],
+      properties: {
+        id: { type: 'string' }
+      }
+    },
+    body: {
+      type: 'object',
+      properties: {
+        nome: { type: 'string' }
+      }
+    },
+    response: {
+      200: perfilSchema,
+      404: {
         type: 'object',
-        required: ['id'],
         properties: {
-          id: { type: 'string' }
-        }
-      },
-      body: {
-        type: 'object',
-        properties: {
-          nome: { type: 'string' }
-        }
-      },
-      response: {
-        200: perfilSchema,
-        404: {
-          type: 'object',
-          properties: {
-            message: { type: 'string' }
-          }
+          message: { type: 'string' }
         }
       }
     }
-  }, updatePerfilController);
+  } }, updatePerfilController);
 
-  fastify.delete('/:id', {
-    schema: {
-      tags: ['perfis'],
-      summary: 'Deletar perfil',
-      params: {
+  fastify.delete('/:id', { preHandler: verificarAdmin, schema: {
+    tags: ['perfis'],
+    summary: 'Deletar perfil',
+    params: {
+      type: 'object',
+      required: ['id'],
+      properties: {
+        id: { type: 'string' }
+      }
+    },
+    response: {
+      204: { type: 'null' },
+      404: {
         type: 'object',
-        required: ['id'],
         properties: {
-          id: { type: 'string' }
-        }
-      },
-      response: {
-        204: { type: 'null' },
-        404: {
-          type: 'object',
-          properties: {
-            message: { type: 'string' }
-          }
+          message: { type: 'string' }
         }
       }
     }
-  }, deletePerfilController);
+  } }, deletePerfilController);
 } 

@@ -1,5 +1,7 @@
 import { AulaRepository } from './aula-repository';
 import { Aula } from './aula-entity';
+import { toAulaResponseDTO } from './dto/AulaMapper';
+import { AulaResponseDTO } from './dto/AulaResponseDTO';
 
 const aulaRepository = new AulaRepository();
 
@@ -13,26 +15,65 @@ function toAula(aula: any): Aula {
   };
 }
 
-export async function createAula(data: any): Promise<Aula> {
-  const aula = await aulaRepository.create(data);
-  return toAula(aula);
+class ServiceError extends Error {
+  statusCode: number;
+  constructor(message: string, statusCode = 500) {
+    super(message);
+    this.name = 'ServiceError';
+    this.statusCode = statusCode;
+  }
 }
 
-export async function getAllAulas(): Promise<Aula[]> {
-  const aulas = await aulaRepository.findAll();
-  return aulas.map(toAula);
+export async function createAula(data: any): Promise<AulaResponseDTO> {
+  try {
+    const aula = await aulaRepository.create(data);
+    return toAulaResponseDTO(aula);
+  } catch (error) {
+    throw new ServiceError('Erro ao criar aula', 500);
+  }
 }
 
-export async function getAulaById(id: number): Promise<Aula | null> {
-  const aula = await aulaRepository.findById(id);
-  return aula ? toAula(aula) : null;
+export async function getAllAulas(): Promise<AulaResponseDTO[]> {
+  try {
+    const aulas = await aulaRepository.findAll();
+    return aulas.map(toAulaResponseDTO);
+  } catch (error) {
+    throw new ServiceError('Erro ao listar aulas', 500);
+  }
 }
 
-export async function updateAula(id: number, data: any): Promise<Aula> {
-  const aula = await aulaRepository.update(id, data);
-  return toAula(aula);
+export async function getAulaById(id: number): Promise<AulaResponseDTO> {
+  try {
+    const aula = await aulaRepository.findById(id);
+    if (!aula) {
+      throw new ServiceError('Aula não encontrada', 404);
+    }
+    return toAulaResponseDTO(aula);
+  } catch (error) {
+    if (error instanceof ServiceError) throw error;
+    throw new ServiceError('Erro ao buscar aula', 500);
+  }
+}
+
+export async function updateAula(id: number, data: any): Promise<AulaResponseDTO> {
+  try {
+    const aula = await aulaRepository.update(id, data);
+    return toAulaResponseDTO(aula);
+  } catch (error) {
+    if ((error as any).code === 'P2025') {
+      throw new ServiceError('Aula não encontrada', 404);
+    }
+    throw new ServiceError('Erro ao atualizar aula', 500);
+  }
 }
 
 export async function deleteAula(id: number): Promise<void> {
-  await aulaRepository.delete(id);
+  try {
+    await aulaRepository.delete(id);
+  } catch (error) {
+    if ((error as any).code === 'P2025') {
+      throw new ServiceError('Aula não encontrada', 404);
+    }
+    throw new ServiceError('Erro ao deletar aula', 500);
+  }
 }

@@ -23,8 +23,27 @@ const pedidoSchema = {
   }
 };
 
+function verificarAdmin(request: any, reply: any, done: any) {
+  const user = request.user;
+  if (!user || !user.perfil || user.perfil.nome !== 'Admin') {
+    reply.code(403).send({ message: 'Acesso restrito a administradores.' });
+    return;
+  }
+  done();
+}
+
+function verificarAdminCoordenadorProfessorInserir(request: any, reply: any, done: any) {
+  const user = request.user;
+  if (!user || !user.perfil || (user.perfil.nome !== 'Admin' && user.perfil.nome !== 'Coordenador' && user.perfil.nome !== 'Professor')) {
+    reply.code(403).send({ message: 'Acesso restrito a administradores, coordenadores ou professores.' });
+    return;
+  }
+  done();
+}
+
 export default async function pedidoRoutes(fastify: FastifyInstance) {
   fastify.post('/', {
+    preHandler: verificarAdminCoordenadorProfessorInserir,
     schema: {
       tags: ['pedidos'],
       summary: 'Criar um novo pedido',
@@ -75,6 +94,7 @@ export default async function pedidoRoutes(fastify: FastifyInstance) {
   }, getPedidoById);
 
   fastify.put('/:id', {
+    preHandler: verificarAdmin,
     schema: {
       tags: ['pedidos'],
       summary: 'Atualizar pedido',
@@ -103,6 +123,7 @@ export default async function pedidoRoutes(fastify: FastifyInstance) {
   }, updatePedido);
 
   fastify.delete('/:id', {
+    preHandler: verificarAdmin,
     schema: {
       tags: ['pedidos'],
       summary: 'Deletar pedido',

@@ -1,28 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { createCurriculoController, getAllCurriculosController, getCurriculoByIdController, updateCurriculoController, deleteCurriculoController } from './curriculo-controller';
 
-const disciplinaSchema = {
-  type: 'object',
-  properties: {
-    id: { type: 'number' },
-    disciplina_id: { type: 'number' },
-    curriculo_id: { type: 'number' },
-    semestre: { type: 'string' },
-    disciplina: {
-      type: 'object',
-      properties: {
-        id: { type: 'number' },
-        nome: { type: 'string' },
-        codigo: { type: 'string' },
-        creditos: { type: 'number' },
-        carga_horaria: { type: 'number' },
-        createdAt: { type: 'string', format: 'date-time' },
-        updatedAt: { type: 'string', format: 'date-time' }
-      }
-    }
-  }
-};
-
 const curriculoSchema = {
   type: 'object',
   properties: {
@@ -31,33 +9,36 @@ const curriculoSchema = {
     semestre_inicio_vigencia: { type: 'string' },
     semestre_fim_vigencia: { type: 'string' },
     createdAt: { type: 'string', format: 'date-time' },
-    updatedAt: { type: 'string', format: 'date-time' },
-    disciplinas: {
-      type: 'array',
-      items: disciplinaSchema
-    }
+    updatedAt: { type: 'string', format: 'date-time' }
   }
 };
 
+function verificarAdminOuCoordenador(request: any, reply: any, done: any) {
+  const user = request.user;
+  if (!user || !user.perfil || (user.perfil.nome !== 'Admin' && user.perfil.nome !== 'Coordenador')) {
+    reply.code(403).send({ message: 'Acesso restrito a administradores ou coordenadores.' });
+    return;
+  }
+  done();
+}
+
 export default async function curriculoRoutes(fastify: FastifyInstance) {
-    fastify.post('/', {
-      schema: {
-        tags: ['curriculos'],
-        summary: 'Criar um novo currículo',
-        body: {
-          type: 'object',
-          required: ['nome_curso', 'semestre_inicio_vigencia', 'semestre_fim_vigencia'],
-          properties: {
-            nome_curso: { type: 'string' },
-            semestre_inicio_vigencia: { type: 'string' },
-            semestre_fim_vigencia: { type: 'string' }
-          }
-        },
-        response: {
-          201: curriculoSchema
+    fastify.post('/', { preHandler: verificarAdminOuCoordenador, schema: {
+      tags: ['curriculos'],
+      summary: 'Criar um novo currículo',
+      body: {
+        type: 'object',
+        required: ['nome_curso', 'semestre_inicio_vigencia', 'semestre_fim_vigencia'],
+        properties: {
+          nome_curso: { type: 'string' },
+          semestre_inicio_vigencia: { type: 'string' },
+          semestre_fim_vigencia: { type: 'string' }
         }
+      },
+      response: {
+        201: curriculoSchema
       }
-    }, createCurriculoController);
+    } }, createCurriculoController);
 
     fastify.get('/', {
       schema: {
@@ -95,57 +76,53 @@ export default async function curriculoRoutes(fastify: FastifyInstance) {
       }
     }, getCurriculoByIdController);
 
-    fastify.put('/:id', {
-      schema: {
-        tags: ['curriculos'],
-        summary: 'Atualizar currículo',
-        params: {
+    fastify.put('/:id', { preHandler: verificarAdminOuCoordenador, schema: {
+      tags: ['curriculos'],
+      summary: 'Atualizar currículo',
+      params: {
+        type: 'object',
+        required: ['id'],
+        properties: {
+          id: { type: 'string' }
+        }
+      },
+      body: {
+        type: 'object',
+        properties: {
+          nome_curso: { type: 'string' },
+          semestre_inicio_vigencia: { type: 'string' },
+          semestre_fim_vigencia: { type: 'string' }
+        }
+      },
+      response: {
+        200: curriculoSchema,
+        404: {
           type: 'object',
-          required: ['id'],
           properties: {
-            id: { type: 'string' }
-          }
-        },
-        body: {
-          type: 'object',
-          properties: {
-            nome_curso: { type: 'string' },
-            semestre_inicio_vigencia: { type: 'string' },
-            semestre_fim_vigencia: { type: 'string' }
-          }
-        },
-        response: {
-          200: curriculoSchema,
-          404: {
-            type: 'object',
-            properties: {
-              message: { type: 'string' }
-            }
+            message: { type: 'string' }
           }
         }
       }
-    }, updateCurriculoController);
+    } }, updateCurriculoController);
 
-    fastify.delete('/:id', {
-      schema: {
-        tags: ['curriculos'],
-        summary: 'Deletar currículo',
-        params: {
+    fastify.delete('/:id', { preHandler: verificarAdminOuCoordenador, schema: {
+      tags: ['curriculos'],
+      summary: 'Deletar currículo',
+      params: {
+        type: 'object',
+        required: ['id'],
+        properties: {
+          id: { type: 'string' }
+        }
+      },
+      response: {
+        204: { type: 'null' },
+        404: {
           type: 'object',
-          required: ['id'],
           properties: {
-            id: { type: 'string' }
-          }
-        },
-        response: {
-          204: { type: 'null' },
-          404: {
-            type: 'object',
-            properties: {
-              message: { type: 'string' }
-            }
+            message: { type: 'string' }
           }
         }
       }
-    }, deleteCurriculoController);
+    } }, deleteCurriculoController);
 } 

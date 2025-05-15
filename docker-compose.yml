@@ -35,9 +35,23 @@ services:
         condition: service_healthy
     environment:
       DATABASE_URL: ${DATABASE_URL}      
-      #DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@alocarec-db:5432/${POSTGRES_DB}
     networks:
       - alocarec-network
+
+  migrate:
+    container_name: alocarec-migrate
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      app:
+        condition: service_started
+    command: /bin/sh -c "npx prisma migrate dev --name init && npm run prisma:seed"
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+    networks:
+      - alocarec-network
+    restart: "no"
 
 networks:
   alocarec-network:
