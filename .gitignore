@@ -9,7 +9,16 @@ infra/.terraform/
 infra/terraform.tfstate
 infra/terraform.tfstate.*
 infra/*.tfstate
-infra/*.tfstate.*       
+infra/*.tfstate.*
+
+# Chaves SSH e outros tipos de chave
+*.pem
+*.key
+*.pub
+*.crt
+*.der
+*.pfx
+infra/T1API*
        
 # Prisma
 prisma/dev.db

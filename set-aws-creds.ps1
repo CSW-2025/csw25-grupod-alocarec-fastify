@@ -22,5 +22,3 @@ $utf8NoBomEncoding = New-Object System.Text.UTF8Encoding $false
 [System.IO.File]::WriteAllText($awsCredentialsPath, $profileContent, $utf8NoBomEncoding)
 
 Write-Host "Credenciais AWS atualizadas com sucesso!"
-
-#executar no powershell: .\set-aws-creds.ps1
