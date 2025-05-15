@@ -1,0 +1,1534 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6",
+		"name": "AlocaRec API",
+		"description": "Coleção de endpoints para a API de Alocação de Recursos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Autenticação",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"usuario@exemplo.com\",\n    \"senha\": \"senha123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/usuarios/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["usuarios", "login"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Usuários",
+			"item": [
+				{
+					"name": "Listar Usuários",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/usuarios",
+							"host": ["{{baseUrl}}"],
+							"path": ["usuarios"]
+						}
+					}
+				},
+				{
+					"name": "Criar Usuário",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Nome do Usuário\",\n    \"email\": \"usuario@exemplo.com\",\n    \"senha\": \"senha123\",\n    \"perfilId\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/usuarios",
+							"host": ["{{baseUrl}}"],
+							"path": ["usuarios"]
+						}
+					}
+				},
+				{
+					"name": "Buscar Usuário por ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/usuarios/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["usuarios", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Atualizar Usuário",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Nome Atualizado\",\n    \"email\": \"atualizado@exemplo.com\",\n    \"perfilId\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/usuarios/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["usuarios", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Deletar Usuário",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/usuarios/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["usuarios", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Aulas",
+			"item": [
+				{
+					"name": "Listar Aulas",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/aulas",
+							"host": ["{{baseUrl}}"],
+							"path": ["aulas"]
+						}
+					}
+				},
+				{
+					"name": "Criar Aula",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Nome da Aula\",\n    \"professorId\": 1,\n    \"disciplinaId\": 1,\n    \"turmaId\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/aulas",
+							"host": ["{{baseUrl}}"],
+							"path": ["aulas"]
+						}
+					}
+				},
+				{
+					"name": "Buscar Aula por ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/aulas/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["aulas", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Atualizar Aula",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Nome da Aula Atualizada\",\n    \"professorId\": 1,\n    \"disciplinaId\": 1,\n    \"turmaId\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/aulas/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["aulas", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Deletar Aula",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/aulas/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["aulas", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Pedidos",
+			"item": [
+				{
+					"name": "Listar Pedidos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/pedidos",
+							"host": ["{{baseUrl}}"],
+							"path": ["pedidos"]
+						}
+					}
+				},
+				{
+					"name": "Criar Pedido",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Nome do Pedido\",\n    \"status\": \"Pendente\",\n    \"moderador_id\": 1,\n    \"sala_id\": 1,\n    \"recurso_id\": 1,\n    \"aula_id\": 1,\n    \"disciplina_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/pedidos",
+							"host": ["{{baseUrl}}"],
+							"path": ["pedidos"]
+						}
+					}
+				},
+				{
+					"name": "Buscar Pedido por ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/pedidos/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["pedidos", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Atualizar Pedido",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Nome do Pedido Atualizado\",\n    \"status\": \"Aprovado\",\n    \"moderador_id\": 1,\n    \"sala_id\": 1,\n    \"recurso_id\": 1,\n    \"aula_id\": 1,\n    \"disciplina_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/pedidos/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["pedidos", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Deletar Pedido",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/pedidos/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["pedidos", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Disciplinas",
+			"item": [
+				{
+					"name": "Listar Disciplinas",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/disciplinas",
+							"host": ["{{baseUrl}}"],
+							"path": ["disciplinas"]
+						}
+					}
+				},
+				{
+					"name": "Criar Disciplina",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Nome da Disciplina\",\n    \"codigo\": \"DISC001\",\n    \"creditos\": 4,\n    \"carga_horaria\": 60,\n    \"ementa\": \"Descrição da ementa\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/disciplinas",
+							"host": ["{{baseUrl}}"],
+							"path": ["disciplinas"]
+						}
+					}
+				},
+				{
+					"name": "Buscar Disciplina por ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/disciplinas/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["disciplinas", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Atualizar Disciplina",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Nome da Disciplina Atualizada\",\n    \"codigo\": \"DISC001\",\n    \"creditos\": 4,\n    \"carga_horaria\": 60,\n    \"ementa\": \"Nova descrição da ementa\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/disciplinas/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["disciplinas", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Deletar Disciplina",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/disciplinas/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["disciplinas", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Perfis",
+			"item": [
+				{
+					"name": "Listar Perfis",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/perfis",
+							"host": ["{{baseUrl}}"],
+							"path": ["perfis"]
+						}
+					}
+				},
+				{
+					"name": "Criar Perfil",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Nome do Perfil\",\n    \"descricao\": \"Descrição do perfil\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/perfis",
+							"host": ["{{baseUrl}}"],
+							"path": ["perfis"]
+						}
+					}
+				},
+				{
+					"name": "Buscar Perfil por ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/perfis/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["perfis", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Atualizar Perfil",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Nome do Perfil Atualizado\",\n    \"descricao\": \"Nova descrição do perfil\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/perfis/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["perfis", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Deletar Perfil",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/perfis/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["perfis", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Prédios",
+			"item": [
+				{
+					"name": "Listar Prédios",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/predios",
+							"host": ["{{baseUrl}}"],
+							"path": ["predios"]
+						}
+					}
+				},
+				{
+					"name": "Criar Prédio",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Nome do Prédio\",\n    \"localizacao\": \"Localização do prédio\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/predios",
+							"host": ["{{baseUrl}}"],
+							"path": ["predios"]
+						}
+					}
+				},
+				{
+					"name": "Buscar Prédio por ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/predios/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["predios", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Atualizar Prédio",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Nome do Prédio Atualizado\",\n    \"localizacao\": \"Nova localização do prédio\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/predios/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["predios", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Deletar Prédio",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/predios/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["predios", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Recursos",
+			"item": [
+				{
+					"name": "Listar Recursos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/recursos",
+							"host": ["{{baseUrl}}"],
+							"path": ["recursos"]
+						}
+					}
+				},
+				{
+					"name": "Criar Recurso",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Nome do Recurso\",\n    \"tipoRecursoId\": 1,\n    \"salaId\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/recursos",
+							"host": ["{{baseUrl}}"],
+							"path": ["recursos"]
+						}
+					}
+				},
+				{
+					"name": "Buscar Recurso por ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/recursos/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["recursos", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Atualizar Recurso",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Nome do Recurso Atualizado\",\n    \"tipoRecursoId\": 1,\n    \"salaId\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/recursos/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["recursos", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Deletar Recurso",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/recursos/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["recursos", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Salas",
+			"item": [
+				{
+					"name": "Listar Salas",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/salas",
+							"host": ["{{baseUrl}}"],
+							"path": ["salas"]
+						}
+					}
+				},
+				{
+					"name": "Criar Sala",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Nome da Sala\",\n    \"predioId\": 1,\n    \"capacidade\": 30\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/salas",
+							"host": ["{{baseUrl}}"],
+							"path": ["salas"]
+						}
+					}
+				},
+				{
+					"name": "Buscar Sala por ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/salas/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["salas", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Atualizar Sala",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Nome da Sala Atualizada\",\n    \"predioId\": 1,\n    \"capacidade\": 40\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/salas/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["salas", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Deletar Sala",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/salas/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["salas", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Reservas",
+			"item": [
+				{
+					"name": "Listar Reservas",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/reservas",
+							"host": ["{{baseUrl}}"],
+							"path": ["reservas"]
+						}
+					}
+				},
+				{
+					"name": "Criar Reserva",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"pedidoId\": 1,\n    \"dataInicio\": \"2024-03-20T10:00:00Z\",\n    \"dataFim\": \"2024-03-20T12:00:00Z\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/reservas",
+							"host": ["{{baseUrl}}"],
+							"path": ["reservas"]
+						}
+					}
+				},
+				{
+					"name": "Buscar Reserva por ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/reservas/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["reservas", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Atualizar Reserva",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"pedidoId\": 1,\n    \"dataInicio\": \"2024-03-21T10:00:00Z\",\n    \"dataFim\": \"2024-03-21T12:00:00Z\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/reservas/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["reservas", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Deletar Reserva",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/reservas/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["reservas", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Turmas",
+			"item": [
+				{
+					"name": "Listar Turmas",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/turmas",
+							"host": ["{{baseUrl}}"],
+							"path": ["turmas"]
+						}
+					}
+				},
+				{
+					"name": "Criar Turma",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"numero\": \"TURMA001\",\n    \"semestre\": \"2024.1\",\n    \"professor_id\": 1,\n    \"vagas\": 30,\n    \"disciplina_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/turmas",
+							"host": ["{{baseUrl}}"],
+							"path": ["turmas"]
+						}
+					}
+				},
+				{
+					"name": "Buscar Turma por ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/turmas/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["turmas", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Atualizar Turma",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"numero\": \"TURMA001\",\n    \"semestre\": \"2024.2\",\n    \"professor_id\": 1,\n    \"vagas\": 35,\n    \"disciplina_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/turmas/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["turmas", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Deletar Turma",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/turmas/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["turmas", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Tipos de Recurso",
+			"item": [
+				{
+					"name": "Listar Tipos de Recurso",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/tipos-recurso",
+							"host": ["{{baseUrl}}"],
+							"path": ["tipos-recurso"]
+						}
+					}
+				},
+				{
+					"name": "Criar Tipo de Recurso",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Nome do Tipo de Recurso\",\n    \"descricao\": \"Descrição do tipo de recurso\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/tipos-recurso",
+							"host": ["{{baseUrl}}"],
+							"path": ["tipos-recurso"]
+						}
+					}
+				},
+				{
+					"name": "Buscar Tipo de Recurso por ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/tipos-recurso/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["tipos-recurso", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Atualizar Tipo de Recurso",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Nome do Tipo de Recurso Atualizado\",\n    \"descricao\": \"Nova descrição do tipo de recurso\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/tipos-recurso/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["tipos-recurso", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Deletar Tipo de Recurso",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/tipos-recurso/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["tipos-recurso", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Currículos",
+			"item": [
+				{
+					"name": "Listar Currículos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/curriculos",
+							"host": ["{{baseUrl}}"],
+							"path": ["curriculos"]
+						}
+					}
+				},
+				{
+					"name": "Criar Currículo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome_curso\": \"Nome do Curso\",\n    \"semestre_inicio_vigencia\": \"2024.1\",\n    \"semestre_fim_vigencia\": \"2028.2\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/curriculos",
+							"host": ["{{baseUrl}}"],
+							"path": ["curriculos"]
+						}
+					}
+				},
+				{
+					"name": "Buscar Currículo por ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/curriculos/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["curriculos", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Atualizar Currículo",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome_curso\": \"Nome do Curso Atualizado\",\n    \"semestre_inicio_vigencia\": \"2024.1\",\n    \"semestre_fim_vigencia\": \"2029.2\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/curriculos/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["curriculos", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Deletar Currículo",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/curriculos/:id",
+							"host": ["{{baseUrl}}"],
+							"path": ["curriculos", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000"
+		},
+		{
+			"key": "token",
+			"value": "seu_token_jwt_aqui"
+		}
+	]
+} 
