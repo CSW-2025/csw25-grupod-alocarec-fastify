@@ -1,21 +1,21 @@
-import { PrismaClient, Aula as PrismaAula } from '@prisma/client';
+import { PrismaClient, Aula } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 export class AulaRepository {
-  async create(data: Omit<PrismaAula, 'id'>): Promise<PrismaAula> {
+  async create(data: Omit<Aula, 'id'>): Promise<Aula> {
     return prisma.aula.create({ data });
   }
 
-  async findAll(): Promise<PrismaAula[]> {
+  async findAll(): Promise<Aula[]> {
     return prisma.aula.findMany();
   }
 
-  async findById(id: number): Promise<PrismaAula | null> {
+  async findById(id: number): Promise<Aula | null> {
     return prisma.aula.findUnique({ where: { id } });
   }
 
-  async update(id: number, data: Partial<Omit<PrismaAula, 'id'>>): Promise<PrismaAula> {
+  async update(id: number, data: Partial<Omit<Aula, 'id'>>): Promise<Aula> {
     return prisma.aula.update({ where: { id }, data });
   }
 

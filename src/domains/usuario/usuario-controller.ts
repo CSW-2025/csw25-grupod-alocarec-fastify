@@ -2,8 +2,8 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { createUserService, getAllUsersService, getUserByIdService, updateUserService, deleteUserService, getUserByEmail } from './usuario-service';
 import { CreateUsuarioInput, UpdateUsuarioInput } from './usuario-entity';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import * as bcrypt from 'bcryptjs';
+import * as jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../../config/jwt';
 
 export async function createUserController(req: FastifyRequest<{ Body: CreateUsuarioInput }>, res: FastifyReply) {

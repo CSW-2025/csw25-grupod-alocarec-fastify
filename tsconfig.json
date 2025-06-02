@@ -1,19 +1,28 @@
 {
   "compilerOptions": {
     "target": "ES2020",
+    "baseUrl": "src",
     "module": "commonjs",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "strict": true,
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
-    "baseUrl": ".", 
+    "baseUrl": ".",
     "paths": {
+      "@/*": ["src/*"],
       "@usuarios/*": ["src/domains/usuario/*"],
-
+      "@pedidos/*": ["src/domains/pedido/*"]
     },
-    "rootDir": "./src"
+    "rootDir": ".",
+    "types": ["node", "jest"],
+    "typeRoots": ["./node_modules/@types"],
+    "resolveJsonModule": true,
+    "moduleResolution": "node"
   },
-  "include": ["src"],
+  "include": ["src", "__tests__", "jest.config.ts", "jest.setup.ts"],
   "exclude": ["node_modules", "dist"]
 }
