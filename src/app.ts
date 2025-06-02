@@ -17,74 +17,80 @@ import curriculoRoutes from './domains/curriculo/curriculo-routes';
 import { errorHandler } from './middleware-error-handler';
 // ajuste o alias se necessário
 
-const app = Fastify();
+export async function build() {
+  const app = Fastify({
+    logger: true
+  });
 
-app.setErrorHandler(errorHandler);
+  app.setErrorHandler(errorHandler);
 
-// Habilitar CORS para todas as origens
-app.register(cors, {
-  origin: true,
-});
+  // Habilitar CORS para todas as origens
+  app.register(cors, {
+    origin: true,
+  });
 
-// Configuração do Swagger (deve ser registrada antes das rotas)
-app.register(swagger, {
-  swagger: {
-    info: {
-      title: 'API de Alocação de Recursos',
-      description: 'API para gerenciamento de alocação de recursos',
-      version: '1.0.0'
-    },
-    host: 'localhost:3000',
-    schemes: ['http'],
-    consumes: ['application/json'],
-    produces: ['application/json'],
-    tags: [
-      { name: 'aulas', description: 'Endpoints relacionados a aulas' },
-      { name: 'curriculos', description: 'Endpoints relacionados a curriculos' },
-      { name: 'disciplinas', description: 'Endpoints relacionados a disciplinas' },
-      { name: 'pedidos', description: 'Endpoints relacionados a pedidos' },
-      { name: 'perfis', description: 'Endpoints relacionados a perfis' },
-      { name: 'predios', description: 'Endpoints relacionados a predios' },
-      { name: 'recursos', description: 'Endpoints relacionados a recursos' },
-      { name: 'reservas', description: 'Endpoints relacionados a reservas' },
-      { name: 'salas', description: 'Endpoints relacionados a salas' },
-      { name: 'tipos de recurso', description: 'Endpoints relacionados a tipos de recurso' },
-      { name: 'turmas', description: 'Endpoints relacionados a turmas' },
-      { name: 'usuarios', description: 'Endpoints relacionados a usuarios' }
-    ],
-    securityDefinitions: {
-      BearerAuth: {
-        type: 'apiKey',
-        name: 'Authorization',
-        in: 'header',
-        description: 'JWT token no formato: Bearer <token>'
-      }
-    },
-    security: [
-      { BearerAuth: [] }
-    ]
-  }
-});
+  // Configuração do Swagger (deve ser registrada antes das rotas)
+  app.register(swagger, {
+    swagger: {
+      info: {
+        title: 'API de Alocação de Recursos',
+        description: 'API para gerenciamento de alocação de recursos',
+        version: '1.0.0'
+      },
+      host: 'localhost:3000',
+      schemes: ['http'],
+      consumes: ['application/json'],
+      produces: ['application/json'],
+      tags: [
+        { name: 'aulas', description: 'Endpoints relacionados a aulas' },
+        { name: 'curriculos', description: 'Endpoints relacionados a curriculos' },
+        { name: 'disciplinas', description: 'Endpoints relacionados a disciplinas' },
+        { name: 'pedidos', description: 'Endpoints relacionados a pedidos' },
+        { name: 'perfis', description: 'Endpoints relacionados a perfis' },
+        { name: 'predios', description: 'Endpoints relacionados a predios' },
+        { name: 'recursos', description: 'Endpoints relacionados a recursos' },
+        { name: 'reservas', description: 'Endpoints relacionados a reservas' },
+        { name: 'salas', description: 'Endpoints relacionados a salas' },
+        { name: 'tipos de recurso', description: 'Endpoints relacionados a tipos de recurso' },
+        { name: 'turmas', description: 'Endpoints relacionados a turmas' },
+        { name: 'usuarios', description: 'Endpoints relacionados a usuarios' }
+      ],
+      securityDefinitions: {
+        BearerAuth: {
+          type: 'apiKey',
+          name: 'Authorization',
+          in: 'header',
+          description: 'JWT token no formato: Bearer <token>'
+        }
+      },
+      security: [
+        { BearerAuth: [] }
+      ]
+    }
+  });
 
-app.register(swaggerUi, {
-  routePrefix: '/documentation'
-});
+  app.register(swaggerUi, {
+    routePrefix: '/documentation'
+  });
 
-// Rotas
-app.get('/', (req, reply) => {
-  reply.redirect('/documentation');
-});
-app.register(usuarioRotas, { prefix: '/usuarios' });
-app.register(aulaRoutes, { prefix: '/aulas' });
-app.register(pedidoRoutes, { prefix: '/pedidos' });
-app.register(disciplinaRoutes, { prefix: '/disciplinas' });
-app.register(perfilRoutes, { prefix: '/perfis' });
-app.register(predioRoutes, { prefix: '/predios' });
-app.register(recursoRoutes, { prefix: '/recursos' });
-app.register(salaRoutes, { prefix: '/salas' });
-app.register(reservaRoutes, { prefix: '/reservas' });
-app.register(turmaRoutes, { prefix: '/turmas' });
-app.register(tipoRecursoRoutes, { prefix: '/tipos-recurso' });
-app.register(curriculoRoutes, { prefix: '/curriculos' });
+  // Rotas
+  app.get('/', (req, reply) => {
+    reply.redirect('/documentation');
+  });
+  app.register(usuarioRotas, { prefix: '/usuarios' });
+  app.register(aulaRoutes, { prefix: '/aulas' });
+  app.register(pedidoRoutes, { prefix: '/pedidos' });
+  app.register(disciplinaRoutes, { prefix: '/disciplinas' });
+  app.register(perfilRoutes, { prefix: '/perfis' });
+  app.register(predioRoutes, { prefix: '/predios' });
+  app.register(recursoRoutes, { prefix: '/recursos' });
+  app.register(salaRoutes, { prefix: '/salas' });
+  app.register(reservaRoutes, { prefix: '/reservas' });
+  app.register(turmaRoutes, { prefix: '/turmas' });
+  app.register(tipoRecursoRoutes, { prefix: '/tipos-recurso' });
+  app.register(curriculoRoutes, { prefix: '/curriculos' });
 
-export default app;
+  return app;
+}
+
+export default build;

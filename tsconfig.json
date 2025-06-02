@@ -9,11 +9,26 @@
     "outDir": "./dist",
     "baseUrl": ".", 
     "paths": {
+      "@/*": ["src/*"],
       "@usuarios/*": ["src/domains/usuario/*"],
-
+      "@pedidos/*": ["src/domains/pedido/*"]
     },
-    "rootDir": "./src"
+    "rootDir": "src",
+    "types": ["node", "jest"],
+    "typeRoots": ["./node_modules/@types"],
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "declaration": true,
+    "removeComments": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "__tests__", "jest.config.ts", "jest.setup.ts"]
 }
