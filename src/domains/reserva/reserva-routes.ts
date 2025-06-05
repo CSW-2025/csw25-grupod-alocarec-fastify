@@ -75,7 +75,7 @@ export default async function reservaRoutes(app: FastifyInstance) {
         type: 'object',
         required: ['id'],
         properties: {
-          id: { type: 'string' }
+          id: { type: 'number' }
         }
       },
       response: {
@@ -107,7 +107,7 @@ export default async function reservaRoutes(app: FastifyInstance) {
       type: 'object',
       required: ['id'],
       properties: {
-        id: { type: 'string' }
+        id: { type: 'number' }
       }
     },
     body: {
@@ -146,7 +146,7 @@ export default async function reservaRoutes(app: FastifyInstance) {
       type: 'object',
       required: ['id'],
       properties: {
-        id: { type: 'string' }
+        id: { type: 'number' }
       }
     },
     response: {
