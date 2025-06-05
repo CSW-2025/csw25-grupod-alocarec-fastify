@@ -1,6 +1,6 @@
 # Aloca Rec
 
-Este é um projeto usando o framework Fastify com TypeScrip e PostgreSQL com Prisma. 
+Este é um projeto usando o framework Fastify com TypeScript e PostgreSQL com Prisma.
 
 # Participantes do grupo
 Nathan Dame Abreu
