@@ -9,7 +9,7 @@ Giuliano Roy Pontello
 Leonardo Bertoletti
 João Pedro Salles
 
-https://github.com/jpsalles21/csw25-grupod-alocarec-fastify.git
+https://github.com/CSW-2025/csw25-grupod-alocarec-fastify.git 
 
 ## ✅ Pré-requisitos
 
