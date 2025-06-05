@@ -162,18 +162,18 @@ describe('PedidoRepository', () => {
 
       const result = await PedidoRepository.remove(1);
 
-      expect(result).toBe(true);
+      expect(result).toEqual(mockPedido);
       expect(prisma.pedido.delete).toHaveBeenCalledWith({
         where: { id: 1 },
       });
     });
 
-    it('deve retornar false quando pedido não encontrado', async () => {
+    it('deve propagar erro quando pedido não encontrado', async () => {
       (prisma.pedido.delete as jest.Mock).mockRejectedValueOnce(new Error('Record to delete does not exist'));
 
-      const result = await PedidoRepository.remove(999);
-
-      expect(result).toBe(false);
+      await expect(PedidoRepository.remove(999))
+        .rejects
+        .toThrow('Record to delete does not exist');
     });
   });
 }); 
