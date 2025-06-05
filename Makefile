@@ -1,5 +1,5 @@
-# Caminho padrão do serviço Node no docker-compose
-SERVICE=api
+# Nome do serviço Node no docker-compose
+SERVICE=app
 
 # Comandos principais
 up:
