@@ -37,6 +37,14 @@ export function update(id: number, data: UpdatePedidoInput) {
   });
 }
 
-export function remove(id: number) {
-  return prisma.pedido.delete({ where: { id } });
+export async function remove(id: number): Promise<boolean> {
+  try {
+    await prisma.pedido.delete({ where: { id } });
+    return true;
+  } catch (error) {
+    if ((error as any).code === 'P2025') {
+      return false;
+    }
+    throw error;
+  }
 }

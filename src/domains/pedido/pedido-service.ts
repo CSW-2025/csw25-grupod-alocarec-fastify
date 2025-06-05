@@ -48,7 +48,10 @@ export async function updatePedidoService(id: number, data: UpdatePedidoInput): 
     const pedido = await repository.update(id, data);
     return toPedidoResponseDTO(pedido);
   } catch (error) {
-    if ((error as any).code === 'P2025') {
+    if (
+      (error as any).code === 'P2025' ||
+      (error as Error).message === 'Pedido não encontrado'
+    ) {
       throw new ServiceError('Pedido não encontrado', 404);
     }
     throw new ServiceError('Erro ao atualizar pedido', 500);
@@ -60,7 +63,10 @@ export async function deletePedidoService(id: number): Promise<void> {
     const deleted = await repository.remove(id);
     if (!deleted) throw new ServiceError('Pedido não encontrado', 404);
   } catch (error) {
-    if ((error as any).code === 'P2025') {
+    if (
+      (error as any).code === 'P2025' ||
+      (error as Error).message === 'Pedido não encontrado'
+    ) {
       throw new ServiceError('Pedido não encontrado', 404);
     }
     throw new ServiceError('Erro ao deletar pedido', 500);
