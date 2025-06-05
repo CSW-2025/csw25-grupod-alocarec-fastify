@@ -12,6 +12,11 @@ jest.mock('@prisma/client', () => ({
       delete: jest.fn(),
     },
   })),
+  Status: {
+    PENDENTE: 'PENDENTE',
+    APROVADA: 'APROVADA',
+    REJEITADA: 'REJEITADA',
+  },
 }));
 
 describe('PedidoRepository', () => {
