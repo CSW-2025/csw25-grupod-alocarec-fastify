@@ -1,4 +1,5 @@
 import { FastifyInstance } from 'fastify';
+import { verifyJwt } from '../../config/auth';
 import {
   createAula,
   getAllAulas,
@@ -35,6 +36,8 @@ function verificarAdminCoordenadorOuProfessor(request: any, reply: any, done: an
 }
 
 export default async function aulaRoutes(fastify: FastifyInstance) {
+  // Middleware para autenticação JWT
+  fastify.addHook('preHandler', verifyJwt);
   fastify.post('/', {
     preHandler: verificarAdminCoordenadorOuProfessor,
     schema: {

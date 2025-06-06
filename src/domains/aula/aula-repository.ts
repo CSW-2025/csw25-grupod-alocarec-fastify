@@ -1,6 +1,5 @@
-import { PrismaClient, Aula as PrismaAula } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { Aula as PrismaAula } from '@prisma/client';
+import { prisma } from '../../config/database';
 
 export class AulaRepository {
   async create(data: Omit<PrismaAula, 'id'>): Promise<PrismaAula> {

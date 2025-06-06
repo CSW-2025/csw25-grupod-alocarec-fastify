@@ -6,6 +6,7 @@ import {
   updateRecursoController,
   deleteRecursoController,
 } from './recurso-controller';
+import { verifyJwt } from '../../config/auth';
 
 declare module 'fastify' {
   interface FastifyRequest {
@@ -23,17 +24,7 @@ function verificarAdmin(request: any, reply: any, done: any) {
 }
 
 export default async function recursoRoutes(app: FastifyInstance) {
-  app.addHook('preHandler', async (request, reply) => {
-    if (request.headers.authorization) {
-      try {
-        const token = request.headers.authorization.replace('Bearer ', '');
-        const decoded = require('jsonwebtoken').verify(token, require('../../config/jwt').JWT_SECRET);
-        request.user = decoded;
-      } catch (err) {
-        reply.code(401).send({ message: 'Token inválido.' });
-      }
-    }
-  });
+  app.addHook('preHandler', verifyJwt);
 
   app.post('/', { preHandler: verificarAdmin, schema: { tags: ['recursos'] } }, createRecursoController);
   app.put('/:id', { preHandler: verificarAdmin, schema: { tags: ['recursos'] } }, updateRecursoController);

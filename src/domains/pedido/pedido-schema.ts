@@ -16,4 +16,4 @@ export const updatePedidoSchema = z.object({
   moderador_id: z.number().nullable().optional(),
   sala_id: z.number().nullable().optional(),
   recurso_id: z.number().nullable().optional()
-}); 
+}).strict();

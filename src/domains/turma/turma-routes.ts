@@ -1,5 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { createTurmaController, getAllTurmasController, getTurmaByIdController, updateTurmaController, deleteTurmaController } from './turma-controller';
+import { verifyJwt } from '../../config/auth';
 
 const turmaSchema = {
   type: 'object',
@@ -23,6 +24,8 @@ function verificarAdminOuCoordenador(request: any, reply: any, done: any) {
 }
 
 export default async function turmaRoutes(fastify: FastifyInstance) {
+  // Middleware para autenticação JWT
+  fastify.addHook('preHandler', verifyJwt);
     fastify.post('/', { preHandler: verificarAdminOuCoordenador, schema: {
       tags: ['turmas'],
       summary: 'Criar uma nova turma',

@@ -1,7 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '../../config/database';
 import { CreatePredioInput, UpdatePredioInput } from './predio-entity';
-
-const prisma = new PrismaClient();
 
 export async function createPredio(data: CreatePredioInput) {
   return await prisma.predio.create({ data });

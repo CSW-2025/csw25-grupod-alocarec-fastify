@@ -2,8 +2,8 @@ import { PrismaClient } from '@prisma/client';
 import * as UsuarioRepository from '../../../src/domains/usuario/usuario-repository';
 import { Usuario, CreateUsuarioInput, Sexo } from '../../../src/domains/usuario/usuario-entity';
 
-jest.mock('@prisma/client', () => ({
-  PrismaClient: jest.fn().mockImplementation(() => ({
+jest.mock('@prisma/client', () => {
+  const prismaMock = {
     usuario: {
       create: jest.fn(),
       findUnique: jest.fn(),
@@ -11,8 +11,9 @@ jest.mock('@prisma/client', () => ({
       update: jest.fn(),
       delete: jest.fn(),
     },
-  })),
-}));
+  };
+  return { PrismaClient: jest.fn().mockImplementation(() => prismaMock) };
+});
 
 describe('UsuarioRepository', () => {
   let prisma: PrismaClient;

@@ -1,5 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import { createUser, getAllUsers, getUserById, updateUser, deleteUser, login } from './usuario-controller';
+import { CreateUsuarioInput } from './usuario-entity';
+import { verifyJwt } from '../../config/auth';
 
 function verificarAdmin(request: any, reply: any, done: any) {
   const user = request.user;
@@ -11,21 +13,10 @@ function verificarAdmin(request: any, reply: any, done: any) {
 }
 
 export default async function usuarioRotas(fastify: FastifyInstance) {
-  // Middleware para autenticação JWT
-  fastify.addHook('preHandler', async (request, reply) => {
-    if (request.headers.authorization) {
-      try {
-        const token = request.headers.authorization.replace('Bearer ', '');
-        const decoded = require('jsonwebtoken').verify(token, require('../../config/jwt').JWT_SECRET);
-        request.user = decoded;
-      } catch (err) {
-        reply.code(401).send({ message: 'Token inválido.' });
-      }
-    }
-  });
+  // Middleware para autenticação JWT aplicado por rota
 
   // Criar usuário
-  fastify.post('/', {
+  fastify.post<{ Body: CreateUsuarioInput }>('/', {
     schema: {
       tags: ['usuarios'],
       summary: 'Criar um novo usuário',
@@ -86,11 +77,12 @@ export default async function usuarioRotas(fastify: FastifyInstance) {
         }
       }
     },
-    preHandler: verificarAdmin
+    preHandler: [verifyJwt, verificarAdmin]
   }, createUser);
 
   // Listar todos os usuários
   fastify.get('/', {
+    preHandler: verifyJwt,
     schema: {
       tags: ['usuarios'],
       summary: 'Listar todos os usuários',
@@ -115,7 +107,8 @@ export default async function usuarioRotas(fastify: FastifyInstance) {
   }, getAllUsers);
 
   // Buscar usuário por ID
-  fastify.get('/:id', {
+  fastify.get<{ Params: { id: number } }>('/:id', {
+    preHandler: verifyJwt,
     schema: {
       tags: ['usuarios'],
       summary: 'Buscar usuário por ID',
@@ -169,7 +162,7 @@ export default async function usuarioRotas(fastify: FastifyInstance) {
   }, getUserById);
 
   // Atualizar usuário
-  fastify.put('/:id', {
+  fastify.put<{ Params: { id: number }; Body: Partial<CreateUsuarioInput> }>('/:id', {
     schema: {
       tags: ['usuarios'],
       summary: 'Atualizar um usuário',
@@ -230,11 +223,11 @@ export default async function usuarioRotas(fastify: FastifyInstance) {
         }
       }
     },
-    preHandler: verificarAdmin
+    preHandler: [verifyJwt, verificarAdmin]
   }, updateUser);
 
   // Deletar usuário
-  fastify.delete('/:id', {
+  fastify.delete<{ Params: { id: number } }>('/:id', {
     schema: {
       tags: ['usuarios'],
       summary: 'Deletar um usuário',
@@ -257,7 +250,7 @@ export default async function usuarioRotas(fastify: FastifyInstance) {
         }
       }
     },
-    preHandler: verificarAdmin
+    preHandler: [verifyJwt, verificarAdmin]
   }, deleteUser);
 
   // Endpoint de login

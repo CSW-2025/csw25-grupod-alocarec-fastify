@@ -1,5 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { createPerfilController, getAllPerfisController, getPerfilByIdController, updatePerfilController, deletePerfilController } from './perfil-controller';
+import { verifyJwt } from '../../config/auth';
 
 const perfilSchema = {
   type: 'object',
@@ -19,6 +20,8 @@ function verificarAdmin(request: any, reply: any, done: any) {
 }
 
 export default async function perfilRoutes(fastify: FastifyInstance) {
+  // Middleware para autenticação JWT
+  fastify.addHook('preHandler', verifyJwt);
   fastify.post('/', { preHandler: verificarAdmin, schema: {
     tags: ['perfis'],
     summary: 'Criar um novo perfil',

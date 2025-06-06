@@ -6,7 +6,11 @@ describe('PedidoSchema', () => {
       const validPedido = {
         aula_id: 1,
         disciplina_id: 2,
-        status: 'PENDENTE'
+        status: 'PENDENTE',
+        nome: 'Pedido',
+        moderador_id: null,
+        sala_id: null,
+        recurso_id: null
       };
 
       const result = createPedidoSchema.safeParse(validPedido);

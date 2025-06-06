@@ -90,7 +90,8 @@ describe('UsuarioController', () => {
       (UsuarioService.getAllUsersService as jest.Mock).mockResolvedValueOnce(mockUsuarios);
       const response = await app.inject({
         method: 'GET',
-        url: '/usuarios'
+        url: '/usuarios',
+        headers: { authorization: 'Bearer fake-admin-token' }
       });
       expect(response.statusCode).toBe(200);
       expect(JSON.parse(response.payload)).toEqual(mockUsuarios);
@@ -112,7 +113,8 @@ describe('UsuarioController', () => {
       (UsuarioService.getUserByIdService as jest.Mock).mockResolvedValueOnce(mockUsuario);
       const response = await app.inject({
         method: 'GET',
-        url: '/usuarios/1'
+        url: '/usuarios/1',
+        headers: { authorization: 'Bearer fake-admin-token' }
       });
       expect(response.statusCode).toBe(200);
       expect(JSON.parse(response.payload)).toEqual(mockUsuario);
@@ -123,7 +125,8 @@ describe('UsuarioController', () => {
       (UsuarioService.getUserByIdService as jest.Mock).mockRejectedValueOnce(notFoundError);
       const response = await app.inject({
         method: 'GET',
-        url: '/usuarios/999'
+        url: '/usuarios/999',
+        headers: { authorization: 'Bearer fake-admin-token' }
       });
       expect(response.statusCode).toBe(404);
     });

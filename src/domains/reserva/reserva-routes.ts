@@ -6,6 +6,7 @@ import {
   updateReserva,
   deleteReserva,
 } from './reserva-controller';
+import { verifyJwt } from '../../config/auth';
 
 function verificarAdminCoordenadorOuProfessor(request: any, reply: any, done: any) {
   const user = request.user;
@@ -17,6 +18,8 @@ function verificarAdminCoordenadorOuProfessor(request: any, reply: any, done: an
 }
 
 export default async function reservaRoutes(app: FastifyInstance) {
+  // Middleware para autenticação JWT
+  app.addHook('preHandler', verifyJwt);
   app.post('/', { preHandler: verificarAdminCoordenadorOuProfessor, schema: {
     tags: ['reservas'],
     summary: 'Criar uma nova reserva',

@@ -2,8 +2,8 @@ import { PrismaClient } from '@prisma/client';
 import * as PedidoRepository from '../../../src/domains/pedido/pedido-repository';
 import { Pedido, CreatePedidoInput, Status } from '../../../src/domains/pedido/pedido-entity';
 
-jest.mock('@prisma/client', () => ({
-  PrismaClient: jest.fn().mockImplementation(() => ({
+jest.mock('@prisma/client', () => {
+  const prismaMock = {
     pedido: {
       create: jest.fn(),
       findUnique: jest.fn(),
@@ -11,8 +11,12 @@ jest.mock('@prisma/client', () => ({
       update: jest.fn(),
       delete: jest.fn(),
     },
-  })),
-}));
+  };
+  return {
+    PrismaClient: jest.fn().mockImplementation(() => prismaMock),
+    Status: { PENDENTE: 'PENDENTE', APROVADA: 'APROVADA', REJEITADA: 'REJEITADA' }
+  };
+});
 
 describe('PedidoRepository', () => {
   let prisma: PrismaClient;
