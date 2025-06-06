@@ -31,13 +31,14 @@ export default async function usuarioRotas(fastify: FastifyInstance) {
       summary: 'Criar um novo usuário',
       body: {
         type: 'object',
-        required: ['nome', 'email', 'dataNascimento', 'sexo', 'perfilId', 'telefones'],
+        required: ['nome', 'email', 'dataNascimento', 'sexo', 'perfilId', 'telefones', 'senha'],
         properties: {
           nome: { type: 'string' },
           email: { type: 'string', format: 'email' },
           dataNascimento: { type: 'string', format: 'date-time' },
           sexo: { type: 'string' },
           perfilId: { type: 'number' },
+          senha: { type: 'string' },
           telefones: {
             type: 'array',
             items: {

@@ -5,6 +5,16 @@ import { Pedido, CreatePedidoInput, Status } from '../../../src/domains/pedido/p
 
 // Mock do módulo de serviço
 jest.mock('../../../src/domains/pedido/pedido-service');
+// Mock do JWT para sempre retornar admin (perfil aceito em todas as rotas protegidas)
+jest.mock('jsonwebtoken', () => ({
+  verify: jest.fn().mockReturnValue({
+    id: 1,
+    email: 'admin@admin.com',
+    nome: 'Administrador',
+    perfil: { id: 1, nome: 'Admin' } // perfil aceito em todas as rotas
+  }),
+  sign: jest.requireActual('jsonwebtoken').sign
+}));
 
 describe('PedidoController', () => {
   let app: FastifyInstance;
@@ -43,7 +53,10 @@ describe('PedidoController', () => {
       const response = await app.inject({
         method: 'POST',
         url: '/pedidos',
-        payload: input
+        payload: input,
+        headers: {
+          authorization: 'Bearer fake-admin-token'
+        }
       });
 
       expect(response.statusCode).toBe(201);
@@ -64,7 +77,10 @@ describe('PedidoController', () => {
       const response = await app.inject({
         method: 'POST',
         url: '/pedidos',
-        payload: invalidInput
+        payload: invalidInput,
+        headers: {
+          authorization: 'Bearer fake-admin-token'
+        }
       });
 
       expect(response.statusCode).toBe(400);
@@ -98,7 +114,9 @@ describe('PedidoController', () => {
     });
 
     it('deve retornar 404 para pedido não encontrado', async () => {
-      jest.spyOn(PedidoService, 'getPedidoByIdService').mockRejectedValueOnce(new Error('Pedido não encontrado'));
+      const notFoundError = new Error('Pedido não encontrado');
+      (notFoundError as any).statusCode = 404;
+      jest.spyOn(PedidoService, 'getPedidoByIdService').mockRejectedValueOnce(notFoundError);
 
       const response = await app.inject({
         method: 'GET',
@@ -133,7 +151,10 @@ describe('PedidoController', () => {
       const response = await app.inject({
         method: 'PUT',
         url: '/pedidos/1',
-        payload: updateInput
+        payload: updateInput,
+        headers: {
+          authorization: 'Bearer fake-admin-token'
+        }
       });
 
       expect(response.statusCode).toBe(200);
@@ -145,12 +166,17 @@ describe('PedidoController', () => {
         status: Status.APROVADA
       };
 
-      jest.spyOn(PedidoService, 'updatePedidoService').mockRejectedValueOnce(new Error('Pedido não encontrado'));
+      const notFoundError = new Error('Pedido não encontrado');
+      (notFoundError as any).statusCode = 404;
+      jest.spyOn(PedidoService, 'updatePedidoService').mockRejectedValueOnce(notFoundError);
 
       const response = await app.inject({
         method: 'PUT',
         url: '/pedidos/999',
-        payload: updateInput
+        payload: updateInput,
+        headers: {
+          authorization: 'Bearer fake-admin-token'
+        }
       });
 
       expect(response.statusCode).toBe(404);
@@ -163,18 +189,26 @@ describe('PedidoController', () => {
 
       const response = await app.inject({
         method: 'DELETE',
-        url: '/pedidos/1'
+        url: '/pedidos/1',
+        headers: {
+          authorization: 'Bearer fake-admin-token'
+        }
       });
 
       expect(response.statusCode).toBe(204);
     });
 
     it('deve retornar 404 para pedido não encontrado', async () => {
-      jest.spyOn(PedidoService, 'deletePedidoService').mockRejectedValueOnce(new Error('Pedido não encontrado'));
+      const notFoundError = new Error('Pedido não encontrado');
+      (notFoundError as any).statusCode = 404;
+      jest.spyOn(PedidoService, 'deletePedidoService').mockRejectedValueOnce(notFoundError);
 
       const response = await app.inject({
         method: 'DELETE',
-        url: '/pedidos/999'
+        url: '/pedidos/999',
+        headers: {
+          authorization: 'Bearer fake-admin-token'
+        }
       });
 
       expect(response.statusCode).toBe(404);

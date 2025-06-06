@@ -23,6 +23,7 @@ export interface Usuario {
     telefones: Telefone[];
     perfilId: number;
     perfil: Perfil;
+    senha: string;
 }
 
 export type CreateUsuarioInput = {

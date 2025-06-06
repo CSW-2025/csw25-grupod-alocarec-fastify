@@ -69,5 +69,8 @@ export async function deleteUserService(id: number): Promise<void> {
 }
 
 export async function getUserByEmail(email: string) {
-  return prisma.usuario.findUnique({ where: { email } });
+  return prisma.usuario.findUnique({
+    where: { email },
+    include: { perfil: true }
+  });
 }

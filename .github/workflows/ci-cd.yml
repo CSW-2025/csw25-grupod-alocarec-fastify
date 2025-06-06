@@ -8,6 +8,24 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: alocarec_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/alocarec_test
+
     steps:
       - name: Checkout código
         uses: actions/checkout@v3
@@ -19,6 +37,12 @@ jobs:
 
       - name: Instalar dependências
         run: npm install
+
+      - name: Rodar migrations
+        run: npx prisma migrate deploy
+
+      - name: Rodar seed
+        run: npx prisma db seed
 
       - name: Rodar testes
         run: npm test
