@@ -1,41 +1,36 @@
 import { FastifyInstance } from 'fastify';
 import { build } from '../../../src/app';
 import * as PedidoService from '../../../src/domains/pedido/pedido-service';
+import { PedidoResponseDTO } from '../../../src/domains/pedido/dto/PedidoResponseDTO';
 import { Pedido, CreatePedidoInput, Status } from '../../../src/domains/pedido/pedido-entity';
 
 // Mock do módulo de serviço
 jest.mock('../../../src/domains/pedido/pedido-service');
-// Mock do JWT para sempre retornar admin (perfil aceito em todas as rotas protegidas)
+
 jest.mock('jsonwebtoken', () => ({
   verify: jest.fn().mockReturnValue({
     id: 1,
     email: 'admin@admin.com',
     nome: 'Administrador',
-    perfil: { id: 1, nome: 'Admin' } // perfil aceito em todas as rotas
+    perfil: { id: 1, nome: 'Admin' }
   }),
   sign: jest.requireActual('jsonwebtoken').sign
 }));
 
 describe('PedidoController', () => {
   let app: FastifyInstance;
-
+  
   beforeEach(async () => {
     app = await build();
   });
 
-  describe('POST /pedidos', () => {
+   describe('POST /pedidos', () => {
     it('deve criar um pedido com sucesso', async () => {
-      const mockPedido: Pedido = {
+      const mockPedido: PedidoResponseDTO = {
         id: 1,
         aula_id: 1,
         disciplina_id: 2,
-        status: Status.PENDENTE,
-        nome: 'Pedido de Teste',
-        moderador_id: null,
-        sala_id: null,
-        recurso_id: null,
-        createdAt: new Date('2024-01-01'),
-        updatedAt: new Date('2024-01-01'),
+        status: Status.PENDENTE
       };
 
       const input: CreatePedidoInput = {
@@ -89,24 +84,21 @@ describe('PedidoController', () => {
 
   describe('GET /pedidos/:id', () => {
     it('deve retornar um pedido pelo ID', async () => {
-      const mockPedido: Pedido = {
+      const mockPedido: PedidoResponseDTO = {
         id: 1,
         aula_id: 1,
         disciplina_id: 2,
-        status: Status.PENDENTE,
-        nome: 'Pedido de Teste',
-        moderador_id: null,
-        sala_id: null,
-        recurso_id: null,
-        createdAt: new Date('2024-01-01'),
-        updatedAt: new Date('2024-01-01'),
+        status: Status.PENDENTE
       };
 
       jest.spyOn(PedidoService, 'getPedidoByIdService').mockResolvedValueOnce(mockPedido);
 
       const response = await app.inject({
         method: 'GET',
-        url: '/pedidos/1'
+        url: '/pedidos/1',
+        headers: {
+          authorization: 'Bearer fake-admin-token'
+        }
       });
 
       expect(response.statusCode).toBe(200);
@@ -120,7 +112,10 @@ describe('PedidoController', () => {
 
       const response = await app.inject({
         method: 'GET',
-        url: '/pedidos/999'
+        url: '/pedidos/999',
+        headers: {
+          authorization: 'Bearer fake-admin-token'
+        }
       });
 
       expect(response.statusCode).toBe(404);
@@ -133,17 +128,11 @@ describe('PedidoController', () => {
         status: Status.APROVADA
       };
 
-      const mockPedido: Pedido = {
+      const mockPedido: PedidoResponseDTO = {
         id: 1,
         aula_id: 1,
         disciplina_id: 2,
-        status: Status.APROVADA,
-        nome: 'Pedido de Teste',
-        moderador_id: null,
-        sala_id: null,
-        recurso_id: null,
-        createdAt: new Date('2024-01-01'),
-        updatedAt: new Date('2024-01-01'),
+        status: Status.APROVADA
       };
 
       jest.spyOn(PedidoService, 'updatePedidoService').mockResolvedValueOnce(mockPedido);
@@ -191,7 +180,7 @@ describe('PedidoController', () => {
         method: 'DELETE',
         url: '/pedidos/1',
         headers: {
-          authorization: 'Bearer fake-admin-token'
+            authorization:  'Bearer fake-admin-token'
         }
       });
 
@@ -207,7 +196,7 @@ describe('PedidoController', () => {
         method: 'DELETE',
         url: '/pedidos/999',
         headers: {
-          authorization: 'Bearer fake-admin-token'
+            authorization:  'Bearer fake-admin-token'
         }
       });
 

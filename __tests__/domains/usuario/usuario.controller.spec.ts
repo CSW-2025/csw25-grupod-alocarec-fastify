@@ -16,7 +16,7 @@ jest.mock('jsonwebtoken', () => ({
   sign: jest.requireActual('jsonwebtoken').sign
 }));
 
-describe('UsuarioController (mockado)', () => {
+describe('UsuarioController', () => {
   let app: FastifyInstance;
 
   beforeEach(async () => {
