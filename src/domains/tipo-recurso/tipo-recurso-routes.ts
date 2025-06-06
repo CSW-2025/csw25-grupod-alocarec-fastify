@@ -1,5 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { createTipoRecursoController, getAllTipoRecursosController, getTipoRecursoByIdController, updateTipoRecursoController, deleteTipoRecursoController } from './tipo-recurso-controller';
+import { verifyJwt } from '../../config/auth';
 
 function verificarAdminOuCoordenador(request: any, reply: any, done: any) {
   const user = request.user;
@@ -11,6 +12,8 @@ function verificarAdminOuCoordenador(request: any, reply: any, done: any) {
 }
 
 export default async function tipoRecursoRoutes(fastify: FastifyInstance) {
+  // Middleware para autenticação JWT
+  fastify.addHook('preHandler', verifyJwt);
     fastify.post('/', { preHandler: verificarAdminOuCoordenador, schema: {
         tags: ['tipos de recurso'],
         summary: 'Criar um novo tipo de recurso',

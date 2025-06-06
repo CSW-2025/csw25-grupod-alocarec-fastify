@@ -1,7 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '../../config/database';
 import { CreateRecursoInput, UpdateRecursoInput } from './recurso-entity';
-
-const prisma = new PrismaClient();
 
 export async function createRecurso(data: CreateRecursoInput) {
   return await prisma.recurso.create({ data });

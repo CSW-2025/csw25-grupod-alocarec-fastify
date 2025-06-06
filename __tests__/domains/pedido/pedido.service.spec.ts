@@ -1,6 +1,7 @@
 import * as PedidoRepository from '../../../src/domains/pedido/pedido-repository';
 import { createPedidoService, getPedidoByIdService, updatePedidoService, deletePedidoService } from '../../../src/domains/pedido/pedido-service';
 import { Pedido, CreatePedidoInput, Status } from '../../../src/domains/pedido/pedido-entity';
+import { PedidoResponseDTO } from '../../../src/domains/pedido/dto/PedidoResponseDTO';
 
 // Mock do módulo de repositório
 jest.mock('../../../src/domains/pedido/pedido-repository');
@@ -32,6 +33,13 @@ describe('PedidoService', () => {
     updatedAt: new Date('2024-01-01'),
   };
 
+  const mockPedidoResponse: PedidoResponseDTO = {
+    id: 1,
+    aula_id: 1,
+    disciplina_id: 2,
+    status: Status.PENDENTE,
+  };
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -52,7 +60,7 @@ describe('PedidoService', () => {
 
       const result = await createPedidoService(input);
 
-      expect(result).toEqual(mockPedido);
+      expect(result).toEqual(mockPedidoResponse);
       expect(PedidoRepository.create).toHaveBeenCalledWith(input);
     });
 
@@ -79,7 +87,7 @@ describe('PedidoService', () => {
 
       const result = await getPedidoByIdService(1);
 
-      expect(result).toEqual(mockPedido);
+      expect(result).toEqual(mockPedidoResponse);
       expect(PedidoRepository.findById).toHaveBeenCalledWith(1);
     });
 
@@ -97,11 +105,12 @@ describe('PedidoService', () => {
       };
 
       const updatedPedido = { ...mockPedido, ...updateInput };
+      jest.spyOn(PedidoRepository, 'findById').mockResolvedValueOnce(mockPedido);
       jest.spyOn(PedidoRepository, 'update').mockResolvedValueOnce(updatedPedido);
 
       const result = await updatePedidoService(1, updateInput);
 
-      expect(result).toEqual(updatedPedido);
+      expect(result).toEqual({ ...mockPedidoResponse, ...updateInput });
       expect(PedidoRepository.update).toHaveBeenCalledWith(1, updateInput);
     });
 
@@ -110,7 +119,7 @@ describe('PedidoService', () => {
         status: Status.APROVADA
       };
 
-      jest.spyOn(PedidoRepository, 'update').mockRejectedValueOnce(new Error('Pedido não encontrado'));
+      jest.spyOn(PedidoRepository, 'findById').mockResolvedValueOnce(null);
 
       await expect(updatePedidoService(999, updateInput)).rejects.toThrow('Pedido não encontrado');
     });
@@ -118,7 +127,7 @@ describe('PedidoService', () => {
 
   describe('deletePedidoService', () => {
     it('deve deletar um pedido com sucesso', async () => {
-      jest.spyOn(PedidoRepository, 'remove').mockResolvedValueOnce(mockPedido);
+      jest.spyOn(PedidoRepository, 'remove').mockResolvedValueOnce(true);
 
       await deletePedidoService(1);
 
@@ -126,7 +135,7 @@ describe('PedidoService', () => {
     });
 
     it('deve lançar erro quando pedido não encontrado', async () => {
-      jest.spyOn(PedidoRepository, 'remove').mockRejectedValueOnce(new Error('Pedido não encontrado'));
+      jest.spyOn(PedidoRepository, 'remove').mockResolvedValueOnce(false);
 
       await expect(deletePedidoService(999)).rejects.toThrow('Pedido não encontrado');
     });

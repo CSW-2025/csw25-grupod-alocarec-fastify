@@ -1,7 +1,9 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
+import * as service from './tipo-recurso-service';
 
 export async function createTipoRecursoController(request: FastifyRequest, reply: FastifyReply) {
-    reply.send('createTipoRecursoController');
+    const tipo = await service.createTipoRecursoService(request.body as any);
+    reply.code(201).send(tipo);
 }
 
 export async function getAllTipoRecursosController(request: FastifyRequest, reply: FastifyReply) {

@@ -6,6 +6,7 @@ import {
   updatePedido,
   deletePedido,
 } from './pedido-controller';
+import { verifyJwt } from '../../config/auth';
 
 const pedidoSchema = {
   type: 'object',
@@ -43,17 +44,7 @@ function verificarAdminCoordenadorProfessorInserir(request: any, reply: any, don
 
 export default async function pedidoRoutes(fastify: FastifyInstance) {
   // Middleware para autenticação JWT (igual usuario-routes)
-  fastify.addHook('preHandler', async (request, reply) => {
-    if (request.headers.authorization) {
-      try {
-        const token = request.headers.authorization.replace('Bearer ', '');
-        const decoded = require('jsonwebtoken').verify(token, require('../../config/jwt').JWT_SECRET);
-        request.user = decoded;
-      } catch (err) {
-        reply.code(401).send({ message: 'Token inválido.' });
-      }
-    }
-  });
+  fastify.addHook('preHandler', verifyJwt);
 
   fastify.post('/', {
     preHandler: verificarAdminCoordenadorProfessorInserir,

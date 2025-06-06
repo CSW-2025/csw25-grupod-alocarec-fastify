@@ -1,5 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { createCurriculoController, getAllCurriculosController, getCurriculoByIdController, updateCurriculoController, deleteCurriculoController } from './curriculo-controller';
+import { verifyJwt } from '../../config/auth';
 
 const curriculoSchema = {
   type: 'object',
@@ -23,6 +24,8 @@ function verificarAdminOuCoordenador(request: any, reply: any, done: any) {
 }
 
 export default async function curriculoRoutes(fastify: FastifyInstance) {
+  // Middleware para autenticação JWT
+  fastify.addHook('preHandler', verifyJwt);
     fastify.post('/', { preHandler: verificarAdminOuCoordenador, schema: {
       tags: ['curriculos'],
       summary: 'Criar um novo currículo',

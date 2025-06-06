@@ -19,9 +19,16 @@ jest.mock('jsonwebtoken', () => ({
 
 describe('PedidoController', () => {
   let app: FastifyInstance;
+  let token: string;
   
   beforeEach(async () => {
     app = await build();
+    const login = await app.inject({
+      method: 'POST',
+      url: '/usuarios/login',
+      payload: { email: 'admin@admin.com', senha: 'admin123' }
+    });
+    token = JSON.parse(login.payload).token;
   });
 
    describe('POST /pedidos', () => {
@@ -50,7 +57,7 @@ describe('PedidoController', () => {
         url: '/pedidos',
         payload: input,
         headers: {
-          authorization: 'Bearer fake-admin-token'
+          authorization: `Bearer ${token}`
         }
       });
 
@@ -74,7 +81,7 @@ describe('PedidoController', () => {
         url: '/pedidos',
         payload: invalidInput,
         headers: {
-          authorization: 'Bearer fake-admin-token'
+          authorization: `Bearer ${token}`
         }
       });
 
@@ -97,7 +104,7 @@ describe('PedidoController', () => {
         method: 'GET',
         url: '/pedidos/1',
         headers: {
-          authorization: 'Bearer fake-admin-token'
+          authorization: `Bearer ${token}`
         }
       });
 
@@ -114,7 +121,7 @@ describe('PedidoController', () => {
         method: 'GET',
         url: '/pedidos/999',
         headers: {
-          authorization: 'Bearer fake-admin-token'
+          authorization: `Bearer ${token}`
         }
       });
 
@@ -142,7 +149,7 @@ describe('PedidoController', () => {
         url: '/pedidos/1',
         payload: updateInput,
         headers: {
-          authorization: 'Bearer fake-admin-token'
+          authorization: `Bearer ${token}`
         }
       });
 
@@ -164,7 +171,7 @@ describe('PedidoController', () => {
         url: '/pedidos/999',
         payload: updateInput,
         headers: {
-          authorization: 'Bearer fake-admin-token'
+          authorization: `Bearer ${token}`
         }
       });
 
@@ -180,7 +187,7 @@ describe('PedidoController', () => {
         method: 'DELETE',
         url: '/pedidos/1',
         headers: {
-            authorization:  'Bearer fake-admin-token'
+            authorization:  `Bearer ${token}`
         }
       });
 
@@ -196,7 +203,7 @@ describe('PedidoController', () => {
         method: 'DELETE',
         url: '/pedidos/999',
         headers: {
-            authorization:  'Bearer fake-admin-token'
+            authorization:  `Bearer ${token}`
         }
       });
 
