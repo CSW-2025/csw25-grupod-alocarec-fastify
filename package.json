@@ -4,6 +4,7 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only --poll --require tsconfig-paths/register src/server.ts",
+    "front": "npm run dev --prefix web",
     "build": "rimraf dist && tsc -p tsconfig.json",
     "start": "node dist/server.js",
     "prisma": "prisma",
