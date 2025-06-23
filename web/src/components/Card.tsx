@@ -10,6 +10,8 @@ export default function Card({ children, className }: CardProps) {
     <div
       className={className}
       style={{
+        width: "100%",
+        maxWidth: 600,
         background: "#fff",
         border: "1px solid #eee",
         borderRadius: 8,
