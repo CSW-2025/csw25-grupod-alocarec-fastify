@@ -1,5 +1,6 @@
 import * as UsuarioRepository from '../../../src/domains/usuario/usuario-repository';
-import { createUserService, getUserByIdService } from '../../../src/domains/usuario/usuario-service';
+import { createUserService, getUserByIdService, updateUserService } from '../../../src/domains/usuario/usuario-service';
+import bcrypt from 'bcryptjs';
 import { Usuario, CreateUsuarioInput, Sexo } from '../../../src/domains/usuario/usuario-entity';
 
 jest.mock('../../../src/domains/usuario/usuario-repository');
@@ -24,6 +25,7 @@ describe('UsuarioService', () => {
   describe('createUserService', () => {
     it('deve criar um usuário com sucesso', async () => {
       (UsuarioRepository.createUser as jest.Mock).mockResolvedValueOnce(mockUsuario);
+      const hashSpy = jest.spyOn(bcrypt as any, 'hash').mockResolvedValueOnce('hashed');
 
       const input: CreateUsuarioInput = {
         email: 'teste@example.com',
@@ -38,7 +40,20 @@ describe('UsuarioService', () => {
       const result = await createUserService(input);
 
       expect(result).toEqual(expect.objectContaining({ email: input.email, nome: input.nome }));
-      expect(UsuarioRepository.createUser).toHaveBeenCalledWith(input);
+      expect(hashSpy).toHaveBeenCalledWith('senha123', 10);
+      expect(UsuarioRepository.createUser).toHaveBeenCalledWith({ ...input, senha: 'hashed' });
+    });
+  });
+
+  describe('updateUserService', () => {
+    it('deve atualizar a senha com hash', async () => {
+      (UsuarioRepository.updateUser as jest.Mock).mockResolvedValueOnce(mockUsuario);
+      const hashSpy = jest.spyOn(bcrypt as any, 'hash').mockResolvedValueOnce('hashed');
+      const result = await updateUserService(1, { senha: 'novaSenha' });
+
+      expect(hashSpy).toHaveBeenCalledWith('novaSenha', 10);
+      expect(UsuarioRepository.updateUser).toHaveBeenCalledWith(1, { senha: 'hashed' });
+      expect(result).toEqual(expect.objectContaining({ email: mockUsuario.email }));
     });
   });
 
