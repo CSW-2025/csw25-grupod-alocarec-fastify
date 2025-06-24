@@ -105,6 +105,8 @@ export default function UsuariosForm() {
         setEditando(null);
         // Recarregar lista
         carregarUsuarios();
+      } else if (res.status === 401 || res.status === 403) {
+        setError("Acesso n\u00e3o autorizado. Faça login novamente.");
       } else {
         setError(data.message || "Erro ao salvar usuário");
       }
@@ -138,6 +140,8 @@ export default function UsuariosForm() {
       
       if (res.ok) {
         carregarUsuarios();
+      } else if (res.status === 401 || res.status === 403) {
+        setError("Acesso n\u00e3o autorizado. Faça login novamente.");
       } else {
         setError("Erro ao remover usuário");
       }
@@ -210,6 +214,7 @@ export default function UsuariosForm() {
             <Input
               label="Email"
               type="email"
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$"
               value={email}
               onChange={e => setEmail(e.target.value)}
               required
@@ -225,6 +230,7 @@ export default function UsuariosForm() {
               <Input
                 label="Senha"
                 type="password"
+                minLength={6}
                 value={senha}
                 onChange={e => setSenha(e.target.value)}
                 required
