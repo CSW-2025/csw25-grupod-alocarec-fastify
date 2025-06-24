@@ -5,105 +5,33 @@ import Button from "@/components/Button";
 import Card from "@/components/Card";
 import { getToken } from "@/helpers/auth";
 
-export default function UsuariosForm() {
-  const [usuarios, setUsuarios] = useState([]);
+export default function SalasForm() {
+  const [salas, setSalas] = useState([]);
+  const [predios, setPredios] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  
-  // Estados do formulário
+
+  // Formulário
   const [showForm, setShowForm] = useState(false);
   const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-  const [perfilId, setPerfilId] = useState(0);
-  const [perfis, setPerfis] = useState([]);
+  const [capacidade, setCapacidade] = useState("");
+  const [predioId, setPredioId] = useState(0);
   const [editando, setEditando] = useState(null);
 
-  // Carregar usuários
-  async function carregarUsuarios() {
+  // Buscar salas
+  async function carregarSalas() {
     setLoading(true);
     try {
       const token = getToken();
-      const res = await fetch("http://localhost:3000/usuarios", {
-        headers: { "Authorization": `Bearer ${token}` }
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setUsuarios(data);
-      } else {
-        setError("Erro ao carregar usuários");
-      }
-    } catch (err) {
-      setError("Erro de conexão");
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  // Carregar perfis
-  async function carregarPerfis() {
-    try {
-      const token = getToken();
-      const res = await fetch("http://localhost:3000/perfis", {
+      const res = await fetch("http://localhost:3000/salas", {
         headers: { "Authorization": `Bearer ${token}` }
       });
       const data = await res.json();
       console.log(data);
       if (res.ok) {
-        setPerfis(data);
-      }
-    } catch (err) {
-      console.error("Erro ao carregar perfis");
-    }
-  }
-
- 
-  useEffect(() => {
-    carregarUsuarios();
-    carregarPerfis();
-  }, []);
-
-  
-  async function handleSubmit(event) {
-    event.preventDefault();
-    setError(null);
-    setLoading(true);
-
-    try {
-      const token = getToken();
-      const url = editando 
-        ? `http://localhost:3000/usuarios/${editando.id}`
-        : "http://localhost:3000/usuarios";
-      
-      const method = editando ? "PUT" : "POST";
-      
-      const res = await fetch(url, {
-        method,
-        headers: { 
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify({ 
-          nome, 
-          email, 
-          senha: editando ? undefined : senha, 
-          perfilId 
-        }),
-      });
-      
-      const data = await res.json();
-      if (res.ok) {
-        // Limpar formulário
-        setNome("");
-        setEmail("");
-        setSenha("");
-        setPerfilId(0);
-        setShowForm(false);
-        setEditando(null);
-        // Recarregar lista
-        carregarUsuarios();
+        setSalas(data);
       } else {
-        setError(data.message || "Erro ao salvar usuário");
+        setError("Erro ao carregar salas");
       }
     } catch (err) {
       setError("Erro de conexão");
@@ -112,30 +40,90 @@ export default function UsuariosForm() {
     }
   }
 
-  // Editar usuário
-  function handleEditar(usuario) {
-    setEditando(usuario);
-    setNome(usuario.nome);
-    setEmail(usuario.email);
-    setPerfilId(usuario.perfil.id);
+  // Buscar prédios
+  async function carregarPredios() {
+    try {
+      const token = getToken();
+      const res = await fetch("http://localhost:3000/predios", {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setPredios(data);
+      }
+    } catch (err) {
+      console.error("Erro ao carregar prédios");
+    }
+  }
+
+  useEffect(() => {
+    carregarSalas();
+    carregarPredios();
+  }, []);
+
+  // Salvar sala
+  async function handleSubmit(event) {
+    event.preventDefault();
+    setError(null);
+    setLoading(true);
+    try {
+      const token = getToken();
+      const url = editando
+        ? `http://localhost:3000/salas/${editando.id}`
+        : "http://localhost:3000/salas";
+      const method = editando ? "PUT" : "POST";
+      const res = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          nome,
+          capacidade: Number(capacidade),
+          predioId
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setNome("");
+        setCapacidade("");
+        setPredioId(0);
+        setShowForm(false);
+        setEditando(null);
+        carregarSalas();
+      } else {
+        setError(data.message || "Erro ao salvar sala");
+      }
+    } catch (err) {
+      setError("Erro de conexão");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Editar sala
+  function handleEditar(sala) {
+    setEditando(sala);
+    setNome(sala.nome);
+    setCapacidade(sala.capacidade.toString());
+    setPredioId(sala.predio?.id || 0);
     setShowForm(true);
   }
 
-  // Remover usuário
+  // Remover sala
   async function handleRemover(id) {
     if (!confirm("Tem certeza que deseja remover?")) return;
-    
     try {
       const token = getToken();
-      const res = await fetch(`http://localhost:3000/usuarios/${id}`, {
+      const res = await fetch(`http://localhost:3000/salas/${id}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}` }
       });
-      
       if (res.ok) {
-        carregarUsuarios();
+        carregarSalas();
       } else {
-        setError("Erro ao remover usuário");
+        setError("Erro ao remover sala");
       }
     } catch (err) {
       setError("Erro de conexão");
@@ -147,43 +135,41 @@ export default function UsuariosForm() {
     setShowForm(false);
     setEditando(null);
     setNome("");
-    setEmail("");
-    setSenha("");
-    setPerfilId(0);
+    setCapacidade("");
+    setPredioId(0);
     setError(null);
   }
 
-  // Novo usuário
-  function handleNovo() {
+  // Nova sala
+  function handleNova() {
     setShowForm(true);
     setEditando(null);
     setNome("");
-    setEmail("");
-    setSenha("");
-    setPerfilId(0);
+    setCapacidade("");
+    setPredioId(0);
   }
 
   return (
-    <div style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto", height: "100vh" }}>
-      <div style={{ 
-        display: "flex", 
-        justifyContent: "space-between", 
+    <div style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}>
+      <div style={{
+        display: "flex",
+        justifyContent: "space-between",
         alignItems: "center",
-        
+        marginBottom: "24px"
       }}>
-        <h1>👥 Usuários</h1>
+        <h1>🏢 Salas</h1>
         {!showForm && (
-          <Button onClick={handleNovo} style={{ background: "#28a745" }}>
-            ➕ Novo Usuário
+          <Button onClick={handleNova} style={{ background: "#28a745" }}>
+            ➕ Nova Sala
           </Button>
         )}
       </div>
 
       {error && (
-        <div style={{ 
-          background: "#f8d7da", 
-          color: "#721c24", 
-          padding: "12px", 
+        <div style={{
+          background: "#f8d7da",
+          color: "#721c24",
+          padding: "12px",
           borderRadius: "4px",
           marginBottom: "16px"
         }}>
@@ -193,7 +179,7 @@ export default function UsuariosForm() {
 
       {showForm ? (
         <Card>
-          <h2>{editando ? "✏️ Editar Usuário" : "➕ Novo Usuário"}</h2>
+          <h2>{editando ? "✏️ Editar Sala" : "➕ Nova Sala"}</h2>
           <form onSubmit={handleSubmit}>
             <Input
               label="Nome"
@@ -202,28 +188,19 @@ export default function UsuariosForm() {
               required
             />
             <Input
-              label="Email"
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
+              label="Capacidade"
+              type="number"
+              value={capacidade}
+              onChange={e => setCapacidade(e.target.value)}
               required
             />
-            {!editando && (
-              <Input
-                label="Senha"
-                type="password"
-                value={senha}
-                onChange={e => setSenha(e.target.value)}
-                required
-              />
-            )}
             <div style={{ marginBottom: "12px" }}>
               <label style={{ display: "block", marginBottom: "4px" }}>
-                Perfil *
+                Prédio *
               </label>
               <select
-                value={perfilId}
-                onChange={e => setPerfilId(Number(e.target.value))}
+                value={predioId}
+                onChange={e => setPredioId(Number(e.target.value))}
                 style={{
                   width: "100%",
                   padding: "8px",
@@ -232,10 +209,10 @@ export default function UsuariosForm() {
                 }}
                 required
               >
-                <option value={0}>Selecione um perfil</option>
-                {perfis.map(perfil => (
-                  <option key={perfil.id} value={perfil.id}>
-                    {perfil.nome}
+                <option value={0}>Selecione um prédio</option>
+                {predios.map(predio => (
+                  <option key={predio.id} value={predio.id}>
+                    {predio.nome}
                   </option>
                 ))}
               </select>
@@ -244,8 +221,8 @@ export default function UsuariosForm() {
               <Button type="submit" disabled={loading} style={{ flex: 1 }}>
                 {loading ? "Salvando..." : (editando ? "Atualizar" : "Cadastrar")}
               </Button>
-              <Button 
-                type="button" 
+              <Button
+                type="button"
                 onClick={handleCancelar}
                 style={{ flex: 1, background: "#6c757d" }}
               >
@@ -260,60 +237,51 @@ export default function UsuariosForm() {
             <div style={{ textAlign: "center", padding: "40px" }}>
               Carregando...
             </div>
-          ) : usuarios.length === 0 ? (
+          ) : salas.length === 0 ? (
             <div style={{ textAlign: "center", padding: "40px", color: "#666" }}>
-              <p>Nenhum usuário cadastrado</p>
-              <Button onClick={handleNovo} style={{ background: "#28a745" }}>
-                ➕ Cadastrar primeiro usuário
+              <p>Nenhuma sala cadastrada</p>
+              <Button onClick={handleNova} style={{ background: "#28a745" }}>
+                ➕ Cadastrar primeira sala
               </Button>
             </div>
           ) : (
-            <div style={{ 
-              display: "grid", 
+            <div style={{
+              display: "grid",
               gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))",
               gap: "16px"
             }}>
-              {usuarios.map(usuario => (
-                <Card key={usuario.id}>
-                  <div style={{ 
-                    display: "flex", 
-                    justifyContent: "space-between", 
+              {salas.map(sala => (
+                <Card key={sala.id}>
+                  <div style={{
+                    display: "flex",
+                    justifyContent: "space-between",
                     alignItems: "flex-start",
                     marginBottom: "16px"
                   }}>
                     <div>
-                      <h3 style={{ margin: "0 0 8px 0", color: "#333" }}>{usuario.nome}</h3>
+                      <h3 style={{ margin: "0 0 8px 0", color: "#333" }}>{sala.nome}</h3>
                       <p style={{ margin: "0 0 4px 0", color: "#666" }}>
-                        <strong>📧 Email:</strong> {usuario.email}
+                        <strong>Capacidade:</strong> {sala.capacidade}
                       </p>
                       <p style={{ margin: "0 0 4px 0", color: "#666" }}>
-                        <strong>👤 Perfil:</strong> {usuario.perfil?.nome}
+                        <strong>Prédio:</strong> {sala.predio?.nome || "-"}
                       </p>
                     </div>
-                    <span style={{ 
-                      background: usuario.ativo ? "green" : "red", 
-                      color: "white", 
-                      padding: "4px 8px", 
-                      borderRadius: "12px",
-                      fontSize: "12px"
-                    }}>
-                      {usuario.ativo ? "✅ Ativo" : "❌ Inativo"}
-                    </span>
                   </div>
-                  <div style={{ 
-                    display: "flex", 
+                  <div style={{
+                    display: "flex",
                     gap: "8px",
                     borderTop: "1px solid #eee",
                     paddingTop: "12px"
                   }}>
-                    <Button 
-                      onClick={() => handleEditar(usuario)}
+                    <Button
+                      onClick={() => handleEditar(sala)}
                       style={{ background: "#0070f3", flex: 1 }}
                     >
                       ✏️ Editar
                     </Button>
-                    <Button 
-                      onClick={() => handleRemover(usuario.id)}
+                    <Button
+                      onClick={() => handleRemover(sala.id)}
                       style={{ background: "#dc3545", flex: 1 }}
                     >
                       🗑️ Remover

@@ -143,10 +143,11 @@ model Reserva {
 }
 
 model TipoRecurso {
-  id   Int    @id @default(autoincrement())
-  nome String
-  recursos Recurso[]
+  id        Int      @id @default(autoincrement())
+  nome      String   @unique
+  recursos  Recurso[]
 }
+
 
 model Sala {
   id         Int      @id @default(autoincrement())
