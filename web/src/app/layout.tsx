@@ -41,8 +41,10 @@ export default function RootLayout({
           <Link href="/">Início</Link> |
           <Link href="/usuarios" style={{ marginLeft: 8 }}>Usuários</Link> |
           <Link href="/salas" style={{ marginLeft: 8 }}>Salas</Link> |
+          <Link href="/predios" style={{ marginLeft: 8 }}>Prédios</Link> |
           <Link href="/reservas" style={{ marginLeft: 8 }}>Reservas</Link> |
           <Link href="/recursos" style={{ marginLeft: 8 }}>Recursos</Link> |
+          <Link href="/tipos-recurso" style={{ marginLeft: 8 }}>Tipos</Link> |
           {isLogged ? (
             <a href="/logout" style={{ marginLeft: 8 }}>Logout</a>
           ) : (
