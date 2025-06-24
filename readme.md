@@ -74,3 +74,15 @@ http://localhost:3000/documentation/static/index.html#/usuarios/post_usuarios_lo
    ```
 
 > **Obs:** O arquivo `.env.aws` não é versionado. Use sempre o `.env.aws.example` como modelo.
+
+## Rodando os testes
+
+1. Instale as dependencias do projeto:
+   ```bash
+   npm install
+   ```
+2. Execute os testes:
+   ```bash
+   npm test
+   ```
+
