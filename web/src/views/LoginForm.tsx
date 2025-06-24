@@ -3,6 +3,7 @@ import { useState } from "react";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import ErrorMessage from "@/components/ErrorMessage";
+import { API_URL } from "@/helpers/api";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -16,7 +17,7 @@ export default function LoginForm() {
     setLoading(true);
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     try {
-      const res = await fetch("http://localhost:3000/usuarios/login", {
+      const res = await fetch(`${API_URL}/usuarios/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, senha }),

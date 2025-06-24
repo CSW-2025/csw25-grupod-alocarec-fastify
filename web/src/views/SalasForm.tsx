@@ -4,6 +4,7 @@ import Input from "@/components/Input";
 import Button from "@/components/Button";
 import Card from "@/components/Card";
 import { getToken } from "@/helpers/auth";
+import { API_URL } from "@/helpers/api";
 
 export default function SalasForm() {
   const [salas, setSalas] = useState([]);
@@ -23,7 +24,7 @@ export default function SalasForm() {
     setLoading(true);
     try {
       const token = getToken();
-      const res = await fetch("http://localhost:3000/salas", {
+      const res = await fetch(`${API_URL}/salas`, {
         headers: { "Authorization": `Bearer ${token}` }
       });
       const data = await res.json();
@@ -44,7 +45,7 @@ export default function SalasForm() {
   async function carregarPredios() {
     try {
       const token = getToken();
-      const res = await fetch("http://localhost:3000/predios", {
+      const res = await fetch(`${API_URL}/predios`, {
         headers: { "Authorization": `Bearer ${token}` }
       });
       const data = await res.json();
@@ -69,8 +70,8 @@ export default function SalasForm() {
     try {
       const token = getToken();
       const url = editando
-        ? `http://localhost:3000/salas/${editando.id}`
-        : "http://localhost:3000/salas";
+        ? `${API_URL}/salas/${editando.id}`
+        : `${API_URL}/salas`;
       const method = editando ? "PUT" : "POST";
       const res = await fetch(url, {
         method,
@@ -118,7 +119,7 @@ export default function SalasForm() {
     if (!confirm("Tem certeza que deseja remover?")) return;
     try {
       const token = getToken();
-      const res = await fetch(`http://localhost:3000/salas/${id}`, {
+      const res = await fetch(`${API_URL}/salas/${id}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}` }
       });

@@ -2,6 +2,14 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+First, create a `.env.local` file at the project root and define the API base URL:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3000
+```
+
+This variable is used by the pages to call the Fastify API.
+
 First, run the development server:
 
 ```bash
