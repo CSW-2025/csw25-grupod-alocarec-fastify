@@ -14,9 +14,17 @@ class ServiceError extends Error {
 
 export async function createReservaService(data: CreateReservaInput): Promise<ReservaResponseDTO> {
   try {
+    const existing = await reservaRepository.findReservaBySalaAndDataHora(
+      data.salaId,
+      data.dataHora
+    );
+    if (existing) {
+      throw new ServiceError('Já existe uma reserva para esta sala neste horário', 400);
+    }
     const reserva = await reservaRepository.createReserva(data);
     return toReservaResponseDTO(reserva);
   } catch (error) {
+    if (error instanceof ServiceError) throw error;
     throw new ServiceError('Erro ao criar reserva', 500);
   }
 }
@@ -43,10 +51,20 @@ export async function getReservaByIdService(id: number): Promise<ReservaResponse
 
 export async function updateReservaService(id: number, data: UpdateReservaInput): Promise<ReservaResponseDTO> {
   try {
+    const current = await reservaRepository.findReservaById(id);
+    if (!current) throw new ServiceError('Reserva não encontrada', 404);
+
+    const salaId = data.salaId ?? current.salaId;
+    const dataHora = data.dataHora ?? current.dataHora;
+    const conflict = await reservaRepository.findReservaBySalaAndDataHora(salaId, dataHora);
+    if (conflict && conflict.id !== id) {
+      throw new ServiceError('Já existe uma reserva para esta sala neste horário', 400);
+    }
+
     const reserva = await reservaRepository.updateReserva(id, data);
-    if (!reserva) throw new ServiceError('Reserva não encontrada', 404);
     return toReservaResponseDTO(reserva);
   } catch (error) {
+    if (error instanceof ServiceError) throw error;
     if ((error as any).code === 'P2025') {
       throw new ServiceError('Reserva não encontrada', 404);
     }
