@@ -31,6 +31,17 @@ export async function findReservaById(id: number): Promise<Reserva | null> {
   return reserva ? toReserva(reserva) : null;
 }
 
+export async function findReservaBySalaAndDataHora(
+  salaId: number,
+  dataHora: string
+): Promise<Reserva | null> {
+  const reserva = await prisma.reserva.findFirst({
+    where: { salaId, dataHora: new Date(dataHora) },
+    include: { sala: true, usuario: true }
+  });
+  return reserva ? toReserva(reserva) : null;
+}
+
 export async function updateReserva(id: number, data: UpdateReservaInput): Promise<Reserva> {
   const reserva = await prisma.reserva.update({
     where: { id },
