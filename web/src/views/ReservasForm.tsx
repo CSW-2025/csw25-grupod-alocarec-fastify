@@ -93,7 +93,7 @@ export default function ReservasForm() {
         body: JSON.stringify({
           salaId,
           usuarioId,
-          dataHora,
+          dataHora: new Date(dataHora).toISOString(),
         }),
       });
       const data = await res.json();
