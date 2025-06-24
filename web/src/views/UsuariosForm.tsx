@@ -15,6 +15,7 @@ export default function UsuariosForm() {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [dataNascimento, setDataNascimento] = useState("");
   const [perfilId, setPerfilId] = useState(0);
   const [perfis, setPerfis] = useState([]);
   const [editando, setEditando] = useState(null);
@@ -83,11 +84,12 @@ export default function UsuariosForm() {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify({ 
-          nome, 
-          email, 
-          senha: editando ? undefined : senha, 
-          perfilId 
+        body: JSON.stringify({
+          nome,
+          email,
+          senha: editando ? undefined : senha,
+          perfilId,
+          dataNascimento
         }),
       });
       
@@ -97,6 +99,7 @@ export default function UsuariosForm() {
         setNome("");
         setEmail("");
         setSenha("");
+        setDataNascimento("");
         setPerfilId(0);
         setShowForm(false);
         setEditando(null);
@@ -117,6 +120,7 @@ export default function UsuariosForm() {
     setEditando(usuario);
     setNome(usuario.nome);
     setEmail(usuario.email);
+    setDataNascimento(usuario.dataNascimento?.slice(0, 10) || "");
     setPerfilId(usuario.perfil.id);
     setShowForm(true);
   }
@@ -149,6 +153,7 @@ export default function UsuariosForm() {
     setNome("");
     setEmail("");
     setSenha("");
+    setDataNascimento("");
     setPerfilId(0);
     setError(null);
   }
@@ -160,6 +165,7 @@ export default function UsuariosForm() {
     setNome("");
     setEmail("");
     setSenha("");
+    setDataNascimento("");
     setPerfilId(0);
   }
 
@@ -206,6 +212,13 @@ export default function UsuariosForm() {
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
+              required
+            />
+            <Input
+              label="Data de Nascimento"
+              type="date"
+              value={dataNascimento}
+              onChange={e => setDataNascimento(e.target.value)}
               required
             />
             {!editando && (
