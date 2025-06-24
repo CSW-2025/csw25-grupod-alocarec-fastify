@@ -68,7 +68,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nome\": \"Nome do Usuário\",\n    \"email\": \"usuario@exemplo.com\",\n    \"senha\": \"senha123\",\n    \"perfilId\": 1\n}"
+							"raw": "{\n    \"nome\": \"Nome do Usuário\",\n    \"email\": \"usuario@exemplo.com\",\n    \"dataNascimento\": \"1990-01-01T00:00:00Z\",\n    \"sexo\": \"M\",\n    \"telefones\": [{ \"numero\": \"51999999999\", \"descricao\": \"Principal\" }],\n    \"senha\": \"senha123\",\n    \"perfilId\": 1\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/usuarios",
@@ -116,7 +116,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nome\": \"Nome Atualizado\",\n    \"email\": \"atualizado@exemplo.com\",\n    \"perfilId\": 1\n}"
+							"raw": "{\n    \"nome\": \"Nome Atualizado\",\n    \"email\": \"atualizado@exemplo.com\",\n    \"dataNascimento\": \"1990-01-01T00:00:00Z\",\n    \"sexo\": \"F\",\n    \"telefones\": [{ \"numero\": \"51988888888\", \"descricao\": \"Principal\" }],\n    \"perfilId\": 1\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/usuarios/:id",
