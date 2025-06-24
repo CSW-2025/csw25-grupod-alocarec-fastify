@@ -92,6 +92,8 @@ export default function SalasForm() {
         setShowForm(false);
         setEditando(null);
         carregarSalas();
+      } else if (res.status === 401 || res.status === 403) {
+        setError("Acesso n\u00e3o autorizado. Faça login novamente.");
       } else {
         setError(data.message || "Erro ao salvar sala");
       }
@@ -122,6 +124,8 @@ export default function SalasForm() {
       });
       if (res.ok) {
         carregarSalas();
+      } else if (res.status === 401 || res.status === 403) {
+        setError("Acesso n\u00e3o autorizado. Faça login novamente.");
       } else {
         setError("Erro ao remover sala");
       }
@@ -190,6 +194,7 @@ export default function SalasForm() {
             <Input
               label="Capacidade"
               type="number"
+              min={1}
               value={capacidade}
               onChange={e => setCapacidade(e.target.value)}
               required
