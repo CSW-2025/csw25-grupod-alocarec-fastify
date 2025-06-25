@@ -4,6 +4,7 @@ import Input from "@/components/Input";
 import Button from "@/components/Button";
 import Card from "@/components/Card";
 import { getToken } from "@/helpers/auth";
+import { API_URL } from "@/helpers/api";
 
 export default function UsuariosForm() {
   const [usuarios, setUsuarios] = useState([]);
@@ -27,7 +28,7 @@ export default function UsuariosForm() {
     setLoading(true);
     try {
       const token = getToken();
-      const res = await fetch("http://localhost:3000/usuarios", {
+      const res = await fetch(`${API_URL}/usuarios`, {
         headers: { "Authorization": `Bearer ${token}` }
       });
       const data = await res.json();
@@ -47,7 +48,7 @@ export default function UsuariosForm() {
   async function carregarPerfis() {
     try {
       const token = getToken();
-      const res = await fetch("http://localhost:3000/perfis", {
+      const res = await fetch(`${API_URL}/perfis`, {
         headers: { "Authorization": `Bearer ${token}` }
       });
       const data = await res.json();
@@ -74,9 +75,9 @@ export default function UsuariosForm() {
 
     try {
       const token = getToken();
-      const url = editando 
-        ? `http://localhost:3000/usuarios/${editando.id}`
-        : "http://localhost:3000/usuarios";
+      const url = editando
+        ? `${API_URL}/usuarios/${editando.id}`
+        : `${API_URL}/usuarios`;
       
       const method = editando ? "PUT" : "POST";
       
@@ -160,7 +161,7 @@ export default function UsuariosForm() {
     
     try {
       const token = getToken();
-      const res = await fetch(`http://localhost:3000/usuarios/${id}`, {
+      const res = await fetch(`${API_URL}/usuarios/${id}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}` }
       });

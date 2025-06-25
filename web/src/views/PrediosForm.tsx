@@ -4,6 +4,7 @@ import Input from "@/components/Input";
 import Button from "@/components/Button";
 import Card from "@/components/Card";
 import { getToken } from "@/helpers/auth";
+import { API_URL } from "@/helpers/api";
 
 export default function PrediosForm() {
   const [predios, setPredios] = useState<any[]>([]);
@@ -27,7 +28,7 @@ export default function PrediosForm() {
     setLoading(true);
     try {
       const token = getToken();
-      const res = await fetch("http://localhost:3000/predios", {
+      const res = await fetch(`${API_URL}/predios`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -54,8 +55,8 @@ export default function PrediosForm() {
     try {
       const token = getToken();
       const url = editando
-        ? `http://localhost:3000/predios/${editando.id}`
-        : "http://localhost:3000/predios";
+        ? `${API_URL}/predios/${editando.id}`
+        : `${API_URL}/predios`;
       const method = editando ? "PUT" : "POST";
       const res = await fetch(url, {
         method,
@@ -113,7 +114,7 @@ export default function PrediosForm() {
     if (!confirm("Tem certeza que deseja remover?")) return;
     try {
       const token = getToken();
-      const res = await fetch(`http://localhost:3000/predios/${id}`, {
+      const res = await fetch(`${API_URL}/predios/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
