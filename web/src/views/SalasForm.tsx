@@ -93,7 +93,7 @@ export default function SalasForm() {
         setEditando(null);
         carregarSalas();
       } else if (res.status === 401 || res.status === 403) {
-        setError("Acesso n\u00e3o autorizado. Faça login novamente.");
+        setError("Acesso não autorizado. Faça login novamente.");
       } else {
         setError(data.message || "Erro ao salvar sala");
       }
@@ -122,12 +122,14 @@ export default function SalasForm() {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}` }
       });
+      
       if (res.ok) {
         carregarSalas();
       } else if (res.status === 401 || res.status === 403) {
-        setError("Acesso n\u00e3o autorizado. Faça login novamente.");
+        setError("Acesso não autorizado. Faça login novamente.");
       } else {
-        setError("Erro ao remover sala");
+        const data = await res.json();
+        setError(data.message || "Erro ao remover sala");
       }
     } catch (err) {
       setError("Erro de conexão");

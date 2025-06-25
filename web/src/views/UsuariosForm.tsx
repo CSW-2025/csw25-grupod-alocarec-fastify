@@ -16,6 +16,8 @@ export default function UsuariosForm() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [dataNascimento, setDataNascimento] = useState("");
+  const [sexo, setSexo] = useState("");
+  const [telefone, setTelefone] = useState("");
   const [perfilId, setPerfilId] = useState(0);
   const [perfis, setPerfis] = useState([]);
   const [editando, setEditando] = useState(null);
@@ -78,19 +80,35 @@ export default function UsuariosForm() {
       
       const method = editando ? "PUT" : "POST";
       
+      const payload = editando ? {
+        nome,
+        email,
+        sexo,
+        dataNascimento: dataNascimento ? `${dataNascimento}T00:00:00.000Z` : undefined,
+      } : {
+        nome,
+        email,
+        senha,
+        sexo,
+        perfilId,
+        dataNascimento: dataNascimento ? `${dataNascimento}T00:00:00.000Z` : undefined,
+        telefones: [{ numero: telefone, descricao: "Principal" }]
+      };
+
+      // Remover campos undefined do payload
+      Object.keys(payload).forEach(key => {
+        if (payload[key] === undefined) {
+          delete payload[key];
+        }
+      });
+      
       const res = await fetch(url, {
         method,
         headers: { 
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify({
-          nome,
-          email,
-          senha: editando ? undefined : senha,
-          perfilId,
-          dataNascimento
-        }),
+        body: JSON.stringify(payload),
       });
       
       const data = await res.json();
@@ -100,13 +118,15 @@ export default function UsuariosForm() {
         setEmail("");
         setSenha("");
         setDataNascimento("");
+        setSexo("");
+        setTelefone("");
         setPerfilId(0);
         setShowForm(false);
         setEditando(null);
         // Recarregar lista
         carregarUsuarios();
       } else if (res.status === 401 || res.status === 403) {
-        setError("Acesso n\u00e3o autorizado. Faça login novamente.");
+        setError("Acesso não autorizado. Faça login novamente.");
       } else {
         setError(data.message || "Erro ao salvar usuário");
       }
@@ -119,11 +139,18 @@ export default function UsuariosForm() {
 
   // Editar usuário
   function handleEditar(usuario) {
+    if (!usuario) {
+      setError("Usuário não encontrado");
+      return;
+    }
+    
     setEditando(usuario);
-    setNome(usuario.nome);
-    setEmail(usuario.email);
+    setNome(usuario.nome || "");
+    setEmail(usuario.email || "");
     setDataNascimento(usuario.dataNascimento?.slice(0, 10) || "");
-    setPerfilId(usuario.perfil.id);
+    setSexo(usuario.sexo || "");
+    setTelefone(usuario.telefones?.[0]?.numero || "");
+    setPerfilId(usuario.perfil?.id || 0);
     setShowForm(true);
   }
 
@@ -141,7 +168,7 @@ export default function UsuariosForm() {
       if (res.ok) {
         carregarUsuarios();
       } else if (res.status === 401 || res.status === 403) {
-        setError("Acesso n\u00e3o autorizado. Faça login novamente.");
+        setError("Acesso não autorizado. Faça login novamente.");
       } else {
         setError("Erro ao remover usuário");
       }
@@ -158,6 +185,8 @@ export default function UsuariosForm() {
     setEmail("");
     setSenha("");
     setDataNascimento("");
+    setSexo("");
+    setTelefone("");
     setPerfilId(0);
     setError(null);
   }
@@ -170,6 +199,8 @@ export default function UsuariosForm() {
     setEmail("");
     setSenha("");
     setDataNascimento("");
+    setSexo("");
+    setTelefone("");
     setPerfilId(0);
   }
 
@@ -224,6 +255,34 @@ export default function UsuariosForm() {
               type="date"
               value={dataNascimento}
               onChange={e => setDataNascimento(e.target.value)}
+              required
+            />
+            <div style={{ marginBottom: "12px" }}>
+              <label style={{ display: "block", marginBottom: "4px" }}>
+                Sexo *
+              </label>
+              <select
+                value={sexo}
+                onChange={e => setSexo(e.target.value)}
+                style={{
+                  width: "100%",
+                  padding: "8px",
+                  border: "1px solid #ccc",
+                  borderRadius: "4px"
+                }}
+                required
+              >
+                <option value="">Selecione o sexo</option>
+                <option value="M">Masculino</option>
+                <option value="F">Feminino</option>
+              </select>
+            </div>
+            <Input
+              label="Telefone"
+              type="tel"
+              value={telefone}
+              onChange={e => setTelefone(e.target.value)}
+              placeholder="(00) 00000-0000"
               required
             />
             {!editando && (
@@ -310,13 +369,13 @@ export default function UsuariosForm() {
                       </p>
                     </div>
                     <span style={{ 
-                      background: usuario.ativo ? "green" : "red", 
+                      background: (usuario.ativo !== undefined ? usuario.ativo : true) ? "green" : "red", 
                       color: "white", 
                       padding: "4px 8px", 
                       borderRadius: "12px",
                       fontSize: "12px"
                     }}>
-                      {usuario.ativo ? "✅ Ativo" : "❌ Inativo"}
+                      {(usuario.ativo !== undefined ? usuario.ativo : true) ? "✅ Ativo" : "❌ Inativo"}
                     </span>
                   </div>
                   <div style={{ 

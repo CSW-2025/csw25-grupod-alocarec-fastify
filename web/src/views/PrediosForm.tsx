@@ -117,12 +117,14 @@ export default function PrediosForm() {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
+      
       if (res.ok) {
         carregarPredios();
       } else if (res.status === 401 || res.status === 403) {
         setError("Acesso não autorizado. Faça login novamente.");
       } else {
-        setError("Erro ao remover prédio");
+        const data = await res.json();
+        setError(data.message || "Erro ao remover prédio");
       }
     } catch (err) {
       setError("Erro de conexão");
