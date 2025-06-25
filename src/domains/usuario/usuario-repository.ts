@@ -43,14 +43,21 @@ export function getUserById(id: number): Promise<Usuario | null> {
 
 export function updateUser(id: number, data: UpdateUsuarioInput): Promise<Usuario | null> {
   const updateData: any = { ...data };
-  
-  // Remover campos que não devem ser atualizados diretamente
-  delete updateData.telefones;
-  delete updateData.perfilId;
-  
+
   if (updateData.sexo) updateData.sexo = updateData.sexo as Sexo;
   if (updateData.dataNascimento) updateData.dataNascimento = new Date(updateData.dataNascimento);
-  
+
+  if (data.telefones) {
+    updateData.telefones = {
+      deleteMany: {},
+      create: data.telefones
+    };
+  }
+
+  if (data.perfilId !== undefined) {
+    updateData.perfilId = data.perfilId;
+  }
+
   return prisma.usuario.update({
     where: { id: Number(id) },
     data: updateData,

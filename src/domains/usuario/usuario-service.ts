@@ -1,6 +1,6 @@
 // user.service.ts
 import * as userRepository from './usuario-repository';
-import { Usuario, CreateUsuarioInput } from './usuario-entity';
+import { Usuario, CreateUsuarioInput, UpdateUsuarioInput } from './usuario-entity';
 import bcrypt from 'bcryptjs';
 import { toUsuarioResponseDTO } from './dto/UsuarioMapper';
 import { UsuarioResponseDTO } from './dto/UsuarioResponseDTO';
@@ -45,7 +45,10 @@ export async function getUserByIdService(id: number): Promise<UsuarioResponseDTO
   }
 }
 
-export async function updateUserService(id: number, data: Partial<CreateUsuarioInput>): Promise<UsuarioResponseDTO> {
+export async function updateUserService(
+  id: number,
+  data: UpdateUsuarioInput
+): Promise<UsuarioResponseDTO> {
   try {
     const updateData = { ...data };
     if (data.senha) {

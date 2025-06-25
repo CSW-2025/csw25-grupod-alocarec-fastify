@@ -55,6 +55,18 @@ describe('UsuarioService', () => {
       expect(UsuarioRepository.updateUser).toHaveBeenCalledWith(1, { senha: 'hashed' });
       expect(result).toEqual(expect.objectContaining({ email: mockUsuario.email }));
     });
+
+    it('deve atualizar perfilId e telefones', async () => {
+      (UsuarioRepository.updateUser as jest.Mock).mockResolvedValueOnce(mockUsuario);
+      const updateInput = {
+        perfilId: 2,
+        telefones: [{ numero: '987654321', descricao: 'casa' }]
+      };
+
+      await updateUserService(1, updateInput);
+
+      expect(UsuarioRepository.updateUser).toHaveBeenCalledWith(1, updateInput);
+    });
   });
 
   // ...outros testes para getUserByIdService, updateUserService, etc...
