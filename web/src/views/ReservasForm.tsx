@@ -4,6 +4,7 @@ import Input from "@/components/Input";
 import Button from "@/components/Button";
 import Card from "@/components/Card";
 import { getToken } from "@/helpers/auth";
+import { API_URL } from "@/helpers/api";
 
 export default function ReservasForm() {
   const [reservas, setReservas] = useState<any[]>([]);
@@ -22,7 +23,7 @@ export default function ReservasForm() {
     setLoading(true);
     try {
       const token = getToken();
-      const res = await fetch("http://localhost:3000/reservas", {
+      const res = await fetch(`${API_URL}/reservas`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -41,7 +42,7 @@ export default function ReservasForm() {
   async function carregarSalas() {
     try {
       const token = getToken();
-      const res = await fetch("http://localhost:3000/salas", {
+      const res = await fetch(`${API_URL}/salas`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -56,7 +57,7 @@ export default function ReservasForm() {
   async function carregarUsuarios() {
     try {
       const token = getToken();
-      const res = await fetch("http://localhost:3000/usuarios", {
+      const res = await fetch(`${API_URL}/usuarios`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -81,8 +82,8 @@ export default function ReservasForm() {
     try {
       const token = getToken();
       const url = editando
-        ? `http://localhost:3000/reservas/${editando.id}`
-        : "http://localhost:3000/reservas";
+        ? `${API_URL}/reservas/${editando.id}`
+        : `${API_URL}/reservas`;
       const method = editando ? "PUT" : "POST";
       const res = await fetch(url, {
         method,
@@ -128,7 +129,7 @@ export default function ReservasForm() {
     if (!confirm("Tem certeza que deseja remover?")) return;
     try {
       const token = getToken();
-      const res = await fetch(`http://localhost:3000/reservas/${id}`, {
+      const res = await fetch(`${API_URL}/reservas/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

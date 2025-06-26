@@ -4,6 +4,7 @@ import Input from "@/components/Input";
 import Button from "@/components/Button";
 import Card from "@/components/Card";
 import { getToken } from "@/helpers/auth";
+import { API_URL } from "@/helpers/api";
 
 export default function TipoRecursoForm() {
   const [tipos, setTipos] = useState<any[]>([]);
@@ -18,7 +19,7 @@ export default function TipoRecursoForm() {
     setLoading(true);
     try {
       const token = getToken();
-      const res = await fetch("http://localhost:3000/tipos-recurso", {
+      const res = await fetch(`${API_URL}/tipos-recurso`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -45,8 +46,8 @@ export default function TipoRecursoForm() {
     try {
       const token = getToken();
       const url = editando
-        ? `http://localhost:3000/tipos-recurso/${editando.id}`
-        : "http://localhost:3000/tipos-recurso";
+        ? `${API_URL}/tipos-recurso/${editando.id}`
+        : `${API_URL}/tipos-recurso`;
       const method = editando ? "PUT" : "POST";
       const res = await fetch(url, {
         method,
@@ -84,7 +85,7 @@ export default function TipoRecursoForm() {
     if (!confirm("Tem certeza que deseja remover?")) return;
     try {
       const token = getToken();
-      const res = await fetch(`http://localhost:3000/tipos-recurso/${id}`, {
+      const res = await fetch(`${API_URL}/tipos-recurso/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
