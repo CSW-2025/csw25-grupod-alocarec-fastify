@@ -18,6 +18,11 @@ export default function RecursosForm() {
   const [tipoId, setTipoId] = useState(0);
   const [editando, setEditando] = useState<any | null>(null);
 
+  const statusOpcoes = [
+  { id: 0, nome: "Disponível" },
+  { id: 1, nome: "Ocupado" },
+];
+
   async function carregarRecursos() {
     setLoading(true);
     try {
@@ -45,11 +50,16 @@ export default function RecursosForm() {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
+      console.log('Tipos carregados:', data);
       if (res.ok) {
         setTipos(data);
+        if (!data || data.length === 0) {
+          setError('Nenhum tipo de recurso cadastrado. Cadastre tipos antes de criar recursos.');
+        }
       }
     } catch (err) {
       console.error("Erro ao carregar tipos");
+      setError('Erro ao carregar tipos de recurso.');
     }
   }
 
@@ -62,6 +72,12 @@ export default function RecursosForm() {
     event.preventDefault();
     setError(null);
     setLoading(true);
+    console.log({ descricao, status, disponivel, tipo_recurso_id: tipoId });
+    if (tipoId === 0) {
+      setError('Selecione um tipo de recurso válido.');
+      setLoading(false);
+      return;
+    }
     try {
       const token = getToken();
       const url = editando
@@ -189,12 +205,28 @@ export default function RecursosForm() {
           <h2>{editando ? "✏️ Editar Recurso" : "➕ Novo Recurso"}</h2>
           <form onSubmit={handleSubmit}>
             <Input label="Descrição" value={descricao} onChange={e => setDescricao(e.target.value)} required />
-            <Input label="Status" value={status} onChange={e => setStatus(e.target.value)} required />
             <div style={{ marginBottom: "12px" }}>
               <label style={{ display: "block", marginBottom: "4px" }}>
-                Disponível
+                Status
               </label>
-              <input type="checkbox" checked={disponivel} onChange={e => setDisponivel(e.target.checked)} />
+              <select
+                value={status}
+                onChange={e => setStatus(e.target.value)}
+                style={{
+                  width: "100%",
+                  padding: "8px",
+                  border: "1px solid #ccc",
+                  borderRadius: "4px",
+                }}
+                required
+              >
+                <option value="">Selecione um status</option>
+                {statusOpcoes.map((opcao) => (
+                  <option key={opcao.id} value={opcao.nome}>
+                    {opcao.nome}
+                  </option>
+                ))}
+              </select>
             </div>
             <div style={{ marginBottom: "12px" }}>
               <label style={{ display: "block", marginBottom: "4px" }}>
