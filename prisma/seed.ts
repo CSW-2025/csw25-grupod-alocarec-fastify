@@ -70,6 +70,45 @@ async function main() {
       telefones: { create: [{ numero: '51986666666', descricao: 'Principal' }] }
     },
   });
+  const profMiguel = await prisma.usuario.upsert({
+    where: { email: 'miguel.xavier@prof.com' },
+    update: {},
+    create: {
+      nome: 'Miguel Xavier',
+      email: 'miguel.xavier@prof.com',
+      senha: senhaHash,
+      dataNascimento: new Date('1982-04-12'),
+      sexo: 'M',
+      perfilId: perfisCriados['Professor'].id,
+      telefones: { create: [{ numero: '51981234567', descricao: 'Principal' }] }
+    },
+  });
+  const profMarcelo = await prisma.usuario.upsert({
+    where: { email: 'marcelo.cohen@prof.com' },
+    update: {},
+    create: {
+      nome: 'Marcelo Cohen',
+      email: 'marcelo.cohen@prof.com',
+      senha: senhaHash,
+      dataNascimento: new Date('1978-11-23'),
+      sexo: 'M',
+      perfilId: perfisCriados['Professor'].id,
+      telefones: { create: [{ numero: '51982345678', descricao: 'Principal' }] }
+    },
+  });
+  const profEduardo = await prisma.usuario.upsert({
+    where: { email: 'eduardo.arruda@prof.com' },
+    update: {},
+    create: {
+      nome: 'Eduardo Arruda',
+      email: 'eduardo.arruda@prof.com',
+      senha: senhaHash,
+      dataNascimento: new Date('1985-07-30'),
+      sexo: 'M',
+      perfilId: perfisCriados['Professor'].id,
+      telefones: { create: [{ numero: '51983456789', descricao: 'Principal' }] }
+    },
+  });
 
   // 3. Prédio
   const predio = await prisma.predio.upsert({
