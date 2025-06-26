@@ -51,5 +51,41 @@ describe('UsuarioRepository', () => {
     });
   });
 
+  describe('updateUser', () => {
+    it('deve atualizar perfilId e telefones', async () => {
+      const updateInput = {
+        perfilId: 2,
+        telefones: [{ numero: '987654321', descricao: 'casa' }]
+      };
+
+      const mockUsuario: Usuario = {
+        id: 1,
+        email: 'teste@example.com',
+        nome: 'Usuario Teste',
+        dataNascimento: new Date('2024-01-01'),
+        sexo: Sexo.M,
+        perfilId: 2,
+        senha: 'senha123',
+        telefones: [{ id: 2, numero: '987654321', descricao: 'casa' }],
+        perfil: { id: 2, nome: 'Professor' }
+      };
+
+      (prisma.usuario.update as jest.Mock).mockResolvedValueOnce(mockUsuario);
+
+      const result = await UsuarioRepository.updateUser(1, updateInput);
+
+      expect(prisma.usuario.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { id: 1 },
+          data: expect.objectContaining({
+            perfilId: 2,
+            telefones: { deleteMany: {}, create: updateInput.telefones }
+          })
+        })
+      );
+      expect(result).toEqual(mockUsuario);
+    });
+  });
+
   // ...outros testes para findUnique, findMany, update, delete...
 }); 

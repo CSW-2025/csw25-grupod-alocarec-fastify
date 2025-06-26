@@ -95,7 +95,27 @@ export default async function usuarioRotas(fastify: FastifyInstance) {
               id: { type: 'number' },
               nome: { type: 'string' },
               email: { type: 'string' },
-              tipo: { type: 'string' },
+              dataNascimento: { type: 'string', format: 'date-time' },
+              sexo: { type: 'string', enum: ['M', 'F'] },
+              perfilId: { type: 'number' },
+              perfil: {
+                type: 'object',
+                properties: {
+                  id: { type: 'number' },
+                  nome: { type: 'string' }
+                }
+              },
+              telefones: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    id: { type: 'number' },
+                    numero: { type: 'string' },
+                    descricao: { type: 'string' }
+                  }
+                }
+              },
               ativo: { type: 'boolean' },
               createdAt: { type: 'string', format: 'date-time' },
               updatedAt: { type: 'string', format: 'date-time' }
@@ -179,8 +199,20 @@ export default async function usuarioRotas(fastify: FastifyInstance) {
           nome: { type: 'string' },
           email: { type: 'string', format: 'email' },
           senha: { type: 'string' },
-          tipo: { type: 'string', enum: ['usuario', 'admin', 'professor', 'aluno'] },
-          ativo: { type: 'boolean' }
+          dataNascimento: { type: 'string', format: 'date-time' },
+          sexo: { type: 'string', enum: ['M', 'F'] },
+          perfilId: { type: 'number' },
+          telefones: {
+            type: 'array',
+            items: {
+              type: 'object',
+              required: ['numero', 'descricao'],
+              properties: {
+                numero: { type: 'string' },
+                descricao: { type: 'string' }
+              }
+            }
+          }
         }
       },
       response: {

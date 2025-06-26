@@ -59,9 +59,23 @@ export async function deleteSalaService(id: number): Promise<void> {
     const deleted = await salaRepository.deleteSala(id);
     if (!deleted) throw new ServiceError('Sala não encontrada', 404);
   } catch (error) {
+    console.error('Erro no deleteSalaService:', error);
+    
+    // Se for erro de chave estrangeira (P2003)
+    if ((error as any).code === 'P2003') {
+      throw new ServiceError('Não é possível excluir esta sala pois ela possui pedidos, reservas ou aulas associadas.', 400);
+    }
+    
+    // Se for erro de registro não encontrado (P2025)
     if ((error as any).code === 'P2025') {
       throw new ServiceError('Sala não encontrada', 404);
     }
+    
+    // Se for erro personalizado do repository
+    if (error instanceof Error) {
+      throw new ServiceError(error.message, 400);
+    }
+    
     throw new ServiceError('Erro ao deletar sala', 500);
   }
 } 

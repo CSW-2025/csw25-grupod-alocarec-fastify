@@ -25,7 +25,18 @@ export async function findAllReservas(): Promise<Reserva[]> {
 
 export async function findReservaById(id: number): Promise<Reserva | null> {
   const reserva = await prisma.reserva.findUnique({
-    where: { id },
+    where: { id: Number(id) },
+    include: { sala: true, usuario: true }
+  });
+  return reserva ? toReserva(reserva) : null;
+}
+
+export async function findReservaBySalaAndDataHora(
+  salaId: number,
+  dataHora: string
+): Promise<Reserva | null> {
+  const reserva = await prisma.reserva.findFirst({
+    where: { salaId: Number(salaId), dataHora: new Date(dataHora) },
     include: { sala: true, usuario: true }
   });
   return reserva ? toReserva(reserva) : null;
@@ -33,7 +44,7 @@ export async function findReservaById(id: number): Promise<Reserva | null> {
 
 export async function updateReserva(id: number, data: UpdateReservaInput): Promise<Reserva> {
   const reserva = await prisma.reserva.update({
-    where: { id },
+    where: { id: Number(id) },
     data,
     include: { sala: true, usuario: true }
   });
@@ -41,7 +52,7 @@ export async function updateReserva(id: number, data: UpdateReservaInput): Promi
 }
 
 export function deleteReserva(id: number): Promise<boolean> {
-  return prisma.reserva.delete({ where: { id } })
+  return prisma.reserva.delete({ where: { id: Number(id) } })
     .then(() => true)
     .catch(() => false);
 } 

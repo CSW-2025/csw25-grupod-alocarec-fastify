@@ -9,6 +9,14 @@ Giuliano Roy Pontello
 Leonardo Bertoletti
 João Pedro Salles
 
+# Para Rodar o Front
+```
+cd web
+npm install
+npm run dev
+```
+Veja em https://localhost:3003
+
 https://github.com/CSW-2025/csw25-grupod-alocarec-fastify.git 
 
 ## ✅ Pré-requisitos
@@ -74,3 +82,15 @@ http://localhost:3000/documentation/static/index.html#/usuarios/post_usuarios_lo
    ```
 
 > **Obs:** O arquivo `.env.aws` não é versionado. Use sempre o `.env.aws.example` como modelo.
+
+## Rodando os testes
+
+1. Instale as dependencias do projeto:
+   ```bash
+   npm install
+   ```
+2. Execute os testes:
+   ```bash
+   npm test
+   ```
+

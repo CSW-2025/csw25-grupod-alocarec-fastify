@@ -65,9 +65,23 @@ export async function deletePredioService(id: number): Promise<void> {
     const deleted = await deletePredio(id);
     if (!deleted) throw new ServiceError('Prédio não encontrado', 404);
   } catch (error) {
+    console.error('Erro no deletePredioService:', error);
+    
+    // Se for erro de chave estrangeira (P2003)
+    if ((error as any).code === 'P2003') {
+      throw new ServiceError('Não é possível excluir este prédio pois ele possui salas associadas.', 400);
+    }
+    
+    // Se for erro de registro não encontrado (P2025)
     if ((error as any).code === 'P2025') {
       throw new ServiceError('Prédio não encontrado', 404);
     }
+    
+    // Se for erro personalizado do repository
+    if (error instanceof Error) {
+      throw new ServiceError(error.message, 400);
+    }
+    
     throw new ServiceError('Erro ao deletar prédio', 500);
   }
 }

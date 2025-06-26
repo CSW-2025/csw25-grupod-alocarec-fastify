@@ -10,16 +10,16 @@ export async function getAllRecursos() {
 }
 
 export async function getRecursoById(id: number) {
-  return await prisma.recurso.findUnique({ where: { id } });
+  return await prisma.recurso.findUnique({ where: { id: Number(id) } });
 }
 
 export async function updateRecurso(id: number, data: UpdateRecursoInput) {
-  return await prisma.recurso.update({ where: { id }, data });
+  return await prisma.recurso.update({ where: { id: Number(id) }, data });
 }
 
 export async function deleteRecurso(id: number): Promise<boolean> {
   try {
-    await prisma.recurso.delete({ where: { id } });
+    await prisma.recurso.delete({ where: { id: Number(id) } });
     return true;
   } catch {
     return false;

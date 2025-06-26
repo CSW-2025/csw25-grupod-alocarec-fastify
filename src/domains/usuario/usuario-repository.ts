@@ -33,7 +33,7 @@ export function getAllUsers(): Promise<Usuario[]> {
 
 export function getUserById(id: number): Promise<Usuario | null> {
   return prisma.usuario.findUnique({
-    where: { id },
+    where: { id: Number(id) },
     include: {
       telefones: true,
       perfil: true
@@ -43,10 +43,23 @@ export function getUserById(id: number): Promise<Usuario | null> {
 
 export function updateUser(id: number, data: UpdateUsuarioInput): Promise<Usuario | null> {
   const updateData: any = { ...data };
-  if (updateData.perfilId === undefined) delete updateData.perfilId;
+
   if (updateData.sexo) updateData.sexo = updateData.sexo as Sexo;
+  if (updateData.dataNascimento) updateData.dataNascimento = new Date(updateData.dataNascimento);
+
+  if (data.telefones) {
+    updateData.telefones = {
+      deleteMany: {},
+      create: data.telefones
+    };
+  }
+
+  if (data.perfilId !== undefined) {
+    updateData.perfilId = data.perfilId;
+  }
+
   return prisma.usuario.update({
-    where: { id },
+    where: { id: Number(id) },
     data: updateData,
     include: {
       telefones: true,
@@ -57,6 +70,6 @@ export function updateUser(id: number, data: UpdateUsuarioInput): Promise<Usuari
 
 export function deleteUser(id: number): Promise<boolean> {
   return prisma.usuario.delete({
-    where: { id }
+    where: { id: Number(id) }
   }).then(() => true).catch(() => false);
 }
