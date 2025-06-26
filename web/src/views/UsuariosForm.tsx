@@ -5,11 +5,12 @@ import Button from "@/components/Button/Button";
 import Card from "@/components/Card/Card";
 import { getToken } from "@/helpers/auth";
 import { API_URL } from "@/helpers/api";
+import type { Usuario, Perfil } from "@/@types/entities";
 
 export default function UsuariosView() {
-  const [usuarios, setUsuarios] = useState([]);
+  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   
   // Estados do formulário
   const [showForm, setShowForm] = useState(false);
@@ -20,8 +21,8 @@ export default function UsuariosView() {
   const [sexo, setSexo] = useState("");
   const [telefone, setTelefone] = useState("");
   const [perfilId, setPerfilId] = useState(0);
-  const [perfis, setPerfis] = useState([]);
-  const [editando, setEditando] = useState(null);
+  const [perfis, setPerfis] = useState<Perfil[]>([]);
+  const [editando, setEditando] = useState<Usuario | null>(null);
 
   // Carregar usuários
   async function carregarUsuarios() {
@@ -68,7 +69,7 @@ export default function UsuariosView() {
   }, []);
 
   
-  async function handleSubmit(event) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
     setLoading(true);
@@ -97,9 +98,9 @@ export default function UsuariosView() {
       };
 
       // Remover campos undefined do payload
-      Object.keys(payload).forEach(key => {
-        if (payload[key] === undefined) {
-          delete payload[key];
+      Object.keys(payload).forEach((key) => {
+        if ((payload as any)[key] === undefined) {
+          delete (payload as any)[key];
         }
       });
       
@@ -139,7 +140,7 @@ export default function UsuariosView() {
   }
 
   // Editar usuário
-  function handleEditar(usuario) {
+  function handleEditar(usuario: Usuario) {
     if (!usuario) {
       setError("Usuário não encontrado");
       return;
@@ -156,7 +157,7 @@ export default function UsuariosView() {
   }
 
   // Remover usuário
-  async function handleRemover(id) {
+  async function handleRemover(id: number) {
     if (!confirm("Tem certeza que deseja remover?")) return;
     
     try {

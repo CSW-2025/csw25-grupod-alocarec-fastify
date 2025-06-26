@@ -7,17 +7,17 @@ import { getToken } from "@/helpers/auth";
 import { API_URL } from "@/helpers/api";
 
 export default function SalasView() {
-  const [salas, setSalas] = useState([]);
-  const [predios, setPredios] = useState([]);
+  const [salas, setSalas] = useState<{id: number, nome: string, capacidade: number, predio?: {id: number, nome: string}}[]>([]);
+  const [predios, setPredios] = useState<{id: number, nome: string}[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   // Formulário
   const [showForm, setShowForm] = useState(false);
   const [nome, setNome] = useState("");
   const [capacidade, setCapacidade] = useState("");
   const [predioId, setPredioId] = useState(0);
-  const [editando, setEditando] = useState(null);
+  const [editando, setEditando] = useState<{id: number, nome: string, capacidade: number, predio?: {id: number, nome: string}} | null>(null);
 
   // Buscar salas
   async function carregarSalas() {
@@ -30,7 +30,7 @@ export default function SalasView() {
       const data = await res.json();
       console.log(data);
       if (res.ok) {
-        setSalas(data);
+        setSalas(data as {id: number, nome: string, capacidade: number, predio?: {id: number, nome: string}}[]);
       } else {
         setError("Erro ao carregar salas");
       }
@@ -63,7 +63,7 @@ export default function SalasView() {
   }, []);
 
   // Salvar sala
-  async function handleSubmit(event) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
     setLoading(true);
@@ -106,7 +106,7 @@ export default function SalasView() {
   }
 
   // Editar sala
-  function handleEditar(sala) {
+  function handleEditar(sala: any) {
     setEditando(sala);
     setNome(sala.nome);
     setCapacidade(sala.capacidade.toString());
@@ -115,7 +115,7 @@ export default function SalasView() {
   }
 
   // Remover sala
-  async function handleRemover(id) {
+  async function handleRemover(id: number) {
     if (!confirm("Tem certeza que deseja remover?")) return;
     try {
       const token = getToken();
