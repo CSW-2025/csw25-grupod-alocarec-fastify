@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import Input from "@/components/Input";
-import Button from "@/components/Button";
-import Card from "@/components/Card";
+import Input from "@/components/Input/Input";
+import Button from "@/components/Button/Button";
+import Card from "@/components/Card/Card";
 import { getToken } from "@/helpers/auth";
 import { API_URL } from "@/helpers/api";
 
@@ -303,13 +303,13 @@ export default function ReservasForm() {
                     }}
                   >
                     <div>
-                      <h3 style={{ margin: "0 0 8px 0", color: "#333" }}>
+                      <h3 style={{ margin: "0 0 8px 0", color: "white" }}>
                         Sala: {nomeSala(reserva.salaId)}
                       </h3>
-                      <p style={{ margin: "0 0 4px 0", color: "#666" }}>
+                      <p style={{ margin: "0 0 4px 0", color: "white" }}>
                         <strong>Usuário:</strong> {nomeUsuario(reserva.usuarioId)}
                       </p>
-                      <p style={{ margin: "0 0 4px 0", color: "#666" }}>
+                      <p style={{ margin: "0 0 4px 0", color: "white" }}>
                         <strong>Data:</strong> {new Date(reserva.dataHora).toLocaleString()}
                       </p>
                     </div>

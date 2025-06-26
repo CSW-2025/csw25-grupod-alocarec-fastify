@@ -1,12 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
-import Input from "@/components/Input";
-import Button from "@/components/Button";
-import Card from "@/components/Card";
+import Input from "@/components/Input/Input";
+import Button from "@/components/Button/Button";
+import Card from "@/components/Card/Card";
 import { getToken } from "@/helpers/auth";
 import { API_URL } from "@/helpers/api";
 
-export default function SalasForm() {
+export default function SalasView() {
   const [salas, setSalas] = useState([]);
   const [predios, setPredios] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -267,12 +267,11 @@ export default function SalasForm() {
                     marginBottom: "16px"
                   }}>
                     <div>
-                      <h3 style={{ margin: "0 0 8px 0", color: "#333" }}>{sala.nome}</h3>
-                      <p style={{ margin: "0 0 4px 0", color: "#666" }}>
+                      <h3 style={{ margin: "0 0 8px 0", color: "white" }}>{sala.nome}</h3>
+                      <p style={{ margin: "0 0 4px 0", color: "white" }}>
                         <strong>Capacidade:</strong> {sala.capacidade}
                       </p>
-                      <p style={{ margin: "0 0 4px 0", color: "#666" }}>
-                        <strong>Prédio:</strong> {sala.predio?.nome || "-"}
+                      <p style={{ margin: "0 0 4px 0", color: "#666" }}>                     
                       </p>
                     </div>
                   </div>

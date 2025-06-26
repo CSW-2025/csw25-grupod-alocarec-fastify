@@ -1,12 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
-import Input from "@/components/Input";
-import Button from "@/components/Button";
-import Card from "@/components/Card";
+import Input from "@/components/Input/Input";
+import Button from "@/components/Button/Button";
+import Card from "@/components/Card/Card";
 import { getToken } from "@/helpers/auth";
 import { API_URL } from "@/helpers/api";
 
-export default function UsuariosForm() {
+export default function UsuariosView() {
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -206,7 +206,7 @@ export default function UsuariosForm() {
   }
 
   return (
-    <div style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto", height: "100vh" }}>
+    <div style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto", height: "100vh"}}>
       <div style={{ 
         display: "flex", 
         justifyContent: "space-between", 
@@ -350,7 +350,7 @@ export default function UsuariosForm() {
             <div style={{ 
               display: "grid", 
               gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))",
-              gap: "16px"
+              gap: "12px"
             }}>
               {usuarios.map(usuario => (
                 <Card key={usuario.id}>
@@ -361,11 +361,11 @@ export default function UsuariosForm() {
                     marginBottom: "16px"
                   }}>
                     <div>
-                      <h3 style={{ margin: "0 0 8px 0", color: "#333" }}>{usuario.nome}</h3>
-                      <p style={{ margin: "0 0 4px 0", color: "#666" }}>
+                      <h3 style={{ margin: "0 0 8px 0", color: "white" }}>{usuario.nome}</h3>
+                      <p style={{ margin: "0 0 4px 0", color: "white" }}>
                         <strong>📧 Email:</strong> {usuario.email}
                       </p>
-                      <p style={{ margin: "0 0 4px 0", color: "#666" }}>
+                      <p style={{ margin: "0 0 4px 0", color: "white" }}>
                         <strong>👤 Perfil:</strong> {usuario.perfil?.nome}
                       </p>
                     </div>

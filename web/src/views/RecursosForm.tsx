@@ -1,12 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
-import Input from "@/components/Input";
-import Button from "@/components/Button";
-import Card from "@/components/Card";
+import Input from "@/components/Input/Input";
+import Button from "@/components/Button/Button";
+import Card from "@/components/Card/Card";
 import { getToken } from "@/helpers/auth";
 import { API_URL } from "@/helpers/api";
+import styles from "./RecursosForm.module.css";
 
-export default function RecursosForm() {
+export default function RecursosView() {
   const [recursos, setRecursos] = useState<any[]>([]);
   const [tipos, setTipos] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -170,35 +171,18 @@ export default function RecursosForm() {
   }
 
   return (
-    <div style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "24px",
-        }}
-      >
+    <div className={styles.container}>
+      <div className={styles.header}>
         <h1>📦 Recursos</h1>
         {!showForm && (
-          <Button onClick={handleNovo} style={{ background: "#28a745" }}>
+          <Button onClick={handleNovo} className={styles.novoBtn}>
             ➕ Novo Recurso
           </Button>
         )}
       </div>
 
       {error && (
-        <div
-          style={{
-            background: "#f8d7da",
-            color: "#721c24",
-            padding: "12px",
-            borderRadius: "4px",
-            marginBottom: "16px",
-          }}
-        >
-          {error}
-        </div>
+        <div className={styles.error}>{error}</div>
       )}
 
       {showForm ? (
@@ -285,14 +269,11 @@ export default function RecursosForm() {
                 <Card key={recurso.id}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "16px" }}>
                     <div>
-                      <h3 style={{ margin: "0 0 8px 0", color: "#333" }}>{recurso.descricao}</h3>
-                      <p style={{ margin: "0 0 4px 0", color: "#666" }}>
+                      <h3 style={{ margin: "0 0 8px 0", color: "white" }}>{recurso.descricao}</h3>
+                      <p style={{ margin: "0 0 4px 0", color: "white" }}>
                         <strong>Status:</strong> {recurso.status}
-                      </p>
-                      <p style={{ margin: "0 0 4px 0", color: "#666" }}>
-                        <strong>Tipo:</strong> {nomeTipo(recurso.tipo_recurso_id)}
-                      </p>
-                      <p style={{ margin: "0 0 4px 0", color: "#666" }}>
+                      </p>                   
+                      <p style={{ margin: "0 0 4px 0", color: "white" }}>
                         <strong>Disponível:</strong> {recurso.disponivel ? "Sim" : "Não"}
                       </p>
                     </div>

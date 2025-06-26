@@ -1,0 +1,27 @@
+.button {
+  background: linear-gradient(90deg, #007aff 0%, #0051a8 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 22px;
+  font-size: 1rem;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+  cursor: pointer;
+}
+.button:hover, .button:focus {
+  background: linear-gradient(90deg, #0051a8 0%, #007aff 100%);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  transform: translateY(-2px) scale(1.03);
+}
+.button:disabled {
+  background: #e0e0e0;
+  color: #aaa;
+  cursor: not-allowed;
+}
+.disabled {
+  background: #e0e0e0;
+  color: #aaa;
+  cursor: not-allowed;
+} 

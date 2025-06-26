@@ -9,6 +9,14 @@ Giuliano Roy Pontello
 Leonardo Bertoletti
 João Pedro Salles
 
+# Para Rodar o Front
+```
+cd web
+npm install
+npm run dev
+```
+Veja em https://localhost:3003
+
 https://github.com/CSW-2025/csw25-grupod-alocarec-fastify.git 
 
 ## ✅ Pré-requisitos
