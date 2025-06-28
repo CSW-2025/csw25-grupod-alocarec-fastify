@@ -130,112 +130,96 @@ curl -X POST http://localhost:3000/usuarios/login \
     "senha": "senha123"
   }'
 ```
+## 📁 Arquitetura do Frontend
 
-## 📋 Funcionalidades Disponíveis
+O frontend foi desenvolvido com **Next.js 14** seguindo as melhores práticas de arquitetura moderna:
 
-### **Backend (API)**
-- ✅ Autenticação JWT
-- ✅ CRUD de Usuários
-- ✅ CRUD de Salas
-- ✅ CRUD de Recursos
-- ✅ CRUD de Reservas
-- ✅ CRUD de Prédios
-- ✅ CRUD de Tipos de Recurso
-- ✅ CRUD de Perfis
-- ✅ CRUD de Turmas
-- ✅ CRUD de Disciplinas
-- ✅ CRUD de Currículos
-- ✅ CRUD de Aulas
+### **Tecnologias Utilizadas:**
+- **Next.js 15** - Framework React com App Router
+- **TypeScript** - Tipagem estática para maior segurança
+- **CSS Modules** - Estilos modulares para evitar conflitos
+- **JWT** - Autenticação baseada em tokens
 
-### **Frontend (Web)**
-- ✅ Sistema de Login/Logout
-- ✅ Dashboard com Reservas
-- ✅ Formulário de Reservas
-- ✅ Gestão de Salas
-- ✅ Gestão de Recursos
-- ✅ Gestão de Usuários
-- ✅ Proteção de Rotas
-- ✅ Tratamento de Erros
-
-## 🐛 Solução de Problemas
-
-### **Erro: "reservas.map is not a function"**
-- **Causa**: Usuário não autenticado ou token expirado
-- **Solução**: Faça login novamente ou verifique se o token está válido
-
-### **Erro de Conexão com Banco**
-- **Causa**: Container do PostgreSQL não inicializou
-- **Solução**: Aguarde alguns minutos e tente novamente
-
-### **Erro de Porta em Uso**
-- **Causa**: Porta 3000 ou 3003 já está sendo usada
-- **Solução**: Pare outros serviços ou altere as portas no `docker-compose.yml`
-
-### **Erro no Frontend: "Cannot find module"**
-- **Causa**: Dependências não instaladas
-- **Solução**: Execute `npm install` na pasta `web`
-
-### **Frontend não conecta com Backend**
-- **Causa**: Backend não está rodando
-- **Solução**: Verifique se o Docker está rodando e execute `docker-compose up`
-
-## 🧪 Executando os Testes
-
-```bash
-# Instalar dependências do backend
-npm install
-
-# Executar todos os testes
-npm test
-
-# Executar testes com coverage
-npm run test:coverage
-
-# Executar testes em modo watch
-npm run test:watch
+### **Estrutura de Pastas:**
+```
+web/
+├── src/
+│   ├── app/                    # App Router (Next.js 14)
+│   │   ├── layout.tsx         # Layout principal da aplicação
+│   │   ├── page.tsx           # Página inicial (Dashboard)
+│   │   ├── login/             # Página de login
+│   │   ├── logout/            # Página de logout
+│   │   ├── usuarios/          # Gestão de usuários
+│   │   ├── salas/             # Gestão de salas
+│   │   ├── recursos/          # Gestão de recursos
+│   │   └── reservas/          # Gestão de reservas
+│   ├── components/            # Componentes reutilizáveis
+│   │   ├── Button/           # Botões customizados
+│   │   ├── Card/             # Cards de conteúdo
+│   │   ├── Input/            # Campos de entrada
+│   │   ├── Loading/          # Indicadores de carregamento
+│   │   ├── ErrorMessage/     # Mensagens de erro
+│   │   └── HeaderNav/        # Navegação principal
+│   ├── views/                # Views/Formulários específicos
+│   │   ├── LoginForm.tsx     # Formulário de login
+│   │   ├── ReservasForm.tsx  # Formulário de reservas
+│   │   ├── SalasForm.tsx     # Formulário de salas
+│   │   ├── UsuariosForm.tsx  # Formulário de usuários
+│   │   ├── RecursosForm.tsx  # Formulário de recursos
+│   │   └── ReservaTableView.tsx # Tabela de reservas
+│   ├── helpers/              # Utilitários e configurações
+│   │   ├── api.ts           # Configuração da API
+│   │   └── auth.ts          # Gerenciamento de autenticação
+│   └── @types/              # Definições de tipos TypeScript
+└── public/                  # Arquivos estáticos
 ```
 
-## 📁 Estrutura do Projeto
+### **Padrões de Arquitetura:**
 
-```
-csw25-grupod-alocarec-fastify/
-├── src/                    # Código fonte do backend
-│   ├── domains/           # Domínios da aplicação
-│   ├── config/            # Configurações
-│   └── middleware/        # Middlewares
-├── web/                   # Frontend Next.js (RODA LOCAL)
-│   ├── src/
-│   │   ├── app/          # Páginas da aplicação
-│   │   ├── components/   # Componentes React
-│   │   ├── views/        # Views/Formulários
-│   │   └── helpers/      # Utilitários
-├── prisma/               # Schema e migrações do banco
-├── __tests__/           # Testes automatizados
-└── infra/               # Configurações de infraestrutura
-```
+#### **1. Componentização Modular**
+- Componentes pequenos e reutilizáveis
+- Separação clara entre lógica e apresentação
+- Props tipadas com TypeScript
+
+#### **2. CSS Modules**
+- Estilos encapsulados por componente
+- Evita conflitos de nomes de classes
+- Melhora a manutenibilidade
+
+#### **3. Proteção de Rotas**
+- Hook personalizado `useAuth` para gerenciar autenticação
+- Componente `ProtectedRoute` para proteger páginas
+- Redirecionamento automático para login
+
+#### **4. Gerenciamento de Estado**
+- React Hooks para estado local
+- Context API para estado global (quando necessário)
+- Estado de loading e erro em cada componente
+
+#### **5. Tratamento de Erros**
+- Try/catch em chamadas de API
+- Estados de erro visuais para o usuário
+- Logs de erro para debug
+
+#### **6. Responsividade**
+- Design mobile-first
+- CSS flexbox e grid
+- Componentes adaptáveis
+
+### **Fluxo de Autenticação:**
+1. Usuário acessa página protegida
+2. `ProtectedRoute` verifica token
+3. Se não autenticado, redireciona para `/login`
+4. Após login bem-sucedido, redireciona para página original
+5. Token é armazenado em cookie seguro
+
+### **Comunicação com API:**
+- Axios ou fetch para requisições HTTP
+- Headers de autorização automáticos
+- Interceptors para tratamento de erros 401
+- Base URL configurável via variáveis de ambiente
 
 ## 🔧 Comandos Úteis
-
-### **Backend (Docker)**
-```bash
-# Parar os containers
-docker-compose down
-
-# Ver logs dos containers
-docker-compose logs -f
-
-# Acessar o container da API
-docker-compose exec api sh
-
-# Executar migrações do banco
-docker-compose exec api npx prisma migrate dev
-
-# Resetar o banco de dados
-docker-compose exec api npx prisma migrate reset
-
-# Gerar cliente Prisma
-docker-compose exec api npx prisma generate
-```
 
 ### **Frontend (Local)**
 ```bash
@@ -250,20 +234,5 @@ npm run dev
 
 # Build para produção
 npm run build
-
-# Rodar testes do frontend
-npm test
-```
-
-## 📞 Suporte
-
-Em caso de dúvidas ou problemas:
-1. Verifique se todos os pré-requisitos estão instalados
-2. Consulte os logs dos containers: `docker-compose logs`
-3. Verifique se as portas não estão sendo usadas por outros serviços
-4. Tente reiniciar os containers: `docker-compose down && docker-compose up --build`
-5. Para problemas no frontend, verifique se o Node.js está instalado e execute `npm install` na pasta `web`
-
----
 
 **Desenvolvido para a disciplina de Construção de Software - 2025** 
