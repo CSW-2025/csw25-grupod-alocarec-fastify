@@ -132,7 +132,7 @@ curl -X POST http://localhost:3000/usuarios/login \
 ```
 ## 📁 Arquitetura do Frontend
 
-O frontend foi desenvolvido com **Next.js 14** seguindo as melhores práticas de arquitetura moderna:
+O frontend foi desenvolvido com **Next.js 15** seguindo as melhores práticas de arquitetura moderna:
 
 ### **Tecnologias Utilizadas:**
 - **Next.js 15** - Framework React com App Router
