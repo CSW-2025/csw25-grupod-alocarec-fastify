@@ -1,4 +1,4 @@
-# Aloca Rec - Guia de Instalação e Teste
+# Aloca Rec - Guia de Instalação e Teste (faça o passo a passo para chegar no Frontend)
 
 Este é um projeto de sistema de alocação de recursos (salas e equipamentos) desenvolvido com Fastify, TypeScript, PostgreSQL e Prisma para o backend, e Next.js para o frontend.
 
@@ -235,4 +235,23 @@ npm run dev
 # Build para produção
 npm run build
 
+<<<<<<< HEAD
 **Desenvolvido para a disciplina de Construção de Software - 2025** 
+=======
+# Rodar testes do frontend
+npm test
+```
+
+## 📞 Suporte
+
+Em caso de dúvidas ou problemas:
+1. Verifique se todos os pré-requisitos estão instalados
+2. Consulte os logs dos containers: `docker-compose logs`
+3. Verifique se as portas não estão sendo usadas por outros serviços
+4. Tente reiniciar os containers: `docker-compose down && docker-compose up --build`
+5. Para problemas no frontend, verifique se o Node.js está instalado e execute `npm install` na pasta `web`
+
+---
+
+**Desenvolvido para a disciplina de Construção de Software - 2025** 
+>>>>>>> e546d3bf7102accf9d18a86df502467ba65365ec
