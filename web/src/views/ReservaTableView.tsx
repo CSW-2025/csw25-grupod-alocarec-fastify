@@ -52,7 +52,7 @@ export default function ReservaTableView() {
   return (
     <div className={styles.mainWrapper}>
       {nomeUser && (
-        <div style={{ fontSize: 30, fontWeight: 600, color: 'white', marginBottom: 24, textAlign: 'center' }}>
+        <div className={styles.welcomeMessage}>
           Olá, {nomeUser}!
         </div>
       )}

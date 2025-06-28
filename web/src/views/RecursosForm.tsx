@@ -21,9 +21,9 @@ export default function RecursosView() {
   const [editando, setEditando] = useState<any | null>(null);
 
   const statusOpcoes = [
-  { id: 0, nome: "Disponível" },
-  { id: 1, nome: "Ocupado" },
-];
+    { id: 0, nome: "Disponível" },
+    { id: 1, nome: "Ocupado" },
+  ];
 
   async function carregarRecursos() {
     setLoading(true);
@@ -190,19 +190,14 @@ export default function RecursosView() {
           <h2>{editando ? "✏️ Editar Recurso" : "➕ Novo Recurso"}</h2>
           <form onSubmit={handleSubmit}>
             <Input label="Descrição" value={descricao} onChange={e => setDescricao(e.target.value)} required />
-            <div style={{ marginBottom: "12px" }}>
-              <label style={{ display: "block", marginBottom: "4px" }}>
+            <div className={styles.selectContainer}>
+              <label className={styles.label}>
                 Status
               </label>
               <select
                 value={status}
                 onChange={e => setStatus(e.target.value)}
-                style={{
-                  width: "100%",
-                  padding: "8px",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
-                }}
+                className={styles.select}
                 required
               >
                 <option value="">Selecione um status</option>
@@ -213,19 +208,14 @@ export default function RecursosView() {
                 ))}
               </select>
             </div>
-            <div style={{ marginBottom: "12px" }}>
-              <label style={{ display: "block", marginBottom: "4px" }}>
+            <div className={styles.selectContainer}>
+              <label className={styles.label}>
                 Tipo *
               </label>
               <select
                 value={tipoId}
                 onChange={e => setTipoId(Number(e.target.value))}
-                style={{
-                  width: "100%",
-                  padding: "8px",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
-                }}
+                className={styles.select}
                 required
               >
                 <option value={0}>Selecione um tipo</option>
@@ -236,11 +226,11 @@ export default function RecursosView() {
                 ))}
               </select>
             </div>
-            <div style={{ display: "flex", gap: "8px" }}>
-              <Button type="submit" disabled={loading} style={{ flex: 1 }}>
+            <div className={styles.buttonGroup}>
+              <Button type="submit" disabled={loading} className={styles.submitBtn}>
                 {loading ? "Salvando..." : editando ? "Atualizar" : "Cadastrar"}
               </Button>
-              <Button type="button" onClick={handleCancelar} style={{ flex: 1, background: "#6c757d" }}>
+              <Button type="button" onClick={handleCancelar} className={styles.cancelBtn}>
                 Cancelar
               </Button>
             </div>
@@ -249,40 +239,34 @@ export default function RecursosView() {
       ) : (
         <div>
           {loading ? (
-            <div style={{ textAlign: "center", padding: "40px" }}>Carregando...</div>
+            <div className={styles.loading}>Carregando...</div>
           ) : recursos.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "40px", color: "#666" }}>
+            <div className={styles.empty}>
               <p>Nenhum recurso cadastrado</p>
-              <Button onClick={handleNovo} style={{ background: "#28a745" }}>
+              <Button onClick={handleNovo} className={styles.novoBtn}>
                 ➕ Cadastrar primeiro recurso
               </Button>
             </div>
           ) : (
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))",
-                gap: "16px",
-              }}
-            >
+            <div className={styles.grid}>
               {recursos.map(recurso => (
                 <Card key={recurso.id}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "16px" }}>
+                  <div className={styles.cardHeader}>
                     <div>
-                      <h3 style={{ margin: "0 0 8px 0", color: "white" }}>{recurso.descricao}</h3>
-                      <p style={{ margin: "0 0 4px 0", color: "white" }}>
+                      <h3 className={styles.cardTitle}>{recurso.descricao}</h3>
+                      <p className={styles.cardInfo}>
                         <strong>Status:</strong> {recurso.status}
                       </p>                   
-                      <p style={{ margin: "0 0 4px 0", color: "white" }}>
+                      <p className={styles.cardInfo}>
                         <strong>Disponível:</strong> {recurso.disponivel ? "Sim" : "Não"}
                       </p>
                     </div>
                   </div>
-                  <div style={{ display: "flex", gap: "8px", borderTop: "1px solid #eee", paddingTop: "12px" }}>
-                    <Button onClick={() => handleEditar(recurso)} style={{ background: "#0070f3", flex: 1 }}>
+                  <div className={styles.cardActions}>
+                    <Button onClick={() => handleEditar(recurso)} className={styles.editBtn}>
                       ✏️ Editar
                     </Button>
-                    <Button onClick={() => handleRemover(recurso.id)} style={{ background: "#dc3545", flex: 1 }}>
+                    <Button onClick={() => handleRemover(recurso.id)} className={styles.removeBtn}>
                       🗑️ Remover
                     </Button>
                   </div>

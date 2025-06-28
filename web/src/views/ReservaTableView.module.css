@@ -7,6 +7,14 @@
   background: none;
 }
 
+.welcomeMessage {
+  font-size: 30px;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
 .tableContainer {
   background: #fff;
   border-radius: 18px;

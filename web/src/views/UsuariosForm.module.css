@@ -2,13 +2,13 @@
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
+  height: 100vh;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
 }
 
 .header h1 {
@@ -80,7 +80,7 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 16px;
+  gap: 12px;
 }
 
 .cardHeader {
@@ -98,6 +98,21 @@
 .cardInfo {
   margin: 0 0 4px 0;
   color: white;
+}
+
+.status {
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.active {
+  background: green;
+}
+
+.inactive {
+  background: red;
 }
 
 .cardActions {

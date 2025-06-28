@@ -5,6 +5,7 @@ import Button from "@/components/Button/Button";
 import Card from "@/components/Card/Card";
 import { getToken } from "@/helpers/auth";
 import { API_URL } from "@/helpers/api";
+import styles from "./SalasForm.module.css";
 
 export default function SalasView() {
   const [salas, setSalas] = useState<{id: number, nome: string, capacidade: number, predio?: {id: number, nome: string}}[]>([]);
@@ -157,29 +158,18 @@ export default function SalasView() {
   }
 
   return (
-    <div style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}>
-      <div style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: "24px"
-      }}>
+    <div className={styles.container}>
+      <div className={styles.header}>
         <h1>🏢 Salas</h1>
         {!showForm && (
-          <Button onClick={handleNova} style={{ background: "#28a745" }}>
+          <Button onClick={handleNova} className={styles.novoBtn}>
             ➕ Nova Sala
           </Button>
         )}
       </div>
 
       {error && (
-        <div style={{
-          background: "#f8d7da",
-          color: "#721c24",
-          padding: "12px",
-          borderRadius: "4px",
-          marginBottom: "16px"
-        }}>
+        <div className={styles.error}>
           {error}
         </div>
       )}
@@ -202,19 +192,14 @@ export default function SalasView() {
               onChange={e => setCapacidade(e.target.value)}
               required
             />
-            <div style={{ marginBottom: "12px" }}>
-              <label style={{ display: "block", marginBottom: "4px" }}>
+            <div className={styles.selectContainer}>
+              <label className={styles.label}>
                 Prédio *
               </label>
               <select
                 value={predioId}
                 onChange={e => setPredioId(Number(e.target.value))}
-                style={{
-                  width: "100%",
-                  padding: "8px",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px"
-                }}
+                className={styles.select}
                 required
               >
                 <option value={0}>Selecione um prédio</option>
@@ -225,14 +210,14 @@ export default function SalasView() {
                 ))}
               </select>
             </div>
-            <div style={{ display: "flex", gap: "8px" }}>
-              <Button type="submit" disabled={loading} style={{ flex: 1 }}>
+            <div className={styles.buttonGroup}>
+              <Button type="submit" disabled={loading} className={styles.submitBtn}>
                 {loading ? "Salvando..." : (editando ? "Atualizar" : "Cadastrar")}
               </Button>
               <Button
                 type="button"
                 onClick={handleCancelar}
-                style={{ flex: 1, background: "#6c757d" }}
+                className={styles.cancelBtn}
               >
                 Cancelar
               </Button>
@@ -242,54 +227,38 @@ export default function SalasView() {
       ) : (
         <div>
           {loading ? (
-            <div style={{ textAlign: "center", padding: "40px" }}>
+            <div className={styles.loading}>
               Carregando...
             </div>
           ) : salas.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "40px", color: "#666" }}>
+            <div className={styles.empty}>
               <p>Nenhuma sala cadastrada</p>
-              <Button onClick={handleNova} style={{ background: "#28a745" }}>
+              <Button onClick={handleNova} className={styles.novoBtn}>
                 ➕ Cadastrar primeira sala
               </Button>
             </div>
           ) : (
-            <div style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))",
-              gap: "16px"
-            }}>
+            <div className={styles.grid}>
               {salas.map(sala => (
                 <Card key={sala.id}>
-                  <div style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "flex-start",
-                    marginBottom: "16px"
-                  }}>
+                  <div className={styles.cardHeader}>
                     <div>
-                      <h3 style={{ margin: "0 0 8px 0", color: "white" }}>{sala.nome}</h3>
-                      <p style={{ margin: "0 0 4px 0", color: "white" }}>
+                      <h3 className={styles.cardTitle}>{sala.nome}</h3>
+                      <p className={styles.cardInfo}>
                         <strong>Capacidade:</strong> {sala.capacidade}
-                      </p>
-                      <p style={{ margin: "0 0 4px 0", color: "#666" }}>                     
                       </p>
                     </div>
                   </div>
-                  <div style={{
-                    display: "flex",
-                    gap: "8px",
-                    borderTop: "1px solid #eee",
-                    paddingTop: "12px"
-                  }}>
+                  <div className={styles.cardActions}>
                     <Button
                       onClick={() => handleEditar(sala)}
-                      style={{ background: "#0070f3", flex: 1 }}
+                      className={styles.editBtn}
                     >
                       ✏️ Editar
                     </Button>
                     <Button
                       onClick={() => handleRemover(sala.id)}
-                      style={{ background: "#dc3545", flex: 1 }}
+                      className={styles.removeBtn}
                     >
                       🗑️ Remover
                     </Button>

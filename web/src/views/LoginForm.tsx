@@ -4,6 +4,7 @@ import Input from "@/components/Input/Input";
 import Button from "@/components/Button/Button";
 import ErrorMessage from "@/components/ErrorMessage/ErrorMessage";
 import { API_URL } from "@/helpers/api";
+import styles from "./LoginForm.module.css";
 
 function EyeIcon({ open }: { open: boolean }) {
   return open ? (
@@ -49,11 +50,11 @@ export default function LoginForm() {
 
   return (
     <>
-      <h1 style={{textAlign: 'center'}}>Seja bem-vindo ao nosso SARC</h1>
-      <div style={{ maxWidth: 400, margin: "80px auto", backgroundColor: "#111111", padding: "3rem", borderRadius: 8 }}>
+      <h1 className={styles.title}>Seja bem-vindo ao nosso SARC</h1>
+      <div className={styles.container}>
         <form onSubmit={handleSubmit}>
           <h2>Login</h2>
-          <div style={{ marginBottom: 12 }}>
+          <div className={styles.inputGroup}>
             <Input
               label="Email"
               type="email"
@@ -63,7 +64,7 @@ export default function LoginForm() {
               required
             />
           </div>
-          <div style={{ marginBottom: 12, position: 'relative' }}>
+          <div className={styles.passwordContainer}>
             <Input
               label="Senha"
               type={showPassword ? "text" : "password"}
@@ -71,25 +72,12 @@ export default function LoginForm() {
               value={senha}
               onChange={e => setSenha(e.target.value)}
               required
-              style={{ paddingRight: 40 }}
+              className={styles.passwordInput}
             />
             <button
               type="button"
               onClick={() => setShowPassword(v => !v)}
-              style={{
-                position: 'absolute',
-                right: 10,
-                top: 36,
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                color: '#888',
-                fontSize: 18,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: 0
-              }}
+              className={styles.eyeButton}
               tabIndex={-1}
               aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
             >
@@ -97,7 +85,7 @@ export default function LoginForm() {
             </button>
           </div>
           <ErrorMessage message={error || ""} />
-          <Button type="submit" disabled={loading} style={{ width: "100%" }}>
+          <Button type="submit" disabled={loading} className={styles.submitBtn}>
             {loading ? "Entrando..." : "Entrar"}
           </Button>
         </form>

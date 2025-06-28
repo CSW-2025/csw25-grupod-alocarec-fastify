@@ -5,6 +5,7 @@ import Button from "@/components/Button/Button";
 import Card from "@/components/Card/Card";
 import { getToken } from "@/helpers/auth";
 import { API_URL } from "@/helpers/api";
+import styles from "./ReservasForm.module.css";
 
 export default function ReservasForm() {
   const [reservas, setReservas] = useState<any[]>([]);
@@ -171,33 +172,18 @@ export default function ReservasForm() {
   }
 
   return (
-    <div style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "24px",
-        }}
-      >
+    <div className={styles.container}>
+      <div className={styles.header}>
         <h1>📅 Reservas</h1>
         {!showForm && (
-          <Button onClick={handleNova} style={{ background: "#28a745" }}>
+          <Button onClick={handleNova} className={styles.novoBtn}>
             ➕ Nova Reserva
           </Button>
         )}
       </div>
 
       {error && (
-        <div
-          style={{
-            background: "#f8d7da",
-            color: "#721c24",
-            padding: "12px",
-            borderRadius: "4px",
-            marginBottom: "16px",
-          }}
-        >
+        <div className={styles.error}>
           {error}
         </div>
       )}
@@ -206,19 +192,14 @@ export default function ReservasForm() {
         <Card>
           <h2>{editando ? "✏️ Editar Reserva" : "➕ Nova Reserva"}</h2>
           <form onSubmit={handleSubmit}>
-            <div style={{ marginBottom: "12px" }}>
-              <label style={{ display: "block", marginBottom: "4px" }}>
+            <div className={styles.selectContainer}>
+              <label className={styles.label}>
                 Sala *
               </label>
               <select
                 value={salaId}
                 onChange={(e) => setSalaId(Number(e.target.value))}
-                style={{
-                  width: "100%",
-                  padding: "8px",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
-                }}
+                className={styles.select}
                 required
               >
                 <option value={0}>Selecione uma sala</option>
@@ -229,19 +210,14 @@ export default function ReservasForm() {
                 ))}
               </select>
             </div>
-            <div style={{ marginBottom: "12px" }}>
-              <label style={{ display: "block", marginBottom: "4px" }}>
+            <div className={styles.selectContainer}>
+              <label className={styles.label}>
                 Usuário *
               </label>
               <select
                 value={usuarioId}
                 onChange={(e) => setUsuarioId(Number(e.target.value))}
-                style={{
-                  width: "100%",
-                  padding: "8px",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
-                }}
+                className={styles.select}
                 required
               >
                 <option value={0}>Selecione um usuário</option>
@@ -259,14 +235,14 @@ export default function ReservasForm() {
               onChange={(e) => setDataHora(e.target.value)}
               required
             />
-            <div style={{ display: "flex", gap: "8px" }}>
-              <Button type="submit" disabled={loading} style={{ flex: 1 }}>
+            <div className={styles.buttonGroup}>
+              <Button type="submit" disabled={loading} className={styles.submitBtn}>
                 {loading ? "Salvando..." : editando ? "Atualizar" : "Cadastrar"}
               </Button>
               <Button
                 type="button"
                 onClick={handleCancelar}
-                style={{ flex: 1, background: "#6c757d" }}
+                className={styles.cancelBtn}
               >
                 Cancelar
               </Button>
@@ -276,61 +252,41 @@ export default function ReservasForm() {
       ) : (
         <div>
           {loading ? (
-            <div style={{ textAlign: "center", padding: "40px" }}>Carregando...</div>
+            <div className={styles.loading}>Carregando...</div>
           ) : reservas.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "40px", color: "#666" }}>
+            <div className={styles.empty}>
               <p>Nenhuma reserva cadastrada</p>
-              <Button onClick={handleNova} style={{ background: "#28a745" }}>
+              <Button onClick={handleNova} className={styles.novoBtn}>
                 ➕ Cadastrar primeira reserva
               </Button>
             </div>
           ) : (
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))",
-                gap: "16px",
-              }}
-            >
+            <div className={styles.grid}>
               {reservas.map((reserva) => (
                 <Card key={reserva.id}>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "flex-start",
-                      marginBottom: "16px",
-                    }}
-                  >
+                  <div className={styles.cardHeader}>
                     <div>
-                      <h3 style={{ margin: "0 0 8px 0", color: "white" }}>
+                      <h3 className={styles.cardTitle}>
                         Sala: {nomeSala(reserva.salaId)}
                       </h3>
-                      <p style={{ margin: "0 0 4px 0", color: "white" }}>
+                      <p className={styles.cardInfo}>
                         <strong>Usuário:</strong> {nomeUsuario(reserva.usuarioId)}
                       </p>
-                      <p style={{ margin: "0 0 4px 0", color: "white" }}>
+                      <p className={styles.cardInfo}>
                         <strong>Data:</strong> {new Date(reserva.dataHora).toLocaleString()}
                       </p>
                     </div>
                   </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "8px",
-                      borderTop: "1px solid #eee",
-                      paddingTop: "12px",
-                    }}
-                  >
+                  <div className={styles.cardActions}>
                     <Button
                       onClick={() => handleEditar(reserva)}
-                      style={{ background: "#0070f3", flex: 1 }}
+                      className={styles.editBtn}
                     >
                       ✏️ Editar
                     </Button>
                     <Button
                       onClick={() => handleRemover(reserva.id)}
-                      style={{ background: "#dc3545", flex: 1 }}
+                      className={styles.removeBtn}
                     >
                       🗑️ Remover
                     </Button>

@@ -6,6 +6,7 @@ import Card from "@/components/Card/Card";
 import { getToken } from "@/helpers/auth";
 import { API_URL } from "@/helpers/api";
 import type { Usuario, Perfil } from "@/@types/entities";
+import styles from "./UsuariosForm.module.css";
 
 export default function UsuariosView() {
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
@@ -62,13 +63,11 @@ export default function UsuariosView() {
     }
   }
 
- 
   useEffect(() => {
     carregarUsuarios();
     carregarPerfis();
   }, []);
 
-  
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
@@ -207,29 +206,18 @@ export default function UsuariosView() {
   }
 
   return (
-    <div style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto", height: "100vh"}}>
-      <div style={{ 
-        display: "flex", 
-        justifyContent: "space-between", 
-        alignItems: "center",
-        
-      }}>
+    <div className={styles.container}>
+      <div className={styles.header}>
         <h1>👥 Usuários</h1>
         {!showForm && (
-          <Button onClick={handleNovo} style={{ background: "#28a745" }}>
+          <Button onClick={handleNovo} className={styles.novoBtn}>
             ➕ Novo Usuário
           </Button>
         )}
       </div>
 
       {error && (
-        <div style={{ 
-          background: "#f8d7da", 
-          color: "#721c24", 
-          padding: "12px", 
-          borderRadius: "4px",
-          marginBottom: "16px"
-        }}>
+        <div className={styles.error}>
           {error}
         </div>
       )}
@@ -259,19 +247,14 @@ export default function UsuariosView() {
               onChange={e => setDataNascimento(e.target.value)}
               required
             />
-            <div style={{ marginBottom: "12px" }}>
-              <label style={{ display: "block", marginBottom: "4px" }}>
+            <div className={styles.selectContainer}>
+              <label className={styles.label}>
                 Sexo *
               </label>
               <select
                 value={sexo}
                 onChange={e => setSexo(e.target.value)}
-                style={{
-                  width: "100%",
-                  padding: "8px",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px"
-                }}
+                className={styles.select}
                 required
               >
                 <option value="">Selecione o sexo</option>
@@ -297,19 +280,14 @@ export default function UsuariosView() {
                 required
               />
             )}
-            <div style={{ marginBottom: "12px" }}>
-              <label style={{ display: "block", marginBottom: "4px" }}>
+            <div className={styles.selectContainer}>
+              <label className={styles.label}>
                 Perfil *
               </label>
               <select
                 value={perfilId}
                 onChange={e => setPerfilId(Number(e.target.value))}
-                style={{
-                  width: "100%",
-                  padding: "8px",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px"
-                }}
+                className={styles.select}
                 required
               >
                 <option value={0}>Selecione um perfil</option>
@@ -320,14 +298,14 @@ export default function UsuariosView() {
                 ))}
               </select>
             </div>
-            <div style={{ display: "flex", gap: "8px" }}>
-              <Button type="submit" disabled={loading} style={{ flex: 1 }}>
+            <div className={styles.buttonGroup}>
+              <Button type="submit" disabled={loading} className={styles.submitBtn}>
                 {loading ? "Salvando..." : (editando ? "Atualizar" : "Cadastrar")}
               </Button>
               <Button 
                 type="button" 
                 onClick={handleCancelar}
-                style={{ flex: 1, background: "#6c757d" }}
+                className={styles.cancelBtn}
               >
                 Cancelar
               </Button>
@@ -337,64 +315,44 @@ export default function UsuariosView() {
       ) : (
         <div>
           {loading ? (
-            <div style={{ textAlign: "center", padding: "40px" }}>
+            <div className={styles.loading}>
               Carregando...
             </div>
           ) : usuarios.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "40px", color: "#666" }}>
+            <div className={styles.empty}>
               <p>Nenhum usuário cadastrado</p>
-              <Button onClick={handleNovo} style={{ background: "#28a745" }}>
+              <Button onClick={handleNovo} className={styles.novoBtn}>
                 ➕ Cadastrar primeiro usuário
               </Button>
             </div>
           ) : (
-            <div style={{ 
-              display: "grid", 
-              gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))",
-              gap: "12px"
-            }}>
+            <div className={styles.grid}>
               {usuarios.map(usuario => (
                 <Card key={usuario.id}>
-                  <div style={{ 
-                    display: "flex", 
-                    justifyContent: "space-between", 
-                    alignItems: "flex-start",
-                    marginBottom: "16px"
-                  }}>
+                  <div className={styles.cardHeader}>
                     <div>
-                      <h3 style={{ margin: "0 0 8px 0", color: "white" }}>{usuario.nome}</h3>
-                      <p style={{ margin: "0 0 4px 0", color: "white" }}>
+                      <h3 className={styles.cardTitle}>{usuario.nome}</h3>
+                      <p className={styles.cardInfo}>
                         <strong>📧 Email:</strong> {usuario.email}
                       </p>
-                      <p style={{ margin: "0 0 4px 0", color: "white" }}>
+                      <p className={styles.cardInfo}>
                         <strong>👤 Perfil:</strong> {usuario.perfil?.nome}
                       </p>
                     </div>
-                    <span style={{ 
-                      background: (usuario.ativo !== undefined ? usuario.ativo : true) ? "green" : "red", 
-                      color: "white", 
-                      padding: "4px 8px", 
-                      borderRadius: "12px",
-                      fontSize: "12px"
-                    }}>
+                    <span className={`${styles.status} ${(usuario.ativo !== undefined ? usuario.ativo : true) ? styles.active : styles.inactive}`}>
                       {(usuario.ativo !== undefined ? usuario.ativo : true) ? "✅ Ativo" : "❌ Inativo"}
                     </span>
                   </div>
-                  <div style={{ 
-                    display: "flex", 
-                    gap: "8px",
-                    borderTop: "1px solid #eee",
-                    paddingTop: "12px"
-                  }}>
+                  <div className={styles.cardActions}>
                     <Button 
                       onClick={() => handleEditar(usuario)}
-                      style={{ background: "#0070f3", flex: 1 }}
+                      className={styles.editBtn}
                     >
                       ✏️ Editar
                     </Button>
                     <Button 
                       onClick={() => handleRemover(usuario.id)}
-                      style={{ background: "#dc3545", flex: 1 }}
+                      className={styles.removeBtn}
                     >
                       🗑️ Remover
                     </Button>
