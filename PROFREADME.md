@@ -1,4 +1,4 @@
-# Aloca Rec - Guia de Instalação e Teste
+# Aloca Rec - Guia de Instalação e Teste (faça o passo a passo para chegar no Frontend)
 
 Este é um projeto de sistema de alocação de recursos (salas e equipamentos) desenvolvido com Fastify, TypeScript, PostgreSQL e Prisma para o backend, e Next.js para o frontend.
 
